@@ -5,7 +5,8 @@
    ~git clone https://github.com/neppramod/emacs-configuration.git~
  - Link this repository to *.emacs.d*  (Note: In windows, files may be copied instead of linking). \\
    ~ln -s emacs-configuration ~/.emacs.d/~ 
- - Link ~emacs.muban~ to ~.emacs.muban~ and put it in home directory, outside *.emacs.d*
+ - Link ~emacs.muban~ to ~.emacs.muban~ and put it in home directory, outside *.emacs.d* \\
+   ~ln -s emacs-configuration/emacs.muban ~/.emacs.muban~
  - *Note*: You can copy these to specific folders, if linking does not work.
  - Install the font mentioned in [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#font][Font section]] of ~configuration.org~
  - Open emacs
