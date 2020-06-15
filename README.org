@@ -9,7 +9,7 @@
    ~ln -s emacs-configuration/emacs.muban ~/.emacs.muban~
  - *Note*: /You can copy these to specific folders, if linking does not work./
  - Install the font mentioned in [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#font][Font section]] of ~configuration.org~
- - Open emacs
+ - Open emacs. Emacs will install required packages and load other settings in ~init.el~ and [[configuration.org][configuration.org]]
  - If emacs prompts for continue connecting? Select *a* (always)
  - Edit a file and make some changes. Save and quit
  - If emacs asks for Save desktop ? Select *y* (yes) (If it asks for a directory, create a blank directory and enter that location)
