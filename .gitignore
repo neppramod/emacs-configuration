@@ -4,6 +4,8 @@ configuration.el
 elpa/
 backup/
 auto-save-list/
+eshell/
 network-security.data
 recentf
 bookmarks
+

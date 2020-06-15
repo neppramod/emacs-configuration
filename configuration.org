@@ -14,7 +14,7 @@
 
 ** Add required packages
    #+BEGIN_SRC emacs-lisp
-   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize wgrep afternoon-theme))
+   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize wgrep magit afternoon-theme))
    #+END_SRC
    - Ivy provides an interface to list, search, filter and perform actions on a collection of "things". 
    - Counsel adds more to ivy's basic functionality
@@ -27,6 +27,7 @@
    - Htmlize is used to export org file to html file
    - In this setting we are installing ~afternoon-theme~. This can be changed to any theme that you want. Also make sure to change ~load-theme~ setting.
    - Wgrep allows to modify results of grep command and save changes to all effected buffers
+   - Magit package works with git project
 
 ** Install the packages
    #+BEGIN_SRC emacs-lisp
@@ -81,7 +82,7 @@
 * Font
   Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
   #+BEGIN_SRC emacs-lisp
-  (set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
+  (set-frame-font "DejaVu Sans Mono 10" nil t) ;; Font
   #+END_SRC
 
 * Theme
@@ -108,7 +109,6 @@
    #+END_SRC
 
 * Key bindings
-
 ** Global
 
    #+BEGIN_SRC emacs-lisp
@@ -117,9 +117,6 @@
    
    ;; Add new key to recentf
    (global-set-key (kbd "C-c f") 'counsel-recentf)
-
-   ;; Set bookmark. See counsel-bookmark later
-   (global-set-key (kbd "C-c b") 'bookmark-set)
    #+END_SRC
 
 ** Counsel
@@ -127,9 +124,6 @@
    #+BEGIN_SRC emacs-lisp
    (global-set-key (kbd "M-x") 'counsel-M-x)
    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-   
-   ;; List bookmarks
-   (global-set-key (kbd "C-c l") 'counsel-bookmark)
 
    ;; Search using grep in a git project
    (global-set-key (kbd "C-c g") 'counsel-git-grep)
@@ -140,7 +134,6 @@
    (key-chord-define-global "cc" 'avy-goto-char)
    (key-chord-define-global "ww" 'avy-goto-word-1)
    #+END_SRC
-
 
 ** Muban
    #+BEGIN_SRC emacs-lisp
@@ -154,8 +147,37 @@
    #+END_SRC
    
 * Notes
-  - Can use ~C-c C-o~ in minibuffer to open the buffer. Can be used in search, bookmark, buffer search etc.
-  - Can use ~C-c g~ (~counsel-git-grep~) command in a git project to search files using grep
-  - Can use ~C-h m~ to see instruction on particular mode for extra information
-  - Can use ~C-c C-p~ to enable editing in wgrep buffer
-  - Can use ~C-c C-k~ to discard change in wgrep buffer
+
+** Edit minibuffer using wgrep
+   - Can use ~C-c C-o~ in minibuffer to open the buffer. Can be used in search, bookmark, buffer search etc.
+   - Can use ~C-c g~ (~counsel-git-grep~) command in a git project to search files using grep
+   - Can use ~C-h m~ to see instruction on particular mode for extra information
+   - Can use ~C-c C-p~ to enable editing in wgrep buffer
+   - Can use ~C-c C-k~ to discard change in wgrep buffer
+ 
+** Manage bookmark
+    - Can use ~C-x r l~ to list bookmarks
+    - Can use ~C-x r b~ to jump to bookmark
+    - Can use ~C-x r m~ to add a bookmark
+    - You can bookmark specific point in file by giving different name, bookmark remote, bookmark directory etc.
+    
+** Dired 
+   - ~C-x d~ open dired
+   - ~g~ redisplay dired
+   - ~C~ copy file to different place
+   - ~q~ quit dired
+   - ~n, p, <, >~ navigation
+   - ~v~ view current file, can quit with ~q~
+   - ~o~ view current file in other window
+   - ~f or enter~ open/visit current file
+   - ~+~ create subdirectory
+   - ~=~ compare file at point with file at mark (needs diff program)
+   - ~m~ Mark files
+   - ~u~ Unmark files
+   - ~d~ Mark files for deletion
+   - ~x~ Delete files marked for deletion
+   - For more info ~C-h m~ or See this [[https://www.gnu.org/software/emacs/refcards/pdf/dired-ref.pdf][dired-ref]] document
+
+
+   
+
