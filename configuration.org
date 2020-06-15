@@ -20,7 +20,7 @@
 
 ** Install the packages
    #+BEGIN_SRC emacs-lisp
-   (package-initialize)
+(package-initialize)
 
 ; fetch the list of packages available 
 (unless package-archive-contents
