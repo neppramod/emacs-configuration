@@ -16,6 +16,16 @@
    #+BEGIN_SRC emacs-lisp
    (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize afternoon-theme))
    #+END_SRC
+   - Ivy provides an interface to list, search, filter and perform actions on a collection of "things". 
+   - Counsel adds more to ivy's basic functionality
+   - Swiper allows easy way to search current buffer
+   - For details in ivy, counse and swiper [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][read this article]]
+   - Muban allows to insert templates at specific points in current document using keywords. A key binding of C-x M-m is assigned to muban-apply, which inserts template associated to certain keyword, defined in .emacs.muban file (stored in home directory)
+   - Org-bullets is used to show asterisk's as bullets in org-mode
+   - Avy is used to jump within current document using characters
+   - Key chord allows to bind regular characters to actions. Here we bind *cc* to jump to characer, and *ww* to jump to word within the document. Using swiper and avy, we can traverse within a document very quickly.
+   - Htmlize is used to export org file to html file
+   - In this setting we are installing ~afternoon-theme~. This can be changed to any theme that you want. Also make sure to change ~load-theme~ setting.
 
 ** Install the packages
    #+BEGIN_SRC emacs-lisp
