@@ -1,9 +1,9 @@
 * Emacs Configuration
 ** Installation
  - Install *emacs*
- - Create *.emacs.d* directory
- - Copy ~init.el~ and ~configuration.org~ to *.emacs.d* directory
- - Copy and rename ~emacs.muban~ to ~.emacs.muban~ and put is in home directory, where *.emacs.d* is present
+ - Download this repository
+ - Link this repository to .emacs.d
+ - Copy and rename ~emacs.muban~ to ~.emacs.muban~ and put is in home directory, outside *.emacs.d*
  - Install the font mentioned in ~configuration.org~
  - Open emacs
  - If emacs prompts for continue connecting? Select *a* (always)
