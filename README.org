@@ -2,7 +2,7 @@
 ** Installation
  - Install *emacs*
  - Download this repository
- - Link this repository to .emacs.d
+ - Link this repository to .emacs.d  (Note: In windows files may be copied instead of linking)
  - Copy and rename ~emacs.muban~ to ~.emacs.muban~ and put is in home directory, outside *.emacs.d*
  - Install the font mentioned in ~configuration.org~
  - Open emacs
