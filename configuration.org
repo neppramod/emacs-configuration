@@ -62,7 +62,7 @@
    #+END_SRC
 
 * Font
-  Note: Make sure following font is installed
+  Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
   #+BEGIN_SRC emacs-lisp
   (set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
   #+END_SRC
