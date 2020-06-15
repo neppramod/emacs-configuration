@@ -10,5 +10,5 @@
  - Edit a file and make some changes. Save and quit
  - If emacs asks for Save desktop ? Select y (yes) (If it asks for a directory, create a blank directory and enter that location)
  
- ** Available Functions
+** Available Functions
   - Check `configuration.org` Key bindings sections to see what key bindings are available
