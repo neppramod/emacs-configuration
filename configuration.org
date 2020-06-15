@@ -44,6 +44,7 @@
   (desktop-save-mode 1)
   (recentf-mode 1)
   (setq recentf-max-saved-items 50)
+  (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
   #+END_SRC
 
 * Enable Packages
@@ -90,6 +91,9 @@
    #+BEGIN_SRC emacs-lisp
    ;; Replace isearch with swiper
    (global-set-key (kbd "C-s") 'swiper)
+   
+   ;; Add new key to recentf
+   (global-set-key (kbd "C-c f") 'counsel-recentf)
    #+END_SRC
 
 ** Counsel
