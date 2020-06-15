@@ -1,1 +1,14 @@
-# Emacs Configuration
+* Emacs Configuration
+** Installation
+ - Install *emacs*
+ - Download this repository
+ - Link this repository to .emacs.d
+ - Copy and rename ~emacs.muban~ to ~.emacs.muban~ and put is in home directory, outside *.emacs.d*
+ - Install the font mentioned in ~configuration.org~
+ - Open emacs
+ - If emacs prompts for continue connecting? Select *a* (always)
+ - Edit a file and make some changes. Save and quit
+ - If emacs asks for Save desktop ? Select *y* (yes) (If it asks for a directory, create a blank directory and enter that location)
+ 
+** Available Functions
+  - Check ~configuration.org~ Key bindings sections to see what key bindings are available
