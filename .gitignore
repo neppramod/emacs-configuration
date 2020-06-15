@@ -2,5 +2,6 @@
 .emacs.desktop.lock
 configuration.el
 elpa/
+backup/
 network-security.data
 recentf
