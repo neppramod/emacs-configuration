@@ -21,4 +21,4 @@
     (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize afternoon-theme))
    #+END_SRC
   - To install the package, you can either load init.el ~M-x load-file~ and load *~/.emacs.d/init.el* (that loads ~configuration.org~) or restart emacs.
-  - Read [[configuration.org][configuration.org]]
+  - Read [[configuration.org][configuration.org]], and go through each section on how things are set. I believe it is well documented. Github also loads org file in proper displayable format, so it should be easy to follow.
