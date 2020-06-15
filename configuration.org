@@ -14,18 +14,19 @@
 
 ** Add required packages
    #+BEGIN_SRC emacs-lisp
-   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize afternoon-theme))
+   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize wgrep afternoon-theme))
    #+END_SRC
    - Ivy provides an interface to list, search, filter and perform actions on a collection of "things". 
    - Counsel adds more to ivy's basic functionality
    - Swiper allows easy way to search current buffer
-   - For details in ivy, counse and swiper [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][read this article]]
+   - For details in ivy, counse and swiper [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][read this article]] and [[https://oremacs.com/swiper/][this article]]
    - Muban allows to insert templates at specific points in current document using keywords. A key binding of ~C-x M-m~ is assigned to ~muban-apply~, which inserts template associated to certain keyword, defined in *.emacs.muban* file (stored in home directory)
    - Org-bullets is used to show asterisk's as bullets in ~org-mode~
    - Avy is used to jump within current document using characters
    - Key chord allows to bind regular characters to actions. Here we bind *cc* to jump to characer, and *ww* to jump to word within the document. Using swiper and avy, we can traverse within a document very quickly.
    - Htmlize is used to export org file to html file
    - In this setting we are installing ~afternoon-theme~. This can be changed to any theme that you want. Also make sure to change ~load-theme~ setting.
+   - Wgrep allows to modify results of grep command and save changes to all effected buffers
 
 ** Install the packages
    #+BEGIN_SRC emacs-lisp
@@ -47,7 +48,7 @@
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (global-linum-mode 0)
-  (setq whitespace-line-column 250) ;; Longer whitespace
+  (setq whitespace-line-column 1000) ;; Longer whitespace
   (setq ring-bell-function 'ignore)
   (setq-default sp-escape-quotes-after-insert nil) ;; Escape quotes properly
   (setq bookmark-save-flag 1) ; everytime bookmark is changed, automatically save
@@ -69,6 +70,12 @@
    #+BEGIN_SRC emacs-lisp
    (setq ivy-use-virtual-buffers t ivy-count-format "%d/%d ")
    (setq enable-recursive-minibuffers t)
+   #+END_SRC
+
+** Wgrep Settings
+   #+BEGIN_SRC emacs-lisp
+   (setq wgrep-auto-save-buffer t)
+   (setq wgrep-change-readonly-file t)
    #+END_SRC
 
 * Font
@@ -110,6 +117,9 @@
    
    ;; Add new key to recentf
    (global-set-key (kbd "C-c f") 'counsel-recentf)
+
+   ;; Set bookmark. See counsel-bookmark later
+   (global-set-key (kbd "C-c b") 'bookmark-set)
    #+END_SRC
 
 ** Counsel
@@ -117,6 +127,12 @@
    #+BEGIN_SRC emacs-lisp
    (global-set-key (kbd "M-x") 'counsel-M-x)
    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+   
+   ;; List bookmarks
+   (global-set-key (kbd "C-c l") 'counsel-bookmark)
+
+   ;; Search using grep in a git project
+   (global-set-key (kbd "C-c g") 'counsel-git-grep)
    #+END_SRC
 
 ** Avy Jump
@@ -137,3 +153,7 @@
    (global-set-key (kbd "M-2") 'java-run)
    #+END_SRC
    
+* Notes
+  - Can use ~C-c C-o~ in minibuffer to open the buffer. Can be used in search, bookmark, buffer search etc.
+  - Can use ~C-c g~ (~counsel-git-grep~) command in a git project to search files using grep  
+  - Can use ~C-h m~ to see instruction on particular mode for extra information
