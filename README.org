@@ -4,11 +4,11 @@
  - Create *.emacs.d* directory
  - Copy ~init.el~ and ~configuration.org~ to *.emacs.d* directory
  - Copy and rename ~emacs.muban~ to ~.emacs.muban~ and put is in home directory, where *.emacs.d* is present
- - Install the font mentioned in `configuration.org`
+ - Install the font mentioned in ~configuration.org~
  - Open emacs
- - If emacs prompts for continue connecting? Select a (always)
+ - If emacs prompts for continue connecting? Select *a* (always)
  - Edit a file and make some changes. Save and quit
- - If emacs asks for Save desktop ? Select y (yes) (If it asks for a directory, create a blank directory and enter that location)
+ - If emacs asks for Save desktop ? Select *y* (yes) (If it asks for a directory, create a blank directory and enter that location)
  
 ** Available Functions
-  - Check `configuration.org` Key bindings sections to see what key bindings are available
+  - Check ~configuration.org~ Key bindings sections to see what key bindings are available
