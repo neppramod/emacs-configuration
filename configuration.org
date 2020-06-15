@@ -15,7 +15,7 @@
 
 ** Add required packages
    #+BEGIN_SRC emacs-lisp
-   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize))
+   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize afternoon-theme))
    #+END_SRC
 
 ** Install the packages
@@ -35,6 +35,7 @@
 * Basic bells and whistle settings
   #+BEGIN_SRC emacs-lisp
   (scroll-bar-mode -1)
+  (tool-bar-mode -1)
   (menu-bar-mode -1)
   (global-linum-mode 0)
   (setq whitespace-line-column 250) ;; Longer whitespace
@@ -66,6 +67,12 @@
   #+BEGIN_SRC emacs-lisp
   (set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
   #+END_SRC
+
+* Theme
+#+BEGIN_SRC emacs-lisp
+  ;; Add the theme package in Add required packages section of Package Management
+  (load-theme 'afternoon t)
+#+END_SRC
 
 * Programming Language Specific
 ** Java
@@ -120,3 +127,4 @@
    (global-set-key (kbd "M-1") 'java-build)
    (global-set-key (kbd "M-2") 'java-run)
    #+END_SRC
+   
