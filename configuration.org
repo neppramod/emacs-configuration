@@ -15,7 +15,7 @@
 
 ** Add required packages
    #+BEGIN_SRC emacs-lisp
-   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize))
+   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord))
    #+END_SRC
 
 ** Install the packages
