@@ -27,4 +27,4 @@
   - Read [[configuration.org][configuration.org]], and go through each section on how things are set. I believe it is well documented. Github also loads org file in proper displayable format, so it should be easy to follow.
 
 ** Screenshot
-[[screenshot1]]
+[[screenshot1.png]]
