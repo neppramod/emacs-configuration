@@ -1,0 +1,118 @@
+* Emacs Configuration
+  This file contains basic emacs configuration
+  #+TITLE Emacs Configuration
+
+* Package Management
+** Set repo using package
+   #+BEGIN_SRC emacs-lisp
+   (require 'package)
+
+   (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
+			 ("elpa" . "http://tromey.com/elpa/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+   #+END_SRC
+
+** Add required packages
+   #+BEGIN_SRC emacs-lisp
+   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord))
+   #+END_SRC
+
+** Install the packages
+   #+BEGIN_SRC emacs-lisp
+   (package-initialize)
+
+; fetch the list of packages available 
+(unless package-archive-contents
+  (package-refresh-contents))
+
+; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+   #+END_SRC
+
+* Basic bells and whistle settings
+  #+BEGIN_SRC emacs-lisp
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (global-linum-mode 0)
+  (setq whitespace-line-column 250) ;; Longer whitespace
+  (setq ring-bell-function 'ignore)
+  (setq-default sp-escape-quotes-after-insert nil) ;; Escape quotes properly
+  (setq bookmark-save-flag 1) ; everytime bookmark is changed, automatically save
+  (desktop-save-mode 1)
+  (recentf-mode 1)
+  (setq recentf-max-saved-items 50)
+  #+END_SRC
+
+* Enable Packages
+  #+BEGIN_SRC emacs-lisp
+  (require 'org-bullets) (add-hook 'org-mode-hook 'org-bullets-mode)
+  (ivy-mode 1)
+  (key-chord-mode +1)
+  #+END_SRC
+
+* Settings
+** Ivy Settings
+   #+BEGIN_SRC emacs-lisp
+   (setq ivy-use-virtual-buffers t ivy-count-format "%d/%d ")
+   (setq enable-recursive-minibuffers t)
+   #+END_SRC
+
+* Font
+  Note: Make sure following font is installed
+  #+BEGIN_SRC emacs-lisp
+  (set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
+  #+END_SRC
+
+* Programming Language Specific
+** Java
+   #+BEGIN_SRC emacs-lisp
+   ;; Following makes sure curly braces are indented
+   (add-hook 'java-mode-hook (lambda () (setq c-default-style "bsd")))
+
+   ;; Build java file
+   (defun java-build ()
+   (interactive)
+   (shell-command (concat "javac " buffer-file-name)))
+
+   (defun java-run()
+   (interactive)
+   (async-shell-command (concat "java " (file-name-base buffer-file-name)))
+   (other-window 1))
+   #+END_SRC
+
+* Key bindings
+
+** Global
+
+   #+BEGIN_SRC emacs-lisp
+   ;; Replace isearch with swiper
+   (global-set-key (kbd "C-s") 'swiper)
+   #+END_SRC
+
+** Counsel
+
+   #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "M-x") 'counsel-M-x)
+   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+   #+END_SRC
+
+** Avy Jump
+   #+BEGIN_SRC emacs-lisp
+   (key-chord-define-global "cc" 'avy-goto-char)
+   (key-chord-define-global "ww" 'avy-goto-word-1)
+   #+END_SRC
+
+
+** Muban
+   #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "C-x M-m") 'muban-apply)
+   #+END_SRC
+
+** Java
+   #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "M-1") 'java-build)
+   (global-set-key (kbd "M-2") 'java-run)
+   #+END_SRC
