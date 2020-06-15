@@ -12,3 +12,11 @@
  
 ** Available Functions
   - Check ~configuration.org~ Key bindings sections to see what key bindings are available
+  
+** Modifying existing settings or adding new one
+  - If you want to add or remove any packages, make sure it is available in the repository. You can use Alt-x and start typing the package name to find it.
+  - Add the package name in "Add required packages" section.
+  #+BEGIN_SRC emacs-lisp
+    (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize afternoon-theme))
+   #+END_SRC
+  - To install the package, you can either load init.el ~M-x load-file~ and load \~/.emacs.d/init.el (that loads configuration.org) or restart emacs.
