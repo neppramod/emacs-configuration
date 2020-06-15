@@ -31,7 +31,7 @@
     (package-install package)))
    #+END_SRC
 
-* Basic bells and whistle settings
+* Basic bells and whistles settings
   #+BEGIN_SRC emacs-lisp
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
