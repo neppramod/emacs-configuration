@@ -1,6 +1,6 @@
 * Emacs Configuration
-  This file contains basic emacs configuration. Next text is set for html title.
-  #+TITLE Emacs Configuration
+#+TITLE: Emacs Configuration
+  This file contains basic emacs configuration
 
 * Package Management
 ** Set repo using package
