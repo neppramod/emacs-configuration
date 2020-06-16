@@ -193,7 +193,8 @@
    - ~Y~ Cherry
    - ~d~ Diff
    - ~E~ Ediff
-   - ~r~ Pulling
+   - ~Fp~ Pulling
+   - ~g~ Refresh
    - ~z~ Stashing
    - ~r~ Rebaing
    - For more see [[https://magit.vc/manual/magit-refcard.pdf][magit ref-card]]
