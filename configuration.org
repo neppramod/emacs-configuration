@@ -179,7 +179,7 @@
    - For more info ~C-h m~ or See this [[https://www.gnu.org/software/emacs/refcards/pdf/dired-ref.pdf][dired-ref]] document
  
 ** Magit
-   - ~magit-status~ Show status of current git project
+   - ~C-x g or magit-status~ Show status of current git project
    - ~s~ Stage files from Unstaged area
    - ~u~ Unstage file
    - ~S~ Stage all files
@@ -198,3 +198,11 @@
    - ~z~ Stashing
    - ~r~ Rebaing
    - For more see [[https://magit.vc/manual/magit-refcard.pdf][magit ref-card]]
+
+** Org Mode
+   - ~C-c C-o~ Open link at point
+** Macro
+   - ~C-x (~ Start macro
+   - ~C-x )~ End macro
+   - ~C-x e~ End and call macro
+   - ~C-u 10 C-x e~ Repeat 10 times
