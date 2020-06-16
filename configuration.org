@@ -58,6 +58,7 @@
   (setq recentf-max-saved-items 50)
   (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))   ; Move all temporary backup files to backup folder
   (electric-pair-mode 1)      ; Automatically add ending brackets and braces
+  (show-paren-mode 1)         ; Highlight matching brackets and braces
   #+END_SRC
 
 * Enable Packages
@@ -146,6 +147,11 @@
    #+BEGIN_SRC emacs-lisp
    (global-set-key (kbd "M-1") 'java-build)
    (global-set-key (kbd "M-2") 'java-run)
+   #+END_SRC
+   
+** Magit
+   #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "C-x g") 'magit-status)
    #+END_SRC
    
 * Notes
