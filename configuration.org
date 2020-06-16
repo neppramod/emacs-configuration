@@ -196,3 +196,4 @@
    - ~r~ Pulling
    - ~z~ Stashing
    - ~r~ Rebaing
+   - For more see [[https://magit.vc/manual/magit-refcard.pdf][magit ref-card]]
