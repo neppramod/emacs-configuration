@@ -57,6 +57,7 @@
   (recentf-mode 1)            ; Maintain a list of recent files opened
   (setq recentf-max-saved-items 50)
   (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))   ; Move all temporary backup files to backup folder
+  (electric-pair-mode 1)      ; Automatically add ending brackets and braces
   #+END_SRC
 
 * Enable Packages
@@ -96,6 +97,7 @@
    #+BEGIN_SRC emacs-lisp
    ;; Following makes sure curly braces are indented
    (add-hook 'java-mode-hook (lambda () (setq c-default-style "bsd")))
+   (add-hook 'java-mode-hook (lambda () (setq c-basic-offset 4 tab-width 4 indent-tabs-mode t)))
 
    ;; Build java file
    (defun java-build ()
@@ -148,7 +150,7 @@
    
 * Notes
 
-** Edit minibuffer using wgrep
+** Edit multiple files in minibuffer using wgrep
    - Can use ~C-c C-o~ in minibuffer to open the buffer. Can be used in search, bookmark, buffer search etc.
    - Can use ~C-c g~ (~counsel-git-grep~) command in a git project to search files using grep
    - Can use ~C-h m~ to see instruction on particular mode for extra information
