@@ -14,7 +14,7 @@
 
 ** Add required packages
    #+BEGIN_SRC emacs-lisp
-   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize wgrep magit afternoon-theme))
+   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize wgrep magit solarized-theme))
    #+END_SRC
    - Ivy provides an interface to list, search, filter and perform actions on a collection of "things". 
    - Counsel adds more to ivy's basic functionality
@@ -90,7 +90,7 @@
 * Theme
 #+BEGIN_SRC emacs-lisp
   ;; Add the theme package in Add required packages section of Package Management
-  (load-theme 'afternoon t)
+  (load-theme 'solarized-dark t)
 #+END_SRC
 
 * Programming Language Specific
