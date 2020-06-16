@@ -5,6 +5,7 @@ elpa/
 backup/
 auto-save-list/
 eshell/
+server/
 network-security.data
 recentf
 bookmarks

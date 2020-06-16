@@ -177,7 +177,22 @@
    - ~d~ Mark files for deletion
    - ~x~ Delete files marked for deletion
    - For more info ~C-h m~ or See this [[https://www.gnu.org/software/emacs/refcards/pdf/dired-ref.pdf][dired-ref]] document
-
-
-   
-
+ 
+** Magit
+   - ~magit-status~ Show status of current git project
+   - ~s~ Stage files from Unstaged area
+   - ~u~ Unstage file
+   - ~S~ Stage all files
+   - ~U~ reset index to some commits
+   - ~cc~ Pressing on staged list, opens commit window
+   - ~C-c C-c~ After writing comment, press this to commit the change
+   - ~Pp~ In ~magit-status~ window press this to push the changes for unmerged section
+   - ~M-x magit-unstage-all~ Remove all changes
+   - ~x~ Soft reset (hard when argument is given)
+   - ~y~ Show references, tag and branches
+   - ~Y~ Cherry
+   - ~d~ Diff
+   - ~E~ Ediff
+   - ~r~ Pulling
+   - ~z~ Stashing
+   - ~r~ Rebaing
