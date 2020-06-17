@@ -76,10 +76,10 @@
 
     #+END_SRC
 
-*** Swiper Helm
-    Swiper allows easy way to search current buffer
+*** Swoop Helm
+    Swoop allows easy way to search current buffer
     #+BEGIN_SRC emacs-lisp
-    (use-package swiper-helm :ensure t)
+    (use-package helm-swoop :ensure t)
     #+END_SRC
 
 *** Wgrep Helm
@@ -120,7 +120,7 @@
    #+END_SRC
 
 ** Key-Chord
-   Key-Chord allows to bind regular characters to actions. Here we bind *cc* to jump to characer, and *ww* to jump to word within the document. Using swiper and avy, we can traverse within a document very quickly.
+   Key-Chord allows to bind regular characters to actions. Here we bind *cc* to jump to characer, and *ww* to jump to word within the document. Using swoop and avy, we can traverse within a document very quickly.
    #+BEGIN_SRC emacs-lisp
    (use-package use-package-chords
    :ensure t
@@ -171,8 +171,8 @@
 ** Global
 
    #+BEGIN_SRC emacs-lisp
-   ;; Replace isearch with swiper
-   (global-set-key (kbd "C-s") 'swiper)
+   ;; Replace isearch with helmswoop
+   (global-set-key (kbd "C-s") 'helm-swoop)
    
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
