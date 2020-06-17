@@ -2,7 +2,7 @@
 ** Installation
  - Install *emacs*
  - Download this repository to ~.emacs.d~ folder (in your home directory) \\ 
-   ~git clone https://github.com/neppramod/emacs-configuration.git ~/.emacs.d~
+   ~git clone https://github.com/neppramod/emacs-configuration.git .emacs.d~
  - *Note*: /In window,s home directory is at C:\Users\<username>\AppData\Roaming. AppData folder is hidden by default/ \\
  - Link or copy ~emacs.muban~ to ~.emacs.muban~ and put it outside *.emacs.d* in home directory. Assuming you are in ~ or AppData directory \\
    ~ln -s .emacs.d/emacs.muban .emacs.muban~
