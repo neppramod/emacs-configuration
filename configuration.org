@@ -86,7 +86,7 @@
     Wgrep allows to modify results of grep command and save changes to all affected buffers
     #+BEGIN_SRC emacs-lisp
     (use-package wgrep-helm 
-    :defer t
+    :ensure t
     :custom
     (wgrep-enable-key "e")
     (wgrep-auto-save-buffer t)
