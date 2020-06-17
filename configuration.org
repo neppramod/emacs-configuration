@@ -120,6 +120,9 @@
    
    ;; Add new key to recentf
    (global-set-key (kbd "C-c f") 'counsel-recentf)
+   
+   ;; Replace regexp on selected text
+   (global-set-key (kbd "C-;") 'replace-regexp)
    #+END_SRC
 
 ** Counsel
