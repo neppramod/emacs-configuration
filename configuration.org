@@ -2,7 +2,7 @@
   This file contains basic emacs configuration
 
 * Package Management
-** Set repo using package
+** Set repo using package and initialize use-package
    #+BEGIN_SRC emacs-lisp
    (require 'package)
 
@@ -10,10 +10,18 @@
 			 ("elpa" . "http://tromey.com/elpa/")
                             ("gnu" . "http://elpa.gnu.org/packages/")
                             ("marmalade" . "http://marmalade-repo.org/packages/")))
-   #+END_SRC
 
-** Add required packages
-   #+BEGIN_SRC emacs-lisp
+   (package-initialize)
+
+   ; fetch the list of packages available 
+   (unless package-archive-contents
+    (package-refresh-contents))
+
+   ; install the missing packages
+  (dolist (package package-list)
+    (unless (package-installed-p package)
+      (package-install package)))
+
    (setq package-list '(use-package))
    #+END_SRC
    - Ivy provides an interface to list, search, filter and perform actions on a collection of "things". 
@@ -30,18 +38,6 @@
    - Magit package works with git project
 
 ** Install the packages
-   #+BEGIN_SRC emacs-lisp
-(package-initialize)
-
-; fetch the list of packages available 
-(unless package-archive-contents
-  (package-refresh-contents))
-
-; install the missing packages
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-   #+END_SRC
 
 Install rest of the packages
      #+BEGIN_SRC emacs-lisp
