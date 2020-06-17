@@ -1,4 +1,4 @@
-##+TITLE: Emacs Configuration
+#+TITLE: Emacs Configuration
   This file contains basic emacs configuration
 
 * Initialize use-package
