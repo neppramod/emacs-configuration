@@ -17,4 +17,4 @@
   - Few custom keys are set, and most of them are found in individual ~use-package~ or [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#key-bindings][Key bindings section]]. Usage of default keys are listed in individual Notes section and global [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#notes-2][Notes]] section.
   
 ** Screenshot
-[[screenshot1.png]]
+[[screenshot-01.png]]
