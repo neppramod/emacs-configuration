@@ -1,7 +1,7 @@
 ##+TITLE: Emacs Configuration
   This file contains basic emacs configuration
 
-* Package Management
+* Initialize use-package
 ** Set repo using package and initialize use-package
    #+BEGIN_SRC emacs-lisp
    (require 'package)
@@ -13,45 +13,15 @@
 
    (package-initialize)
 
-   ; fetch the list of packages available 
-   (unless package-archive-contents
-    (package-refresh-contents))
+   ; Fetch the list of packages available 
+   (unless package-archive-contents (package-refresh-contents))
 
+    ; Install use-package
     (setq package-list '(use-package))
-
-    ; install the missing packages
     (dolist (package package-list)
-    (unless (package-installed-p package)
-      (package-install package)))
-
+    (unless (package-installed-p package) (package-install package)))
 
    #+END_SRC
-   - Helm adds many functionality to search and manage buffers
-   - Swiper allows easy way to search current buffer
-   - Wgrep allows to modify results of grep command and save changes to all effected buffers
-   - Muban allows to insert templates at specific points in current document using keywords. A key binding of ~C-x M-m~ is assigned to ~muban-apply~, which inserts template associated to certain keyword, defined in *.emacs.muban* file (stored in home directory)
-   - Org-bullets is used to show asterisk's as bullets in ~org-mode~
-   - Avy is used to jump within current document using characters
-   - Key chord allows to bind regular characters to actions. Here we bind *cc* to jump to characer, and *ww* to jump to word within the document. Using swiper and avy, we can traverse within a document very quickly.
-   - Htmlize is used to export org file to html file
-   - In this setting we are installing ~solarized-theme~. This can be changed to any theme that you want. Also make sure to change ~load-theme~ setting.
-   - Magit package works with git project
-
-** Install the packages
-
-Install rest of the packages
-     #+BEGIN_SRC emacs-lisp
-     (use-package helm :ensure t)
-     (use-package swiper-helm :ensure t)
-     (use-package wgrep-helm :ensure t)
-     (use-package muban :ensure t)
-     (use-package org-bullets :ensure t)
-     (use-package avy :ensure t)
-     (use-package key-chord :ensure t)
-     (use-package htmlize :ensure t)
-     (use-package magit :ensure t)
-     (use-package solarized-theme :ensure t)
-     #+END_SRC
 
 * Basic bells and whistles settings
   #+BEGIN_SRC emacs-lisp
@@ -71,31 +41,113 @@ Install rest of the packages
   (show-paren-mode 1)         ; Highlight matching brackets and braces
   #+END_SRC
 
-* Enable Packages
-  #+BEGIN_SRC emacs-lisp
-  (require 'org-bullets) (add-hook 'org-mode-hook 'org-bullets-mode)
-  (helm-mode 1)
-  (key-chord-mode +1)
-  #+END_SRC
+* Looks
+*** Theme
+    #+BEGIN_SRC emacs-lisp
+    (use-package solarized-theme 
+    :ensure t
+    :init
+    (load-theme 'solarized-dark t))
+    
+    #+END_SRC
 
-* Settings
-** Wgrep Settings
+*** Font
+    Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
+    #+BEGIN_SRC emacs-lisp
+    (set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
+    #+END_SRC
+
+* Custom settings
+
+** Helm Packages
+
+*** Helm
+    Helm adds many functionality to search and manage buffers
+    #+BEGIN_SRC emacs-lisp
+      (use-package helm 
+      :ensure t
+      :init 
+      (helm-mode 1)
+      :bind
+      (("M-x" . helm-M-x))
+      (("C-x C-f" . helm-find-files))
+      (("C-c f" . helm-recentf))   ;; Add new key to recentf
+      (("C-c g" . helm-grep-do-git-grep)))  ;; Search using grep in a git project
+
+    #+END_SRC
+
+*** Swiper Helm
+    Swiper allows easy way to search current buffer
+    #+BEGIN_SRC emacs-lisp
+    (use-package swiper-helm :ensure t)
+    #+END_SRC
+
+*** Wgrep Helm
+    Wgrep allows to modify results of grep command and save changes to all effected buffers
+    #+BEGIN_SRC emacs-lisp
+    (use-package wgrep-helm 
+    :defer t
+    :custom
+    (wgrep-enable-key "e")
+    (wgrep-auto-save-buffer t)
+    (wgrep-change-readonly-file t))
+    #+END_SRC
+
+***  Notes
+**** Change multiple files in minibuffer using wgrep
+    - ~C-c g~ (~helm-git-do-grep~) command in a git project to search files using grep
+    - ~C-c C-s~ save buffer
+    - ~C-c C-p~ enable editing in wgrep buffer
+    - ~C-h m~ see instruction on particular mode for extra information
+    - ~C-c C-k~ discard change in wgrep buffer
+
+** Muban    
+   Muban allows to insert templates at specific points in current document using keywords. A key binding of ~C-x M-m~ is assigned to ~muban-apply~, which inserts template associated to certain keyword, defined in *.emacs.muban* file (stored in home directory)
+    #+BEGIN_SRC emacs-lisp
+     (use-package muban 
+     :ensure t
+     :bind
+     (("C-x M-m" . muban-apply)))
+    #+END_SRC
+
+** Org-Bullets
+   Org-bullets is used to show asterisk's as bullets in ~org-mode~
    #+BEGIN_SRC emacs-lisp
-   (setq wgrep-auto-save-buffer t)
-   (setq wgrep-change-readonly-file t)
+     (use-package org-bullets 
+     :ensure t
+     :config
+     (add-hook 'org-mode-hook 'org-bullets-mode))   
    #+END_SRC
 
-* Font
-  Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
-  #+BEGIN_SRC emacs-lisp
-  (set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
-  #+END_SRC
+** Key-Chord
+   Key-Chord allows to bind regular characters to actions. Here we bind *cc* to jump to characer, and *ww* to jump to word within the document. Using swiper and avy, we can traverse within a document very quickly.
+   #+BEGIN_SRC emacs-lisp
+   (use-package use-package-chords
+   :ensure t
+   :config (key-chord-mode 1))
+   #+END_SRC
 
-* Theme
-#+BEGIN_SRC emacs-lisp
-  ;; Add the theme package in Add required packages section of Package Management
-  (load-theme 'solarized-dark t)
-#+END_SRC
+** Avy
+   Avy is used to jump within current document using characters
+   #+BEGIN_SRC emacs-lisp
+     (use-package avy 
+     :ensure t
+     :chords
+     ("cc" . avy-goto-char)
+     ("ww" . avy-goto-word-1))   
+   #+END_SRC
+   
+** Htmlize
+   Htmlize is used to export org file to html file
+    #+BEGIN_SRC emacs-lisp
+     (use-package htmlize :ensure t)
+    #+END_SRC
+
+** Magit
+   Magit package works with git project
+   #+BEGIN_SRC emacs-lisp
+     (use-package magit :ensure t)
+   #+END_SRC
 
 * Programming Language Specific
 ** Java
@@ -122,32 +174,8 @@ Install rest of the packages
    ;; Replace isearch with swiper
    (global-set-key (kbd "C-s") 'swiper)
    
-   ;; Add new key to recentf
-   (global-set-key (kbd "C-c f") 'helm-recentf)
-   
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
-   #+END_SRC
-
-** Helm
-
-   #+BEGIN_SRC emacs-lisp
-   (global-set-key (kbd "M-x") 'helm-M-x)
-   (global-set-key (kbd "C-x C-f") 'helm-find-files)
-
-   ;; Search using grep in a git project
-   (global-set-key (kbd "C-c g") 'helm-grep-do-git-grep)
-   #+END_SRC
-
-** Avy Jump
-   #+BEGIN_SRC emacs-lisp
-   (key-chord-define-global "cc" 'avy-goto-char)
-   (key-chord-define-global "ww" 'avy-goto-word-1)
-   #+END_SRC
-
-** Muban
-   #+BEGIN_SRC emacs-lisp
-   (global-set-key (kbd "C-x M-m") 'muban-apply)
    #+END_SRC
 
 ** Java
@@ -160,20 +188,40 @@ Install rest of the packages
    #+BEGIN_SRC emacs-lisp
    (global-set-key (kbd "C-x g") 'magit-status)
    #+END_SRC
-   
+  
+*** Notes
+    - ~C-x g or magit-status~ Show status of current git project
+    - ~s~ Stage files from Unstaged area
+    - ~u~ Unstage file
+    - ~S~ Stage all files
+    - ~U~ reset index to some commits
+    - ~cc~ Pressing on staged list, opens commit window
+    - ~C-c C-c~ After writing comment, press this to commit the change
+    - ~Pp~ In ~magit-status~ window press this to push the changes for unmerged section
+    - ~M-x magit-unstage-all~ Remove all changes
+    - ~x~ Soft reset (hard when argument is given)
+    - ~y~ Show references, tag and branches
+    - ~Y~ Cherry
+    - ~d~ Diff
+    - ~E~ Ediff
+    - ~Fp~ Pulling
+    - ~g~ Refresh
+    - ~z~ Stashing
+    - ~r~ Rebaing
+    - For more see [[https://magit.vc/manual/magit-refcard.pdf][magit ref-card]]
+ 
 * Notes
 
 ** General
    - ~M-/~ Complete word
    - ~C-;~ Replace regular expression in selected text
-
-** Change multiple files in minibuffer using wgrep
-   - Can use ~C-c g~ (~helm-git-do-grep~) command in a git project to search files using grep
-   - Can use ~C-c C-s~ to save the buffer
-   - Can use ~C-c C-p~ to enable editing in wgrep buffer
-   - Can use ~C-h m~ to see instruction on particular mode for extra information
-   - Can use ~C-c C-k~ to discard change in wgrep buffer
  
+** Macro
+   - ~C-x (~ Start macro
+   - ~C-x )~ End macro
+   - ~C-x e~ End and call macro
+   - ~C-u 10 C-x e~ Repeat 10 times
+
 ** Manage bookmark
     - Can use ~C-x r l~ to list bookmarks
     - Can use ~C-x r b~ to jump to bookmark
@@ -197,27 +245,6 @@ Install rest of the packages
    - ~x~ Delete files marked for deletion
    - For more info ~C-h m~ or See this [[https://www.gnu.org/software/emacs/refcards/pdf/dired-ref.pdf][dired-ref]] document
  
-** Magit
-   - ~C-x g or magit-status~ Show status of current git project
-   - ~s~ Stage files from Unstaged area
-   - ~u~ Unstage file
-   - ~S~ Stage all files
-   - ~U~ reset index to some commits
-   - ~cc~ Pressing on staged list, opens commit window
-   - ~C-c C-c~ After writing comment, press this to commit the change
-   - ~Pp~ In ~magit-status~ window press this to push the changes for unmerged section
-   - ~M-x magit-unstage-all~ Remove all changes
-   - ~x~ Soft reset (hard when argument is given)
-   - ~y~ Show references, tag and branches
-   - ~Y~ Cherry
-   - ~d~ Diff
-   - ~E~ Ediff
-   - ~Fp~ Pulling
-   - ~g~ Refresh
-   - ~z~ Stashing
-   - ~r~ Rebaing
-   - For more see [[https://magit.vc/manual/magit-refcard.pdf][magit ref-card]]
-
 ** Org Mode
    - Org File. Save file with .org extension
    - ~C-c a~ View agenda mode (has various options to manage agenda)
@@ -250,8 +277,3 @@ Install rest of the packages
    - ~C-c C-c~ Code block
    - ~C-c C-o~ Open result of code block
    - For more see [[https://orgmode.org/orgcard.pdf][Org-Mode Reference Card]]
-** Macro
-   - ~C-x (~ Start macro
-   - ~C-x )~ End macro
-   - ~C-x e~ End and call macro
-   - ~C-u 10 C-x e~ Repeat 10 times
