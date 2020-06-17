@@ -159,6 +159,10 @@
    
 * Notes
 
+* General
+   - ~M-/~ Complete word
+   - ~C-;~ Replace regular expression in selected text
+
 ** Edit multiple files in minibuffer using wgrep
    - Can use ~C-c C-o~ in minibuffer to open the buffer. Can be used in search, bookmark, buffer search etc.
    - Can use ~C-c g~ (~counsel-git-grep~) command in a git project to search files using grep
@@ -212,11 +216,8 @@
 
 ** Org Mode
    - Org File. Save file with .org extension
-   - ~C-c a~ View agenda mode
+   - ~C-c a~ View agenda mode (has various options to manage agenda)
    - ~C-c [~ Enable agenda on current file
-   - ~agenda view, n~ Show TODO items
-   - ~agenda view, m~ Find with tag
-   - ~agenda view, M~ Find with tag not done
    - ~M-Enter~ Create item
    - ~M-Right M-Left~ Create subitem / Change level
    - ~M-Up M-Down~ Change order
@@ -233,8 +234,6 @@
    - ~C-Shift-|~ Insert table
    - ~C-c C-c~ Realign table
    - ~Tab~ Realign, move to next field
-   - ~Shift-Tab~ Previous field
-   - ~Enter~ Next row
    - ~M-a M-e~ Beginning / end of row
    - ~M-left M-right~ Left, right
    - ~M-Shift-Left/Right~ Delete/Add column
