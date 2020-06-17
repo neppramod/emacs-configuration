@@ -159,7 +159,7 @@
    
 * Notes
 
-* General
+** General
    - ~M-/~ Complete word
    - ~C-;~ Replace regular expression in selected text
 
