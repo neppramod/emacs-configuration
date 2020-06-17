@@ -171,8 +171,8 @@
 ** Global
 
    #+BEGIN_SRC emacs-lisp
-   ;; Replace isearch with helmswoop
-   (global-set-key (kbd "C-s") 'helm-swoop)
+   ;; Search with helm-swoop
+   (global-set-key (kbd "C-c s") 'helm-swoop)
    
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
