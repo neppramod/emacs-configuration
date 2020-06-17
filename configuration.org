@@ -23,6 +23,7 @@
       (package-install package)))
 
    (setq package-list '(use-package))
+   (package-initialize)  ;; Install
    #+END_SRC
    - Ivy provides an interface to list, search, filter and perform actions on a collection of "things". 
    - Counsel adds more to ivy's basic functionality
