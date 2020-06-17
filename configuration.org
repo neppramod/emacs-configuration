@@ -12,31 +12,38 @@
                             ("marmalade" . "http://marmalade-repo.org/packages/")))
 
    (package-initialize)
-   (unless (package-installed-p 'use-package)
-   (package-refresh-contents)
-   (package-install 'use-package))
+
+   ; fetch the list of packages available 
+   (unless package-archive-contents
+    (package-refresh-contents))
+
+    (setq package-list '(use-package))
+
+    ; install the missing packages
+    (dolist (package package-list)
+    (unless (package-installed-p package)
+      (package-install package)))
+
 
    #+END_SRC
-   - Ivy provides an interface to list, search, filter and perform actions on a collection of "things". 
-   - Counsel adds more to ivy's basic functionality
+   - Helm adds many functionality to search and manage buffers
    - Swiper allows easy way to search current buffer
-   - For details in ivy, counse and swiper [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][read this article]] and [[https://oremacs.com/swiper/][this article]]
+   - Wgrep allows to modify results of grep command and save changes to all effected buffers
    - Muban allows to insert templates at specific points in current document using keywords. A key binding of ~C-x M-m~ is assigned to ~muban-apply~, which inserts template associated to certain keyword, defined in *.emacs.muban* file (stored in home directory)
    - Org-bullets is used to show asterisk's as bullets in ~org-mode~
    - Avy is used to jump within current document using characters
    - Key chord allows to bind regular characters to actions. Here we bind *cc* to jump to characer, and *ww* to jump to word within the document. Using swiper and avy, we can traverse within a document very quickly.
    - Htmlize is used to export org file to html file
-   - In this setting we are installing ~afternoon-theme~. This can be changed to any theme that you want. Also make sure to change ~load-theme~ setting.
-   - Wgrep allows to modify results of grep command and save changes to all effected buffers
+   - In this setting we are installing ~solarized-theme~. This can be changed to any theme that you want. Also make sure to change ~load-theme~ setting.
    - Magit package works with git project
 
 ** Install the packages
 
 Install rest of the packages
      #+BEGIN_SRC emacs-lisp
-     (use-package ivy :ensure t)
-     (use-package counsel :ensure t)
-     (use-package swiper :ensure t)
+     (use-package helm :ensure t)
+     (use-package swiper-helm :ensure t)
+     (use-package wgrep-helm :ensure t)
      (use-package muban :ensure t)
      (use-package org-bullets :ensure t)
      (use-package avy :ensure t)
@@ -67,17 +74,11 @@ Install rest of the packages
 * Enable Packages
   #+BEGIN_SRC emacs-lisp
   (require 'org-bullets) (add-hook 'org-mode-hook 'org-bullets-mode)
-  (ivy-mode 1)
+  (helm-mode 1)
   (key-chord-mode +1)
   #+END_SRC
 
 * Settings
-** Ivy Settings
-   #+BEGIN_SRC emacs-lisp
-   (setq ivy-use-virtual-buffers t ivy-count-format "%d/%d ")
-   (setq enable-recursive-minibuffers t)
-   #+END_SRC
-
 ** Wgrep Settings
    #+BEGIN_SRC emacs-lisp
    (setq wgrep-auto-save-buffer t)
@@ -122,20 +123,20 @@ Install rest of the packages
    (global-set-key (kbd "C-s") 'swiper)
    
    ;; Add new key to recentf
-   (global-set-key (kbd "C-c f") 'counsel-recentf)
+   (global-set-key (kbd "C-c f") 'helm-recentf)
    
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
    #+END_SRC
 
-** Counsel
+** Helm
 
    #+BEGIN_SRC emacs-lisp
-   (global-set-key (kbd "M-x") 'counsel-M-x)
-   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+   (global-set-key (kbd "M-x") 'helm-M-x)
+   (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
    ;; Search using grep in a git project
-   (global-set-key (kbd "C-c g") 'counsel-git-grep)
+   (global-set-key (kbd "C-c g") 'helm-grep-do-git-grep)
    #+END_SRC
 
 ** Avy Jump
@@ -166,11 +167,11 @@ Install rest of the packages
    - ~M-/~ Complete word
    - ~C-;~ Replace regular expression in selected text
 
-** Edit multiple files in minibuffer using wgrep
-   - Can use ~C-c g~ (~counsel-git-grep~) command in a git project to search files using grep
-   - Can use ~C-c C-o~ in minibuffer to open the buffer. Can be used in search, bookmark, buffer search etc.
-   - Can use ~C-h m~ to see instruction on particular mode for extra information
+** Change multiple files in minibuffer using wgrep
+   - Can use ~C-c g~ (~helm-git-do-grep~) command in a git project to search files using grep
+   - Can use ~C-c C-s~ to save the buffer
    - Can use ~C-c C-p~ to enable editing in wgrep buffer
+   - Can use ~C-h m~ to see instruction on particular mode for extra information
    - Can use ~C-c C-k~ to discard change in wgrep buffer
  
 ** Manage bookmark
