@@ -164,8 +164,8 @@
    - ~C-;~ Replace regular expression in selected text
 
 ** Edit multiple files in minibuffer using wgrep
-   - Can use ~C-c C-o~ in minibuffer to open the buffer. Can be used in search, bookmark, buffer search etc.
    - Can use ~C-c g~ (~counsel-git-grep~) command in a git project to search files using grep
+   - Can use ~C-c C-o~ in minibuffer to open the buffer. Can be used in search, bookmark, buffer search etc.
    - Can use ~C-h m~ to see instruction on particular mode for extra information
    - Can use ~C-c C-p~ to enable editing in wgrep buffer
    - Can use ~C-c C-k~ to discard change in wgrep buffer
