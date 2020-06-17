@@ -243,6 +243,7 @@
    - ~C-c &~ Jump back to previous followed link
    - ~C-c C-c~ Code block
    - ~C-c C-o~ Open result of code block
+   - For more see [[https://orgmode.org/orgcard.pdf][org ref card]]
 ** Macro
    - ~C-x (~ Start macro
    - ~C-x )~ End macro
