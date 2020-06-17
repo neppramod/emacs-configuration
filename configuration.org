@@ -83,7 +83,7 @@
     #+END_SRC
 
 *** Wgrep Helm
-    Wgrep allows to modify results of grep command and save changes to all effected buffers
+    Wgrep allows to modify results of grep command and save changes to all affected buffers
     #+BEGIN_SRC emacs-lisp
     (use-package wgrep-helm 
     :defer t
