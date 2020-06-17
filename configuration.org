@@ -208,7 +208,41 @@
    - For more see [[https://magit.vc/manual/magit-refcard.pdf][magit ref-card]]
 
 ** Org Mode
-   - ~C-c C-o~ Open link at point
+   - Org File. Save file with .org extension
+   - ~C-c a~ View agenda mode
+   - ~C-c [~ Enable agenda on current file
+   - ~agenda view, n~ Show TODO items
+   - ~agenda view, m~ Find with tag
+   - ~agenda view, M~ Find with tag not done
+   - ~M-Enter~ Create item
+   - ~M-Right M-Left~ Create subitem / Change level
+   - ~M-Up M-Down~ Change order
+   - ~Shift-Right~ Create TODO item, complete
+   - ~M-Shift-Enter~ Insert new TODO, Checkbox
+   - ~[1/1]~ Create checkbox
+   - ~[] C-c C-c~ Complete checkbox
+   - ~[/] C-c C-c~ Toggle count completed items
+   - ~[%] C-c C-c~ Use percentage
+   - ~C-c C-d~ Deadline
+   - ~C-c C-c~ Tag with keyword on item
+   - ~Tab~ Hide subsection
+   - ~Shift-Tab~ Hide/show multiple
+   - ~C-Shift-|~ Insert table
+   - ~C-c C-c~ Realign table
+   - ~Tab~ Realign, move to next field
+   - ~Shift-Tab~ Previous field
+   - ~Enter~ Next row
+   - ~M-a M-e~ Beginning / end of row
+   - ~M-left M-right~ Left, right
+   - ~M-Shift-Left/Right~ Delete/Add column
+   - ~M-Shift-Up/Down~ Delete/Add row
+   - ~C-c -~ Insert hr line
+   - ~C-c l~ Globally insert link to current locaton
+   - ~C-c C-l~ Insert a link
+   - ~C-c C-o~ Open file link
+   - ~C-c &~ Jump back to previous followed link
+   - ~C-c C-c~ Code block
+   - ~C-c C-o~ Open result of code block
 ** Macro
    - ~C-x (~ Start macro
    - ~C-x )~ End macro
