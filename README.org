@@ -12,17 +12,9 @@
  - Edit a file and make some changes. Save and quit
  - If emacs asks for Save desktop ? Select *y* (yes) (If it asks for a directory, create a blank directory and enter that location)
  
-** Available Functions
-  - Check ~configuration.org~ [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#key-bindings][Key bindings sections]] to see what key bindings are available
-  
-** Modifying existing settings or adding new
-  - If you want to add or remove any packages, make sure it is available in the repository. You can use Alt-x and start typing the package name to find it.
-  - Add the package name in [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#add-required-packages][Add required packages section]].
-  #+BEGIN_SRC emacs-lisp
-   (setq package-list '(ivy counsel swiper muban org-bullets avy key-chord htmlize wgrep magit solarized-theme))
-   #+END_SRC
-  - To install the package, you can either load init.el ~M-x load-file~ and load *~/.emacs.d/init.el* (that loads ~configuration.org~) or restart emacs.
+** Details
   - Read [[configuration.org][configuration.org]], and go through each section on how things are set. I believe it is well documented. Github also loads org file in proper displayable format, so it should be easy to follow.
-
+  - Few custom keys are set, and most of them are found in individual ~use-package~ or [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#key-bindings][Key bindings section]]. Usage of default keys are listed in individual Notes section and global [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#notes-2][Notes]] section.
+  
 ** Screenshot
 [[screenshot1.png]]
