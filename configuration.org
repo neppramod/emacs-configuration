@@ -234,6 +234,7 @@
    - ~C~ copy file to different place
    - ~q~ quit dired
    - ~n, p, <, >~ navigation
+   - ~^~ Go to parent
    - ~v~ view current file, can quit with ~q~
    - ~o~ view current file in other window
    - ~f or enter~ open/visit current file
