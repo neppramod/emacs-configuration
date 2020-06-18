@@ -96,8 +96,8 @@
 ***  Notes
 **** Change multiple files in minibuffer using wgrep
     - ~C-c g~ (~helm-git-do-grep~) command in a git project to search files using grep
-    - ~C-c C-s~ save buffer
-    - ~C-c C-p~ enable editing in wgrep buffer
+    - ~C-c C-s~ save buffer, after edit save to all files
+    - ~e~ enable editing in wgrep buffer
     - ~C-h m~ see instruction on particular mode for extra information
     - ~C-c C-k~ discard change in wgrep buffer
 
