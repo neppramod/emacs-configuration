@@ -25,6 +25,7 @@
 
 * Basic bells and whistles settings
   #+BEGIN_SRC emacs-lisp
+  (set-language-environment "UTF-8")
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
