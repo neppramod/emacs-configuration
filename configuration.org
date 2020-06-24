@@ -175,6 +175,9 @@
    ;; Search with helm-swoop
    (global-set-key (kbd "C-c s") 'helm-swoop)
    
+   ;; Join all lines
+   M-x replace-string C-q C-j RET RET
+   
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
    #+END_SRC
