@@ -175,9 +175,6 @@
    ;; Search with helm-swoop
    (global-set-key (kbd "C-c s") 'helm-swoop)
    
-   ;; Join all lines
-   M-x replace-string C-q C-j RET RET
-   
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
    #+END_SRC
@@ -219,6 +216,7 @@
 ** General
    - ~M-/~ Complete word
    - ~C-;~ Replace regular expression in selected text
+   - ~M-x replace-string C-q C-j RET RET~ Join all lines
  
 ** Macro
    - ~C-x (~ Start macro
