@@ -25,6 +25,7 @@
 
 * Basic bells and whistles settings
   #+BEGIN_SRC emacs-lisp
+  (set-language-environment "UTF-8")
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
@@ -58,7 +59,6 @@
     #+END_SRC
 
 * Custom settings
-
 ** Helm Packages
 
 *** Helm
@@ -124,7 +124,11 @@
    #+BEGIN_SRC emacs-lisp
    (use-package use-package-chords
    :ensure t
-   :config (key-chord-mode 1))
+   :init 
+   :config (key-chord-mode 1)
+    (setq key-chord-two-keys-delay 0.2)
+    (setq key-chord-one-key-delay 0.3) ; default 0.2
+   )
    #+END_SRC
 
 ** Avy
@@ -133,8 +137,8 @@
      (use-package avy 
      :ensure t
      :chords
-     ("cc" . avy-goto-char)
-     ("ww" . avy-goto-word-1))   
+     ("jc" . avy-goto-char)
+     ("jw" . avy-goto-word-1))
    #+END_SRC
    
 ** Htmlize
@@ -148,7 +152,57 @@
    #+BEGIN_SRC emacs-lisp
      (use-package magit :ensure t)
    #+END_SRC
+ 
 
+** Eyebrowse
+   Different configuration for window view
+   #+BEGIN_SRC emacs-lisp
+       (use-package eyebrowse 
+       :ensure t
+       :config (eyebrowse-mode 1))
+   #+END_SRC
+
+
+** Pdf-Tools
+   #+BEGIN_SRC emacs-lisp
+
+   ;; This allows us to save bookmark while closing pdf
+   (defun kill-buffer-hook-setup ()
+   (if (and buffer-file-name
+   (file-name-extension buffer-file-name)
+   (string= (downcase (file-name-extension buffer-file-name)) "pdf")
+   (yes-or-no-p "Set bookmark with current file name?"))
+   (bookmark-set (file-name-nondirectory buffer-file-name) nil)))
+
+   (use-package pdf-tools
+   :pin manual ;; manually update
+   :config
+   ;; initialise
+   (pdf-tools-install)
+   ;; open pdfs scaled to fit page
+   (setq-default pdf-view-display-size 'fit-page)
+   ;; automatically annotate highlights
+   (setq pdf-annot-activate-created-annotations t)
+   ;; use normal isearch
+   (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+   ;; turn off cua so copy works
+   (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
+   ;; save pdf at kill
+   (add-hook 'kill-buffer-hook 'kill-buffer-hook-setup)
+   ;; midnight node by default
+   (add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode)
+   ;; more fine-grained zooming
+   (setq pdf-view-resize-factor 1.1)
+   ;; keyboard shortcuts
+   (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
+   (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
+   (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
+   
+
+   
+
+
+   #+END_SRC
 * Programming Language Specific
 ** Java
    #+BEGIN_SRC emacs-lisp
@@ -163,8 +217,8 @@
 
    (defun java-run()
    (interactive)
-   (async-shell-command (concat "java " (file-name-base buffer-file-name)))
-   (other-window 1))
+   (async-shell-command (concat "java " (file-name-base buffer-file-name))))
+
    #+END_SRC
 
 * Key bindings
@@ -172,8 +226,8 @@
 
    #+BEGIN_SRC emacs-lisp
    ;; Search with helm-swoop
-   (global-set-key (kbd "C-c s") 'helm-swoop)
-   
+   (key-chord-define-global "js" 'helm-swoop)
+      
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
    #+END_SRC
