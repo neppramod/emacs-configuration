@@ -46,15 +46,11 @@
    (use-package emms
    :ensure t
    :config
-   (setq exec-path (append exec-path '("<full path to music player directory>")))
+   (setq exec-path (append exec-path '("/usr/local/bin")))
+
    (emms-standard)
    (emms-default-players)
-   (setq emms-source-file-default-directory "~/Music")
-   (define-emms-simple-player mplayer '(file url)
-      (regexp-opt '(".ogg" ".mp3" ".wav" ".mpg" ".mpeg" ".wmv" ".wma"
-                    ".mov" ".avi" ".divx" ".ogm" ".asf" ".mkv" "http://" "mms://"
-                    ".rm" ".rmvb" ".mp4" ".flac" ".vob" ".m4a" ".flv" ".ogv" ".pls"))
-      "mplayer" "-slave" "-quiet" "-really-quiet" "-fullscreen")
+   (setq  emms-player-mplayer-parameters '("-novideo"))
    )
    #+END_SRC
    
