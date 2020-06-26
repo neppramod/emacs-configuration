@@ -269,6 +269,7 @@
 ** General
    - ~M-/~ Complete word
    - ~C-;~ Replace regular expression in selected text
+   - ~M-x replace-string C-q C-j RET RET~ Join all lines
  
 ** Macro
    - ~C-x (~ Start macro
