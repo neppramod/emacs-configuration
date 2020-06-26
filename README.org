@@ -98,3 +98,12 @@
    (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
    (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
       #+END_SRC
+   Once you add above setting, and load the file and after that call ~M-x pdf-tools-install~ if you see similar error message as below
+   
+   #+BEGIN_EXAMPLE
+   /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/build/server/autobuild -i /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/
+Failed to recognize this system, trying to continue.
+   #+END_EXAMPLE
+   
+   Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have automake, autobuild installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
+   
