@@ -155,54 +155,18 @@
  
 
 ** Eyebrowse
-   Different configuration for window view
+   Different configuration for window view. This allows you to setup different window view for particular work. For more [[https://depp.brause.cc/eyebrowse/][see this]]
    #+BEGIN_SRC emacs-lisp
        (use-package eyebrowse 
        :ensure t
        :config (eyebrowse-mode 1))
    #+END_SRC
+*** Notes
+   - ~C-c C-w 0~ Take to setting number 0
+   - ~C-c C-w 1~ Take to setting number 1 and so on..
+   - ~C-c C-w '~ Go to last setting
+   - ~C-c C-w "~ Close current setting
 
-
-** Pdf-Tools
-   #+BEGIN_SRC emacs-lisp
-
-   ;; This allows us to save bookmark while closing pdf
-   (defun kill-buffer-hook-setup ()
-   (if (and buffer-file-name
-   (file-name-extension buffer-file-name)
-   (string= (downcase (file-name-extension buffer-file-name)) "pdf")
-   (yes-or-no-p "Set bookmark with current file name?"))
-   (bookmark-set (file-name-nondirectory buffer-file-name) nil)))
-
-   (use-package pdf-tools
-   :pin manual ;; manually update
-   :config
-   ;; initialise
-   (pdf-tools-install)
-   ;; open pdfs scaled to fit page
-   (setq-default pdf-view-display-size 'fit-page)
-   ;; automatically annotate highlights
-   (setq pdf-annot-activate-created-annotations t)
-   ;; use normal isearch
-   (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-   ;; turn off cua so copy works
-   (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
-   ;; save pdf at kill
-   (add-hook 'kill-buffer-hook 'kill-buffer-hook-setup)
-   ;; midnight node by default
-   (add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode)
-   ;; more fine-grained zooming
-   (setq pdf-view-resize-factor 1.1)
-   ;; keyboard shortcuts
-   (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
-   (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
-   (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
-   
-
-   
-
-
-   #+END_SRC
 * Programming Language Specific
 ** Java
    #+BEGIN_SRC emacs-lisp
