@@ -82,7 +82,7 @@
    (bookmark-set (file-name-nondirectory buffer-file-name) nil)))
 
    (use-package pdf-tools
-   :pin manual ;; manually update
+   :ensure t
    :config
    ;; initialise
    (pdf-tools-install)
