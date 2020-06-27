@@ -234,6 +234,8 @@
    - ~M-/~ Complete word
    - ~C-;~ Replace regular expression in selected text
    - ~M-x replace-string C-q C-j RET RET~ Join all lines
+   - ~C-x r s~ Type a ~<number>~. Copy to register
+   - ~C-x r i~ Type a ~<number>~. Insert register
  
 ** Macro
    - ~C-x (~ Start macro
