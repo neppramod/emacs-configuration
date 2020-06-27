@@ -243,6 +243,15 @@
    - ~C-x C-k n some-name~ Name the macro. Now we can execute ~M-x some-name~
    - ~M-x insert-kbd-macro~ Save the macro in a file loaded by ~init.el~, thus can be used later
 
+** Rectangles
+   - ~C-x r k~ Kill rectangle. Can be yanked.
+   - ~C-x r d~ Delete rectangle
+   - ~C-x r y~ Yank rectangle
+   - ~C-x r c~ Clear rectangle. Does not shift
+   - ~C-x r o~ Open rectangle. Shifts right
+   - ~C-x r t~ Replace rectangle with string
+   - ~M-x string-insert-rectangle~ Insert string in rectangle
+
 ** Manage bookmark
     - Can use ~C-x r l~ to list bookmarks
     - Can use ~C-x r b~ to jump to bookmark
