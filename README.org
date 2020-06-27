@@ -103,7 +103,9 @@
    ;; keyboard shortcuts
    (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
    (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
-   (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
+   (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete)
+   (define-key pdf-view-mode-map (kbd ",") 'pdf-view-scroll-down-or-previous-page)
+   (define-key pdf-view-mode-map (kbd ".") 'pdf-view-scroll-up-or-next-page))
       #+END_SRC
    Once you add above setting, and load the file and after that call ~M-x pdf-tools-install~ if you see similar error message as below
    
