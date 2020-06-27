@@ -43,8 +43,7 @@
 *** EMMS
     EMMS lets you play media. For this we need to install the player in our system
     before we can configure this. In this example, we need to install ~mplayer~ and
-    set its location. In the example below we setup default Music directory also.
-    This setup is for very basic music player.
+    set its location. This setup is basic setup.
 
        #+BEGIN_SRC emacs-lisp
    (use-package emms
@@ -58,9 +57,9 @@
    )
    #+END_SRC
    
-   Find out the location of mplayer installation with ~which mplayer~ in terminal, and paste above the directory name where mplayer is located. 
-   E.g ~/user/local/bin~ in Mac.
-   Also specify where your Music folder is located.
+   Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name where mplayer is located. 
+   E.g ~/user/local/bin~ in Mac. In windows, I installed in ~Documents/mplayer~, so it will be something like ~c:/Users/<username>/Documents/mplayer~
+  
 *** Pdf-Tools
     Pdf-tools is a set of packages that allows to view pdf in emacs. 
     Follow [[https://github.com/politza/pdf-tools][instructions here]] to install required packages for pdf-tools in your system.
