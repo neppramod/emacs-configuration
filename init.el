@@ -2,11 +2,11 @@
 ;; All the settings and package installation is set in configuration.org
 (org-babel-load-file "~/.emacs.d/configuration.org")
 
+;; Before loading following file (custom.org), make sure you have configured custom.org first
+;(org-babel-load-file "~/.emacs.d/custom.org")
+
 ;; Load macros file. After defining macro, open below file and add macro to proper section with M-x insert-kbd-macro for future use
 (org-babel-load-file "~/.emacs.d/macros.org")
-
-;; For loading following file, make sure you have configured custom.org first
-(org-babel-load-file "~/.emacs.d/custom.org")
 
 ;; Anything below this is auto generated
 ;; Don't edit this
