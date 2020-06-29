@@ -80,7 +80,7 @@ Failed to recognize this system, trying to continue.
  
  
  
- *** Org2Blog
+*** Org2Blog
    
    Write blog posts to wordpress with below basic setup
    #+BEGIN_SRC emacs-lisp
