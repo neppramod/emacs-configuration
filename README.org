@@ -20,5 +20,6 @@
 [[screenshot-01.png]]
 
   
-** Make sure to edit [[custom.org]] to setup custom packages and uncomment 
+** Custom Packages 
+Make sure to edit [[custom.org]] to setup custom packages and uncomment 
 ~(org-babel-load-file "~/.emacs.d/custom.org")~ in init.el to load it.
