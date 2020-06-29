@@ -1,3 +1,9 @@
 
 #+TITLE: Macros
   This file contains custom macros
+
+** Delete end of line
+ #+BEGIN_SRC emacs-lisp
+ (fset 'delete_end_of_line
+    [?\C-f ?\C-e backspace ?\C-n ?\C-a])
+ #+END_SRC
