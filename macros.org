@@ -1,2 +1,3 @@
 
-* Macros
+#+TITLE: Macros
+  This file contains custom macros
