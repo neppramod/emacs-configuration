@@ -79,6 +79,7 @@ Failed to recognize this system, trying to continue.
    Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have ~pkg-config~, ~poppler~ and ~automake~ installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
  
  
+ 
  *** Org2Blog
    
    Write blog posts to wordpress with below basic setup
