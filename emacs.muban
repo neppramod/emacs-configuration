@@ -6,6 +6,16 @@ public class Solution
     public static void main(String[] args) {
  
     }
+    
+    @Cursor here@
 }
 #muban-begin sopl
-System.out.println();
+System.out.println(@@);
+#muban-begin ats
+Arrays.toString()
+#muban-begin arr
+int[] arr = {@};
+#muban-begin for
+for (int i = 0; i < n; i++) {
+    @@
+}
