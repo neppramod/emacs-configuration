@@ -12,7 +12,7 @@ public class Solution
 #muban-begin sopl
 System.out.println(@@);
 #muban-begin ats
-Arrays.toString()
+Arrays.toString(@@)
 #muban-begin arr
 int[] arr = {@@};
 #muban-begin for
