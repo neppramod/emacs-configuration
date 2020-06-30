@@ -102,12 +102,12 @@
     - ~C-c C-k~ discard change in wgrep buffer
 
 ** Muban    
-   Muban allows to insert templates at specific points in current document using keywords. A key binding of ~C-x M-m~ is assigned to ~muban-apply~, which inserts template associated to certain keyword, defined in *.emacs.muban* file (stored in home directory)
+   Muban allows to insert templates at specific points in current document using keywords. A key binding of ~C-c m~ is assigned to ~muban-apply~, which inserts template associated to certain keyword, defined in *.emacs.muban* file (stored in home directory)
     #+BEGIN_SRC emacs-lisp
      (use-package muban 
      :ensure t
      :bind
-     (("C-x M-m" . muban-apply)))
+     (("C-c m" . muban-apply)))
     #+END_SRC
 
 ** Org-Bullets
