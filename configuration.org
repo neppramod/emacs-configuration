@@ -121,7 +121,7 @@
    #+END_SRC
 
 ** Key-Chord
-   Key-Chord allows to bind regular characters to actions. Here we bind *cc* to jump to characer, and *ww* to jump to word within the document. Using swoop and avy, we can traverse within a document very quickly.
+   Key-Chord allows to bind regular characters to actions.
    #+BEGIN_SRC emacs-lisp
    (use-package use-package-chords
    :ensure t
@@ -133,7 +133,7 @@
    #+END_SRC
 
 ** Avy
-   Avy is used to jump within current document using characters
+   Avy is used to jump within current document using characters. Here we bind *jc* to jump to characer, and *jw* to jump to word within the document. Using swoop and avy, we can traverse within a document very quickly. Below we also bind *js* to enable ~helm-swoop~ to quickly search in current document.
    #+BEGIN_SRC emacs-lisp
      (use-package avy 
      :ensure t
