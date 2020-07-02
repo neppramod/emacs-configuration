@@ -1,14 +1,14 @@
 
 ** Custom Packages
    Following packages require special setup and configuration. Install them
-   by following following instruction.
+   by following following instructions.
    
-*** EMMS
+*** Emacs Multimedia System (EMMS)
     EMMS lets you play media. For this we need to install the player in our system
     before we can configure this. In this example, we need to install ~mplayer~ and
-    set its location. This setup is basic setup.
+    set its location. This setup is a basic setup and here we only enable music playback.
 
-       #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
    (use-package emms
    :ensure t
    :config
@@ -28,7 +28,7 @@
     Follow [[https://github.com/politza/pdf-tools][instructions here]] to install required packages for pdf-tools in your system.
     Once you install the required packages, you can install pdf-tools in emacs using following setting.
     
-    I was having one issue with pdf viewing. When I closed the pdf, next time, it did not
+    I was having one issue with pdf viewing. When I closed the pdf next time it did not
     load the pdf from last position. I found a script, that asks to set the bookmark for current
     pdf file. That is what ~kill-buffer-hook-setup~ does. I also enabled ~pdf-view-midnight-minor-mode~
     so that pdf loads in dark mode.
@@ -78,6 +78,7 @@ Failed to recognize this system, trying to continue.
    
    Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have ~pkg-config~, ~poppler~ and ~automake~ installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
  
+ - Use ~h, t, D, , and .~ for various actions shown in keyboard shortcuts section when using a pdf. The first 3 command changes can be saved, so that it is enabled for external applicaton as well.
  
  
 *** Org2Blog
