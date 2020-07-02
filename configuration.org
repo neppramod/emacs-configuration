@@ -40,6 +40,7 @@
   (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))   ; Move all temporary backup files to backup folder
   (electric-pair-mode 1)      ; Automatically add ending brackets and braces
   (show-paren-mode 1)         ; Highlight matching brackets and braces
+  (visual-line-mode 1)	      ; Soft wrap
   #+END_SRC
 
 * Looks
