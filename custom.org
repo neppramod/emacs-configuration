@@ -2,6 +2,7 @@
 ** Custom Packages
    Following packages require special setup and configuration. Install them
    by following following instructions.
+   *Note*: If you don't want to enable any package either remove that section or for ~use-package~ change ~:ensure t~ to ~:disabled t~ 
    
 *** Emacs Multimedia System (EMMS)
     EMMS lets you play media. For this we need to install the player in our system
