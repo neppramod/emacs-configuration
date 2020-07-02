@@ -13,7 +13,7 @@
    (use-package emms
    :ensure t
    :config
-   (setq exec-path (append exec-path '("/usr/local/bin")))
+   (setq exec-path (append exec-path '("<mplayer directory location>")))
 
    (emms-standard)
    (emms-default-players)
