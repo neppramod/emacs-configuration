@@ -85,7 +85,7 @@ Failed to recognize this system, trying to continue.
    
    Write blog posts to wordpress with below basic setup. Change ~disabled~ to ~ensure~
    #+BEGIN_SRC emacs-lisp
-   (use-package org2blog :disabled t)
+   (use-package org2blog :ensure t)
    (setq org2blog/wp-blog-alist
       '(("<a profile name for this blog>"
          :url "https://<prefix>.wordpress.com/xmlrpc.php"
