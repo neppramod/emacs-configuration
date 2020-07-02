@@ -107,11 +107,11 @@ Failed to recognize this system, trying to continue.
     pacman -S mingw64/mingw-w64-x86_64-aspell
     pacman -S mingw64/mingw-w64-x86_64-aspell-en
     
-    Then in emacs set ispell-program-name as
+    Then below set ispell-program-name as
     (setq-default ispell-program-name "C:/msys64/mingw64/bin/aspell.exe")
     #+END_EXAMPLE
 
-    After that set the location of ~aspell~ executable using ~ispell-program-name~ variable.
+    Set location of ~aspell~ executable using ~ispell-program-name~ variable.
  
     #+BEGIN_SRC emacs lisp
     (setq-default ispell-program-name "<locaton_to_aspell_executable>")
