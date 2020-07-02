@@ -119,7 +119,7 @@ Failed to recognize this system, trying to continue.
     
     
 **** Notes
-***** ~M-x flyspell-mode~ Enable grammar check
-***** ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
-***** ~M-C-i~ Auto correct current word
+   - ~M-x flyspell-mode~ Enable grammar check
+   - ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
+   - ~M-C-i~ Auto correct current word
 
