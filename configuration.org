@@ -165,8 +165,8 @@
 *** Notes
    - ~C-c C-w 0~ Take to setting number 0
    - ~C-c C-w 1~ Take to setting number 1 and so on
-   - ~C-c C-w '~ Go to last setting
-   - ~C-c C-w "~ Close current setting
+   - *C-c C-w '* Go to last setting
+   - *C-c C-w "* Close current setting
 
 * Programming Language Specific
 ** Java
