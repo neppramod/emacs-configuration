@@ -96,3 +96,30 @@ Failed to recognize this system, trying to continue.
    - Once logged in you can manage your blog using ~M-x org2blog-user-interface~
    - The user interface has shortcut keys for most of the options. E.g. You can press ~e~ to create a new blog, ~l~ to publish post, ~k~ to view post and ~;~ to delete post
    - Once you create a buffer save it as org file, and then you can keep on updating it and publish new contents.
+   
+   
+*** Aspell
+    Aspell allows to use dictionary to correct words while writing.
+    Make sure to install aspell before activating it. 
+    
+    *Note*: For windows use mingw64 packages and install aspell using following commands.
+    #+BEGIN_EXAMPLE
+    pacman -S mingw64/mingw-w64-x86_64-aspell
+    pacman -S mingw64/mingw-w64-x86_64-aspell-en
+    
+    Then in emacs set ispell-program-name as
+    (setq-default ispell-program-name "C:/msys64/mingw64/bin/aspell.exe")
+    #+END_EXAMPLE
+
+    After that set the location of ~aspell~ executable using ~ispell-program-name~ variable.
+ 
+    #+BEGIN_SRC emacs lisp
+    (setq-default ispell-program-name "<locaton_to_aspell_executable>")
+    #+END_SRC
+    
+    
+**** Notes
+***** ~M-x flyspell-mode~ Enable grammar check
+***** ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
+***** ~M-C-i~ Auto correct current word
+
