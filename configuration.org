@@ -133,7 +133,7 @@
    #+END_SRC
 
 ** Avy
-   Avy is used to jump within current document using characters. Here we bind *jc* to jump to characer, and *jw* to jump to word within the document. Using swoop and avy, we can traverse within a document very quickly. Below we also bind *js* to enable ~helm-swoop~ to quickly search in current document.
+   Avy is used to jump within current document using characters. Here we bind *jc* to jump to characer, and *jw* to jump to word within the document. Later we also bind *js* to enable ~helm-swoop~ to quickly search in current document.
    #+BEGIN_SRC emacs-lisp
      (use-package avy 
      :ensure t
