@@ -185,7 +185,8 @@
    (async-shell-command (concat "java " (file-name-base buffer-file-name))))
 
    #+END_SRC
-
+* Macros
+  Custom Macros
 * Key bindings
 ** Global
 
@@ -244,7 +245,7 @@
    - ~C-x e~ End and call macro
    - ~C-u 10 C-x e~ Repeat 10 times
    - ~C-x C-k n some-name~ Name the macro. Now we can execute ~M-x some-name~
-   - ~M-x insert-kbd-macro~ Save the macro in ~macros.org~ , thus can be used later
+   - ~M-x insert-kbd-macro~ Save the macro in [[Macros]] section, thus can be used later
 
 ** Rectangles
    - ~C-x r k~ Kill rectangle. Can be yanked.
