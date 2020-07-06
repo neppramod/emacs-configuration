@@ -139,7 +139,8 @@
      :ensure t
      :chords
      ("jc" . avy-goto-char)
-     ("jw" . avy-goto-word-1))
+     ("jw" . avy-goto-word-1)
+     ("jl" . avy-goto-line))
    #+END_SRC
    
 ** Htmlize
