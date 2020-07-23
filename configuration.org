@@ -46,10 +46,10 @@
 * Looks
 *** Theme
     #+BEGIN_SRC emacs-lisp
-    (use-package solarized-theme 
+    (use-package zenburn-theme 
     :ensure t
     :init
-    (load-theme 'solarized-dark t))
+    (load-theme 'zenburn t))
     
     #+END_SRC
 
