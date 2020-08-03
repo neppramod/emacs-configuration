@@ -6,7 +6,7 @@
    #+BEGIN_SRC emacs-lisp
    (require 'package)
 
-   (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
+   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			 ("elpa" . "http://tromey.com/elpa/")
                             ("gnu" . "http://elpa.gnu.org/packages/")
                             ("marmalade" . "http://marmalade-repo.org/packages/")))
@@ -25,6 +25,9 @@
 
 * Basic bells and whistles settings
   #+BEGIN_SRC emacs-lisp
+;  (global-set-key "\t" 'self-insert-command)
+;  (global-set-key "\r" 'newline-and-indent)
+  (setq-default indent-tabs-mode nil) ; use spaces for indentation
   (set-language-environment "UTF-8")
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
@@ -41,15 +44,17 @@
   (electric-pair-mode 1)      ; Automatically add ending brackets and braces
   (show-paren-mode 1)         ; Highlight matching brackets and braces
   (global-visual-line-mode 1)	      ; Soft wrap
+  (setq org-export-with-smart-quotes t)  ; Enable smart quotes in org mode
   #+END_SRC
 
 * Looks
 *** Theme
     #+BEGIN_SRC emacs-lisp
-    (use-package solarized-theme 
+    (use-package zenburn-theme 
     :ensure t
     :init
-    (load-theme 'solarized-dark t))
+    (load-theme 'zenburn t)
+    )
     
     #+END_SRC
 
@@ -61,11 +66,10 @@
 
 * Custom settings
 ** Helm Packages
-
 *** Helm
     Helm adds many functionality to search and manage buffers
     #+BEGIN_SRC emacs-lisp
-      (use-package helm 
+      (use-package helm
       :ensure t
       :init 
       (helm-mode 1)
@@ -201,10 +205,15 @@
 
 ** Java
    #+BEGIN_SRC emacs-lisp
-   (global-set-key (kbd "M-1") 'java-build)
-   (global-set-key (kbd "M-2") 'java-run)
+
+   (global-set-key
+   (kbd "C-c c")
+   (defhydra hydra-compile (:body-pre (next-line))
+     "Build"
+     ("jb" java-build "Java Build")
+     ("jr" java-run   "Java Run")
+     ("k"  (kill-matching-buffers "*Async Shell Command*") "Kill Buffer")))
    #+END_SRC
-   
 ** Magit
    #+BEGIN_SRC emacs-lisp
    (global-set-key (kbd "C-x g") 'magit-status)
@@ -313,3 +322,146 @@
    - ~C-c C-c~ Code block
    - ~C-c C-o~ Open result of code block
    - For more see [[https://orgmode.org/orgcard.pdf][Org-Mode Reference Card]]
+
+* Hydra
+
+** Zoom
+ #+BEGIN_SRC emacs-lisp
+
+ (defhydra hydra-zoom (global-map "C-c z")
+ "zoom"
+ ("=" text-scale-increase "in") 
+ ("-" text-scale-decrease "out") 
+ )
+
+ #+END_SRC
+
+** Movement
+#+BEGIN_SRC emacs-lisp
+(global-set-key
+ (kbd "C-c j")
+ (defhydra hydra-move
+   (:body-pre (next-line))
+   "move"
+   ("n" next-line  "next line")
+   ("p" previous-line "previous line")
+   ("f" forward-char "forward")
+   ("b" backward-char "backward")
+   ("a" beginning-of-line "beginning of line")
+   ("e" move-end-of-line  "end of line")
+   ("v" scroll-up-command "scroll up")
+   ;; Converting M-v to V here by analogy.
+   ("V" scroll-down-command "scroll down")
+   ("l" recenter-top-bottom  "recenter")))
+#+END_SRC
+
+** Window
+#+BEGIN_SRC emacs-lisp
+
+(defun hydra-move-splitter-right (arg)
+  "Move window splitter right."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'right))
+      (enlarge-window-horizontally arg)
+    (shrink-window-horizontally arg)))
+
+(defun hydra-move-splitter-up (arg)
+  "Move window splitter up."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'up))
+      (enlarge-window arg)
+    (shrink-window arg)))
+
+(defun hydra-move-splitter-down (arg)
+  "Move window splitter down."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'up))
+      (shrink-window arg)
+    (enlarge-window arg)))
+
+
+(defhydra hydra-window ()
+   "
+Movement^^        ^Split^         ^Switch^		^Resize^
+----------------------------------------------------------------
+_h_ ←       	_v_ertical    	_b_uffer		_q_ X←
+_j_ ↓        	_x_ horizontal	_f_ind files	_w_ X↓
+_k_ ↑        	_z_ undo      	_a_ce 1		_e_ X↑
+_l_ →        	_Z_ reset      	_s_wap		_r_ X→
+_F_ollow		_D_lt Other   	_S_ave		max_i_mize
+_SPC_ cancel	_o_nly this   	_d_elete	
+"
+   ("h" windmove-left )
+   ("j" windmove-down )
+   ("k" windmove-up )
+   ("l" windmove-right )
+   ("q" hydra-move-splitter-left)
+   ("w" hydra-move-splitter-down)
+   ("e" hydra-move-splitter-up)
+   ("r" hydra-move-splitter-right)
+   ("b" helm-mini)
+   ("f" helm-find-files)
+   ("F" follow-mode)
+   ("a" (lambda ()
+          (interactive)
+          (ace-window 1)
+          (add-hook 'ace-window-end-once-hook
+                    'hydra-window/body))
+       )
+   ("v" (lambda ()
+          (interactive)
+          (split-window-right)
+          (windmove-right))
+       )
+   ("x" (lambda ()
+          (interactive)
+          (split-window-below)
+          (windmove-down))
+       )
+   ("s" (lambda ()
+          (interactive)
+          (ace-window 4)
+          (add-hook 'ace-window-end-once-hook
+                    'hydra-window/body)))
+   ("S" save-buffer)
+   ("d" delete-window)
+   ("D" (lambda ()
+          (interactive)
+          (ace-window 16)
+          (add-hook 'ace-window-end-once-hook
+                    'hydra-window/body))
+       )
+   ("o" delete-other-windows)
+   ("i" delete-other-windowsuu)
+   ("z" (progn
+          (winner-undo)
+          (setq this-command 'winner-undo))
+   )
+   ("Z" winner-redo)
+   ("SPC" nil)
+   )
+
+  (global-set-key (kbd "C-c w") 'hydra-window/body)
+
+#+END_SRC
+** EMMS
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-c e")
+     (defhydra hydra-emms
+     (:body-pre (next-line))
+     "emms"
+     ("i" emms "show interface")
+     ("n" emms-next "next")
+     ("p" emms-previous "prev")
+     ("s" emms-start "start")
+     ("e" emms-stop "end")
+     ("t" emms-add-directory-tree "add tree")
+     ("c" emms-playlist-clear "clear playlist")
+     ("ra" emms-random "random")
+     ("rp" emms-toggle-repeat-playlist "repeat playlist")
+     ("rt" emms-toggle-repeat-track "repeat track")
+     ))
+   #+END_SRC
