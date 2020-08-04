@@ -4,7 +4,8 @@ import java.util.*;
 public class Solution
 {
     public static void main(String[] args) {
- 
+        Solution sol = new Solution();
+         
     }
     
     @Cursor here@
@@ -21,3 +22,7 @@ for (int i = 0; i < n; i++) {
 }
 #muban-begin sol
 Solution sol = new Solution();
+#muban-begin main
+public static void main(String[] args) {
+       @@
+}
