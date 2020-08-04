@@ -358,6 +358,14 @@
 ** Window
 #+BEGIN_SRC emacs-lisp
 
+(defun hydra-move-splitter-left (arg)
+  "Move window splitter left."
+  (interactive "p")
+  (if (let ((windmove-wrap-around))
+        (windmove-find-other-window 'right))
+      (shrink-window-horizontally arg)
+    (enlarge-window-horizontally arg)))
+
 (defun hydra-move-splitter-right (arg)
   "Move window splitter right."
   (interactive "p")
@@ -387,10 +395,10 @@
    "
 Movement^^        ^Split^         ^Switch^		^Resize^
 ----------------------------------------------------------------
-_h_ ←       	_v_ertical    	_b_uffer		_q_ X←
-_j_ ↓        	_x_ horizontal	_f_ind files	_w_ X↓
-_k_ ↑        	_z_ undo      	_a_ce 1		_e_ X↑
-_l_ →        	_Z_ reset      	_s_wap		_r_ X→
+_h_ ←       	_v_ertical    	_b_uffer		_,_ X←
+_j_ ↓        	_x_ horizontal	_f_ind files	_n_ X↓
+_k_ ↑        	_z_ undo      	_a_ce 1		_p_ X↑
+_l_ →        	_Z_ reset      	_s_wap		_._ X→
 _F_ollow		_D_lt Other   	_S_ave		max_i_mize
 _SPC_ cancel	_o_nly this   	_d_elete	
 "
@@ -398,10 +406,10 @@ _SPC_ cancel	_o_nly this   	_d_elete
    ("j" windmove-down )
    ("k" windmove-up )
    ("l" windmove-right )
-   ("q" hydra-move-splitter-left)
-   ("w" hydra-move-splitter-down)
-   ("e" hydra-move-splitter-up)
-   ("r" hydra-move-splitter-right)
+   ("," hydra-move-splitter-left)
+   ("n" hydra-move-splitter-down)
+   ("p" hydra-move-splitter-up)
+   ("." hydra-move-splitter-right)
    ("b" helm-mini)
    ("f" helm-find-files)
    ("F" follow-mode)
@@ -444,8 +452,8 @@ _SPC_ cancel	_o_nly this   	_d_elete
    ("SPC" nil)
    )
 
-  (global-set-key (kbd "C-c w") 'hydra-window/body)
-
+  ;(global-set-key (kbd "C-c w") 'hydra-window/body)
+  (key-chord-define-global "WW" 'hydra-window/body)
 #+END_SRC
 ** EMMS
    #+BEGIN_SRC emacs-lisp
