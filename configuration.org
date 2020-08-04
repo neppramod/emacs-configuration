@@ -98,9 +98,12 @@
 
 ** Hydra
 #+BEGIN_SRC emacs-lisp
-(use-package hydra
-:ensure t)
+(use-package hydra :ensure t)
+#+END_SRC
 
+** Ace-Window
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window :ensure t)
 #+END_SRC
 ** Muban    
 
