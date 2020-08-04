@@ -48,16 +48,6 @@
   #+END_SRC
 
 * Looks
-*** Theme
-    #+BEGIN_SRC emacs-lisp
-    (use-package zenburn-theme 
-    :ensure t
-    :init
-    (load-theme 'zenburn t)
-    )
-    
-    #+END_SRC
-
 *** Font
     Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
     #+BEGIN_SRC emacs-lisp
