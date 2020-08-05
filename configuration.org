@@ -46,7 +46,19 @@
   (global-visual-line-mode 1)	      ; Soft wrap
   (setq org-export-with-smart-quotes t)  ; Enable smart quotes in org mode
   #+END_SRC
+  
+* Settings
+#+BEGIN_SRC emacs-lisp
+ (setq EMACS_DIR "~/.emacs.d/")
+ (setq USER_INIT_FILE (concat EMACS_DIR "init.el"))
 
+ ;; Load platform specific variables using specific files. E.g linux.el. 
+ ;; Make necessary changes as needed
+ (cond ((eq system-type 'windows-nt) (load (concat EMACS_DIR "windows")))
+      ((eq system-type 'gnu/linux) (load (concat EMACS_DIR "linux")))
+      ((eq system-type 'darwin) (load (concat EMACS_DIR "mac")))
+      (t (load-library "default")))
+#+END_SRC
 * Looks
 *** Font
     Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
@@ -131,8 +143,8 @@
    :ensure t
    :init 
    :config (key-chord-mode 1)
-    (setq key-chord-two-keys-delay 0.2)
-    (setq key-chord-one-key-delay 0.3) ; default 0.2
+    (setq key-chord-two-keys-delay 0.4)
+    (setq key-chord-one-key-delay 0.5) ; default 0.2
    )
    #+END_SRC
 
@@ -159,7 +171,6 @@
      (use-package magit :ensure t)
    #+END_SRC
  
-
 ** Eyebrowse
    Different configuration for window view. This allows you to setup different window view for particular work. For more [[https://depp.brause.cc/eyebrowse/][see this]]
    #+BEGIN_SRC emacs-lisp
@@ -172,6 +183,107 @@
    - ~C-c C-w 1~ Take to setting number 1 and so on
    - C-c C-w ' Go to last setting
    - C-c C-w " Close current setting
+
+** Emacs Multimedia System (EMMS)
+     EMMS lets you play media. For this we need to install the player in our system
+     before we can configure this. In this example, we need to install ~mplayer~ and
+     set its location. This setup is a basic setup and here we only enable music playback.
+
+    #+BEGIN_SRC emacs-lisp
+    (use-package emms
+    :ensure t
+    :config
+    (setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION)))
+
+    (emms-standard)
+    (emms-default-players)
+    (setq  emms-player-mplayer-parameters '("-novideo"))
+    )
+    #+END_SRC
+   
+    Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name to MPLAYER_DIRECTORY_LOCATION variable where mplayer is located. 
+    E.g ~/user/local/bin~ in Mac. In windows, I installed in ~Documents/mplayer~, so it will be something like ~c:/Users/<username>/Documents/mplayer~
+
+** Pdf-Tools
+    Pdf-tools is a set of packages that allows to view pdf in emacs. 
+    Follow [[https://github.com/politza/pdf-tools][instructions here]] to install required packages for pdf-tools in your system.
+    Once you install the required packages, you can install pdf-tools in emacs using following setting.
+    
+    I was having one issue with pdf viewing. When I closed the pdf next time it did not
+    load the pdf from last position. I found a script, that asks to set the bookmark for current
+    pdf file. That is what ~kill-buffer-hook-setup~ does. I also enabled ~pdf-view-midnight-minor-mode~
+    so that pdf loads in dark mode.
+    
+   #+BEGIN_SRC emacs-lisp
+
+   ;; This allows us to save bookmark while closing pdf
+   (defun kill-buffer-hook-setup ()
+   (if (and buffer-file-name
+   (file-name-extension buffer-file-name)
+   (string= (downcase (file-name-extension buffer-file-name)) "pdf")
+   (yes-or-no-p "Set bookmark with current file name?"))
+   (bookmark-set (file-name-nondirectory buffer-file-name) nil)))
+
+   (use-package pdf-tools
+   :ensure t
+   :config
+   ;; initialise
+   (pdf-tools-install)
+   ;; open pdfs scaled to fit page
+   (setq-default pdf-view-display-size 'fit-page)
+   ;; automatically annotate highlights
+   (setq pdf-annot-activate-created-annotations t)
+   ;; use normal isearch
+   (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+   ;; turn off cua so copy works
+   (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
+   ;; save pdf at kill
+   (add-hook 'kill-buffer-hook 'kill-buffer-hook-setup)
+   ;; midnight node (enable if change to dark font)
+   ; (add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode)
+   ;; more fine-grained zooming
+   (setq pdf-view-resize-factor 1.1)
+   ;; keyboard shortcuts
+   (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
+   (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
+   (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete)
+   (define-key pdf-view-mode-map (kbd ",") 'pdf-view-scroll-down-or-previous-page)
+   (define-key pdf-view-mode-map (kbd ".") 'pdf-view-scroll-up-or-next-page))
+      #+END_SRC
+   Once you add above setting, and load the file and after that call ~M-x pdf-tools-install~ if you see similar error message as below
+   
+   #+BEGIN_EXAMPLE
+   /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/build/server/autobuild -i /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/
+Failed to recognize this system, trying to continue.
+   #+END_EXAMPLE
+   
+   Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have ~pkg-config~, ~poppler~ and ~automake~ installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
+ 
+ - Use ~h, t, D, , and .~ for various actions shown in keyboard shortcuts section when using a pdf. The first 3 command changes can be saved, so that it is enabled for external applicaton as well.
+ 
+** Aspell
+    Aspell allows to use dictionary to correct words while writing.
+    Make sure to install aspell before activating it. 
+    
+    *Note*: For windows use mingw64 packages and install aspell using following commands.
+    #+BEGIN_EXAMPLE
+    pacman -S mingw64/mingw-w64-x86_64-aspell
+    pacman -S mingw64/mingw-w64-x86_64-aspell-en
+    
+    Then below set ispell-program-name (see Settings abovel) as
+    (setq-default ispell-program-name "C:/msys64/mingw64/bin/aspell.exe")
+    #+END_EXAMPLE
+
+    Set location of ~aspell~ executable using ~ispell-program-name~ variable.
+ 
+    #+BEGIN_SRC emacs lisp
+    (setq-default ispell-program-name ASPELL_BIN)
+    #+END_SRC
+    
+    
+**** Notes
+   - ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
+   - ~M-C-i~ Auto correct current word
 
 * Programming Language Specific
 ** Java
@@ -190,8 +302,6 @@
    (async-shell-command (concat "java " (file-name-base buffer-file-name))))
 
    #+END_SRC
-* Macros
-  Custom Macros
 * Key bindings
 ** Global
 
@@ -201,6 +311,9 @@
       
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
+
+   (defun reload-init-file() (interactive) (load-file USER_INIT_FILE))
+   (global-set-key (kbd "C-c r") 'reload-init-file)
    #+END_SRC
 
 ** Java
@@ -324,22 +437,23 @@
    - For more see [[https://orgmode.org/orgcard.pdf][Org-Mode Reference Card]]
 
 * Hydra
-
 ** Zoom
  #+BEGIN_SRC emacs-lisp
 
- (defhydra hydra-zoom (global-map "C-c z")
+
+ (defhydra hydra-zoom()
  "zoom"
  ("=" text-scale-increase "in") 
- ("-" text-scale-decrease "out") 
+ ("-" text-scale-decrease "out")
+ ("q" nil "quit")
  )
+  (key-chord-define-global "ZZ" 'hydra-zoom/body)
 
  #+END_SRC
 
 ** Movement
 #+BEGIN_SRC emacs-lisp
-(global-set-key
- (kbd "C-c j")
+
  (defhydra hydra-move
    (:body-pre (next-line))
    "move"
@@ -352,7 +466,11 @@
    ("v" scroll-up-command "scroll up")
    ;; Converting M-v to V here by analogy.
    ("V" scroll-down-command "scroll down")
-   ("l" recenter-top-bottom  "recenter")))
+   ("l" recenter-top-bottom  "recenter")
+   ("q" nil "quit")
+   ("." nil "quit")
+   )
+   (key-chord-define-global ".." 'hydra-move/body)
 #+END_SRC
 
 ** Window
@@ -400,7 +518,7 @@ _j_ ↓        	_x_ horizontal	_f_ind files	_n_ X↓
 _k_ ↑        	_z_ undo      	_a_ce 1		_p_ X↑
 _l_ →        	_Z_ reset      	_s_wap		_._ X→
 _F_ollow		_D_lt Other   	_S_ave		max_i_mize
-_SPC_ cancel	_o_nly this   	_d_elete	
+_q_ cancel	_o_nly this   	_d_elete	
 "
    ("h" windmove-left )
    ("j" windmove-down )
@@ -442,24 +560,20 @@ _SPC_ cancel	_o_nly this   	_d_elete
           (add-hook 'ace-window-end-once-hook
                     'hydra-window/body))
        )
-   ("o" delete-other-windows)
-   ("i" delete-other-windowsuu)
+   ("o" delete-other-windows :exit t)
+   ("i" delete-other-windows)
    ("z" (progn
           (winner-undo)
           (setq this-command 'winner-undo))
    )
    ("Z" winner-redo)
-   ("SPC" nil)
+   ("q" nil)
    )
-
-  ;(global-set-key (kbd "C-c w") 'hydra-window/body)
   (key-chord-define-global "WW" 'hydra-window/body)
 #+END_SRC
 ** EMMS
-   #+BEGIN_SRC emacs-lisp
-     (global-set-key (kbd "C-c e")
-     (defhydra hydra-emms
-     (:body-pre (next-line))
+#+BEGIN_SRC emacs-lisp
+     (defhydra hydra-emms()
      "emms"
      ("i" emms "show interface")
      ("n" emms-next "next")
@@ -471,5 +585,7 @@ _SPC_ cancel	_o_nly this   	_d_elete
      ("ra" emms-random "random")
      ("rp" emms-toggle-repeat-playlist "repeat playlist")
      ("rt" emms-toggle-repeat-track "repeat track")
-     ))
-   #+END_SRC
+     ("q" nil "quit")
+     )
+     (key-chord-define-global "EE" 'hydra-emms/body)
+#+END_SRC

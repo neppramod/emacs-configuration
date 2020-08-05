@@ -3,85 +3,8 @@
    Following packages require special setup and configuration. Install them
    by following following instructions.
    *Note*: If you don't want to enable any package either remove that section or for ~use-package~ change ~:ensure t~ to ~:disabled t~ 
-   
-*** Emacs Multimedia System (EMMS)
-    EMMS lets you play media. For this we need to install the player in our system
-    before we can configure this. In this example, we need to install ~mplayer~ and
-    set its location. This setup is a basic setup and here we only enable music playback.
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package emms
-   :ensure t
-   :config
-   (setq exec-path (append exec-path '("<mplayer directory location>")))
-
-   (emms-standard)
-   (emms-default-players)
-   (setq  emms-player-mplayer-parameters '("-novideo"))
-   )
-   #+END_SRC
-   
-   Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name where mplayer is located. 
-   E.g ~/user/local/bin~ in Mac. In windows, I installed in ~Documents/mplayer~, so it will be something like ~c:/Users/<username>/Documents/mplayer~
   
-*** Pdf-Tools
-    Pdf-tools is a set of packages that allows to view pdf in emacs. 
-    Follow [[https://github.com/politza/pdf-tools][instructions here]] to install required packages for pdf-tools in your system.
-    Once you install the required packages, you can install pdf-tools in emacs using following setting.
-    
-    I was having one issue with pdf viewing. When I closed the pdf next time it did not
-    load the pdf from last position. I found a script, that asks to set the bookmark for current
-    pdf file. That is what ~kill-buffer-hook-setup~ does. I also enabled ~pdf-view-midnight-minor-mode~
-    so that pdf loads in dark mode.
-    
-   #+BEGIN_SRC emacs-lisp
 
-   ;; This allows us to save bookmark while closing pdf
-   (defun kill-buffer-hook-setup ()
-   (if (and buffer-file-name
-   (file-name-extension buffer-file-name)
-   (string= (downcase (file-name-extension buffer-file-name)) "pdf")
-   (yes-or-no-p "Set bookmark with current file name?"))
-   (bookmark-set (file-name-nondirectory buffer-file-name) nil)))
-
-   (use-package pdf-tools
-   :ensure t
-   :config
-   ;; initialise
-   (pdf-tools-install)
-   ;; open pdfs scaled to fit page
-   (setq-default pdf-view-display-size 'fit-page)
-   ;; automatically annotate highlights
-   (setq pdf-annot-activate-created-annotations t)
-   ;; use normal isearch
-   (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-   ;; turn off cua so copy works
-   (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
-   ;; save pdf at kill
-   (add-hook 'kill-buffer-hook 'kill-buffer-hook-setup)
-   ;; midnight node by default
-   (add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode)
-   ;; more fine-grained zooming
-   (setq pdf-view-resize-factor 1.1)
-   ;; keyboard shortcuts
-   (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
-   (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
-   (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete)
-   (define-key pdf-view-mode-map (kbd ",") 'pdf-view-scroll-down-or-previous-page)
-   (define-key pdf-view-mode-map (kbd ".") 'pdf-view-scroll-up-or-next-page))
-      #+END_SRC
-   Once you add above setting, and load the file and after that call ~M-x pdf-tools-install~ if you see similar error message as below
-   
-   #+BEGIN_EXAMPLE
-   /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/build/server/autobuild -i /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/
-Failed to recognize this system, trying to continue.
-   #+END_EXAMPLE
-   
-   Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have ~pkg-config~, ~poppler~ and ~automake~ installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
- 
- - Use ~h, t, D, , and .~ for various actions shown in keyboard shortcuts section when using a pdf. The first 3 command changes can be saved, so that it is enabled for external applicaton as well.
- 
- 
 *** Org2Blog
    
    Write blog posts to wordpress with below basic setup. Change ~disabled~ to ~ensure~
@@ -100,27 +23,3 @@ Failed to recognize this system, trying to continue.
    - Once you create a buffer save it as org file, and then you can keep on updating it and publish new contents.
    
    
-*** Aspell
-    Aspell allows to use dictionary to correct words while writing.
-    Make sure to install aspell before activating it. 
-    
-    *Note*: For windows use mingw64 packages and install aspell using following commands.
-    #+BEGIN_EXAMPLE
-    pacman -S mingw64/mingw-w64-x86_64-aspell
-    pacman -S mingw64/mingw-w64-x86_64-aspell-en
-    
-    Then below set ispell-program-name as
-    (setq-default ispell-program-name "C:/msys64/mingw64/bin/aspell.exe")
-    #+END_EXAMPLE
-
-    Set location of ~aspell~ executable using ~ispell-program-name~ variable.
- 
-    #+BEGIN_SRC emacs lisp
-    (setq-default ispell-program-name "<locaton_to_aspell_executable>")
-    #+END_SRC
-    
-    
-**** Notes
-   - ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
-   - ~M-C-i~ Auto correct current word
-
