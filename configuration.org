@@ -49,6 +49,10 @@
   
 * Settings
 #+BEGIN_SRC emacs-lisp
+
+ ;; Install exec-path-from-shell-package to load environment variable
+ (use-package exec-path-from-shell :ensure t)
+
  (setq EMACS_DIR "~/.emacs.d/")
  (setq USER_INIT_FILE (concat EMACS_DIR "init.el"))
 
@@ -195,7 +199,7 @@
     :config
     (setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION)))
 
-    (emms-standard)
+    (emms-all)
     (emms-default-players)
     (setq  emms-player-mplayer-parameters '("-novideo"))
     )
