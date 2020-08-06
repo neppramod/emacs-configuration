@@ -441,20 +441,6 @@ Failed to recognize this system, trying to continue.
    - For more see [[https://orgmode.org/orgcard.pdf][Org-Mode Reference Card]]
 
 * Hydra
-** Zoom
- #+BEGIN_SRC emacs-lisp
-
-
- (defhydra hydra-zoom()
- "zoom"
- ("=" text-scale-increase "in") 
- ("-" text-scale-decrease "out")
- ("q" nil "quit")
- )
-  (key-chord-define-global "ZZ" 'hydra-zoom/body)
-
- #+END_SRC
-
 ** Movement
 #+BEGIN_SRC emacs-lisp
 
@@ -474,7 +460,7 @@ Failed to recognize this system, trying to continue.
    ("q" nil "quit")
    ("." nil "quit")
    )
-   (key-chord-define-global ".." 'hydra-move/body)
+   (key-chord-define-global "jj" 'hydra-move/body)
 #+END_SRC
 
 ** Window
@@ -517,12 +503,13 @@ Failed to recognize this system, trying to continue.
    "
 Movement^^        ^Split^         ^Switch^		^Resize^
 ----------------------------------------------------------------
-_h_ ←       	_v_ertical    	_b_uffer		_,_ X←
+_h_ ←       	_v_ertical    	_b_uffer	        _,_ X←
 _j_ ↓        	_x_ horizontal	_f_ind files	_n_ X↓
 _k_ ↑        	_z_ undo      	_a_ce 1		_p_ X↑
 _l_ →        	_Z_ reset      	_s_wap		_._ X→
-_F_ollow		_D_lt Other   	_S_ave		max_i_mize
-_q_ cancel	_o_nly this   	_d_elete	
+_F_ollow	        _D_lt Other   	_S_ave		max_i_mize
+_q_ cancel	_o_nly this   	_d_elete	        _=_ zoom in
+                                                _-_ zoom out
 "
    ("h" windmove-left )
    ("j" windmove-down )
@@ -532,6 +519,8 @@ _q_ cancel	_o_nly this   	_d_elete
    ("n" hydra-move-splitter-down)
    ("p" hydra-move-splitter-up)
    ("." hydra-move-splitter-right)
+   ("=" text-scale-increase "in") 
+   ("-" text-scale-decrease "out")
    ("b" helm-mini)
    ("f" helm-find-files)
    ("F" follow-mode)
@@ -573,7 +562,7 @@ _q_ cancel	_o_nly this   	_d_elete
    ("Z" winner-redo)
    ("q" nil)
    )
-  (key-chord-define-global "WW" 'hydra-window/body)
+   (key-chord-define-global "ww" 'hydra-window/body)
 #+END_SRC
 ** EMMS
 #+BEGIN_SRC emacs-lisp
@@ -591,5 +580,5 @@ _q_ cancel	_o_nly this   	_d_elete
      ("rt" emms-toggle-repeat-track "repeat track")
      ("q" nil "quit")
      )
-     (key-chord-define-global "EE" 'hydra-emms/body)
+     (key-chord-define-global "ee" 'hydra-emms/body)
 #+END_SRC
