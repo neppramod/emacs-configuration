@@ -581,5 +581,5 @@ _q_ cancel	_o_nly this   	_d_elete	        _=_ zoom in
      ("rt" emms-toggle-repeat-track "repeat track")
      ("q" nil "quit")
      )
-     (key-chord-define-global "ee" 'hydra-emms/body)
+     (key-chord-define-global "EE" 'hydra-emms/body)
 #+END_SRC
