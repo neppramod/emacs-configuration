@@ -454,11 +454,12 @@ Failed to recognize this system, trying to continue.
    ("a" beginning-of-line "beginning of line")
    ("e" move-end-of-line  "end of line")
    ("v" scroll-up-command "scroll up")
+   ("o" other-window "other window")
    ;; Converting M-v to V here by analogy.
    ("V" scroll-down-command "scroll down")
    ("l" recenter-top-bottom  "recenter")
    ("q" nil "quit")
-   ("." nil "quit")
+   ("SPC" nil "quit")
    )
    (key-chord-define-global "jj" 'hydra-move/body)
 #+END_SRC
