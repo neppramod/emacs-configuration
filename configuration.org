@@ -198,7 +198,7 @@
     :ensure t
     :config
     (setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION)))
-
+    (setq emms-source-file-default-directory "~/Music/")  
     (emms-all)
     (emms-default-players)
     (setq  emms-player-mplayer-parameters '("-novideo"))
@@ -509,7 +509,7 @@ _j_ ↓        	_x_ horizontal	_f_ind files	_n_ X↓
 _k_ ↑        	_z_ undo      	_a_ce 1		_p_ X↑
 _l_ →        	_Z_ reset      	_s_wap		_._ X→
 _F_ollow	        _D_lt Other   	_S_ave		max_i_mize
-_q_ cancel	_o_nly this   	_d_elete	        _=_ zoom in
+_q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
                                                 _-_ zoom out
 "
    ("h" windmove-left )
@@ -522,7 +522,7 @@ _q_ cancel	_o_nly this   	_d_elete	        _=_ zoom in
    ("." hydra-move-splitter-right)
    ("=" text-scale-increase "in") 
    ("-" text-scale-decrease "out")
-   ("b" helm-mini)
+   ("b" buffer-menu "buffer-menu")
    ("f" helm-find-files)
    ("F" follow-mode)
    ("a" (lambda ()
@@ -554,8 +554,8 @@ _q_ cancel	_o_nly this   	_d_elete	        _=_ zoom in
           (add-hook 'ace-window-end-once-hook
                     'hydra-window/body))
        )
-   ("o" delete-other-windows :exit t)
-   ("i" delete-other-windows)
+   ("o" other-window)
+   ("i" delete-other-windows :exit t)
    ("z" (progn
           (winner-undo)
           (setq this-command 'winner-undo))
