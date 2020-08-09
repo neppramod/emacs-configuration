@@ -289,6 +289,17 @@ Failed to recognize this system, trying to continue.
    - ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
    - ~M-C-i~ Auto correct current word
 
+** Which Key
+   Show more options for keys
+   #+BEGIN_SRC emacs-lisp
+    (use-package which-key 
+      :ensure t 
+      :init
+      (which-key-mode)
+      )
+   #+END_SRC
+
+
 * Programming Language Specific
 ** Java
    #+BEGIN_SRC emacs-lisp
@@ -312,7 +323,10 @@ Failed to recognize this system, trying to continue.
    #+BEGIN_SRC emacs-lisp
    ;; Search with helm-swoop
    (key-chord-define-global "js" 'helm-swoop)
-      
+
+   ;; Go to buffer menu
+   (key-chord-define-global "bb" 'buffer-menu)
+
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
 
@@ -510,7 +524,7 @@ _k_ ↑        	_z_ undo      	_a_ce 1		_p_ X↑
 _l_ →        	_Z_ reset      	_s_wap		_._ X→
 _F_ollow	        _D_lt Other   	_S_ave		max_i_mize
 _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
-                                                _-_ zoom out
+                                _m_ bookmark      _-_ zoom out
 "
    ("h" windmove-left )
    ("j" windmove-down )
@@ -523,6 +537,7 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
    ("=" text-scale-increase "in") 
    ("-" text-scale-decrease "out")
    ("b" buffer-menu "buffer-menu")
+   ("m" bookmark-bmenu-list "bookmark")
    ("f" helm-find-files)
    ("F" follow-mode)
    ("a" (lambda ()
