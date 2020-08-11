@@ -25,9 +25,14 @@
 
 * Basic bells and whistles settings
   #+BEGIN_SRC emacs-lisp
-;  (global-set-key "\t" 'self-insert-command)
-;  (global-set-key "\r" 'newline-and-indent)
-  (setq-default indent-tabs-mode nil) ; use spaces for indentation
+
+  ;; make return key also do indent, for current buffer only
+  (electric-indent-local-mode 1)
+  (setq-default tab-always-indent 'complete)	
+
+  ;; make return key also do indent, globally
+  (electric-indent-mode 1)
+		
   (set-language-environment "UTF-8")
   (scroll-bar-mode -1)
   (tool-bar-mode -1)
@@ -64,6 +69,13 @@
       (t (load-library "default")))
 #+END_SRC
 * Looks
+*** Theme
+   #+BEGIN_SRC emacs-lisp
+     (use-package material-theme 
+     :ensure t 
+     :init 
+     (load-theme 'material t))
+   #+END_SRC
 *** Font
     Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
     #+BEGIN_SRC emacs-lisp
@@ -298,8 +310,6 @@ Failed to recognize this system, trying to continue.
       (which-key-mode)
       )
    #+END_SRC
-
-
 * Programming Language Specific
 ** Java
    #+BEGIN_SRC emacs-lisp
@@ -308,14 +318,46 @@ Failed to recognize this system, trying to continue.
    (add-hook 'java-mode-hook (lambda () (setq c-basic-offset 4 tab-width 4 indent-tabs-mode t)))
 
    ;; Build java file
-   (defun java-build ()
-   (interactive)
-   (shell-command (concat "javac " buffer-file-name)))
+   ;(defun java-build ()
+   ;(interactive)
+   ;(shell-command (concat "javac " buffer-file-name)))
 
-   (defun java-run()
-   (interactive)
-   (async-shell-command (concat "java " (file-name-base buffer-file-name))))
+   ;(defun java-run()
+   ;(interactive)
+   ;(shell-command (concat "java " (file-name-base buffer-file-name))))
 
+
+   (use-package quickrun :ensure t)
+   (global-set-key (kbd "C-c c") 'quickrun)
+   #+END_SRC
+** LSP
+   #+BEGIN_SRC emacs-lisp
+   (setq lsp-keymap-prefix "C-c l")
+
+   ;;(key-chord-define-global "ll" 'lsp-command-keymap)
+   (use-package projectile :ensure t)
+   (use-package flycheck :ensure t)
+   (use-package yasnippet :ensure t :config (yas-global-mode))
+   (use-package lsp-mode :ensure t :hook ((lsp-mode . lsp-enable-which-key-integration))
+     :config (setq lsp-completion-enable-additional-text-edit nil))
+   (use-package company :ensure t)
+   (use-package lsp-ui :ensure t)
+   (use-package lsp-java :ensure t :config (add-hook 'java-mode-hook 'lsp))
+   (use-package dap-mode :ensure t :after lsp-mode :config (dap-auto-configure-mode))
+;;   (use-package dap-java :ensure t)
+   (use-package helm-lsp :ensure t)
+   (use-package lsp-treemacs :ensure t)
+
+
+   ;; optionally if you want to use debugger
+
+  (use-package dap-mode
+    :ensure t :after lsp-mode
+    :config
+     (require 'dap-java)
+     (dap-mode t)
+     (dap-ui-mode t))
+     
    #+END_SRC
 * Key bindings
 ** Global
@@ -334,17 +376,6 @@ Failed to recognize this system, trying to continue.
    (global-set-key (kbd "C-c r") 'reload-init-file)
    #+END_SRC
 
-** Java
-   #+BEGIN_SRC emacs-lisp
-
-   (global-set-key
-   (kbd "C-c c")
-   (defhydra hydra-compile (:body-pre (next-line))
-     "Build"
-     ("jb" java-build "Java Build")
-     ("jr" java-run   "Java Run")
-     ("k"  (kill-matching-buffers "*Async Shell Command*") "Kill Buffer")))
-   #+END_SRC
 ** Magit
    #+BEGIN_SRC emacs-lisp
    (global-set-key (kbd "C-x g") 'magit-status)
@@ -569,7 +600,7 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
           (add-hook 'ace-window-end-once-hook
                     'hydra-window/body))
        )
-   ("o" other-window)
+   ("o" other-window :exit t)
    ("i" delete-other-windows :exit t)
    ("z" (progn
           (winner-undo)
