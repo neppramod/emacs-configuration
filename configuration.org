@@ -336,7 +336,7 @@ Failed to recognize this system, trying to continue.
 
    ;;(key-chord-define-global "ll" 'lsp-command-keymap)
    (use-package projectile :ensure t)
-   (use-package flycheck :ensure t)
+   (use-package flycheck :ensure t :init (global-flycheck-mode))
    (use-package yasnippet :ensure t :config (yas-global-mode))
    (use-package lsp-mode :ensure t :hook ((lsp-mode . lsp-enable-which-key-integration))
      :config (setq lsp-completion-enable-additional-text-edit nil))
@@ -359,6 +359,15 @@ Failed to recognize this system, trying to continue.
      (dap-ui-mode t))
      
    #+END_SRC
+** Scala
+#+BEGIN_SRC emacs-lisp
+(use-package scala-mode
+  :ensure t
+  :interpreter
+    ("scala" . scala-mode)
+  :mode "\\.s\\(cala\\|bt\\)$"
+)
+#+END_SRC
 * Key bindings
 ** Global
 
