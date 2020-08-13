@@ -1,5 +1,10 @@
 .emacs.desktop
 .emacs.desktop.lock
+.cache/
+.dap-breakpoints
+.lsp-session*
+*.el
+eclipse.*
 configuration.el
 elpa/
 backup/
@@ -8,6 +13,7 @@ eshell/
 server/
 transient/
 emms/
+workspace/
 network-security.data
 recentf
 bookmarks
