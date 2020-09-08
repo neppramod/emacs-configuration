@@ -71,10 +71,10 @@
 * Looks
 *** Theme
    #+BEGIN_SRC emacs-lisp
-     (use-package material-theme 
+     (use-package solarized-theme 
      :ensure t 
      :init 
-     (load-theme 'material t))
+     (load-theme 'solarized-light t))
    #+END_SRC
 *** Font
     Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
