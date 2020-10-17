@@ -360,7 +360,7 @@ Failed to recognize this system, trying to continue.
    #+END_SRC
 ** LSP
    #+BEGIN_SRC emacs-lisp
-   (setq lsp-keymap-prefix "C-c l")
+   ;(setq lsp-keymap-prefix "C-c l")
 
    (use-package ag
    :ensure t
@@ -375,26 +375,120 @@ Failed to recognize this system, trying to continue.
    )
    (use-package flycheck :ensure t :init (global-flycheck-mode))
    (use-package yasnippet :ensure t :config (yas-global-mode))
-   (use-package lsp-mode :ensure t :hook ((lsp-mode . lsp-enable-which-key-integration))
-     :config (setq lsp-completion-enable-additional-text-edit nil))
+
+   (use-package helm-lsp
+   :ensure t
+   :after (lsp-mode)
+   :commands (helm-lsp-workspace-symbol)
+   :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
+
+   (use-package lsp-mode 
+   :diminish (lsp-mode . "lsp")
+   :bind (:map lsp-mode-map ("C-c C-d" . lsp-describe-thing-at-point)) 
+   :hook (
+       (lsp-mode . lsp-enable-which-key-integration)
+       (java-mode . #'lsp-deferred)
+    )
+    :init
+  (setq lsp-auto-guess-root t       ; Detect project root
+   lsp-log-io nil
+   lsp-enable-indentation t
+   lsp-enable-imenu t
+   lsp-keymap-prefix "C-l"
+   lsp-file-watch-threshold 500
+   lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
+
+   (setq lsp-enable-file-watchers nil) 
+
+   (defun lsp-on-save-operation ()
+   (when (or (boundp 'lsp-mode)
+   (bound-p 'lsp-deferred))
+   (lsp-organize-imports)
+   (lsp-format-buffer)))
+
+   :config (setq lsp-completion-enable-additional-text-edit nil))
+
+(use-package lsp-ui
+  :ensure t
+  :after (lsp-mode)
+  :commands lsp-ui-doc-hide
+  :bind (:map lsp-ui-mode-map
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+         ([remap xref-find-references] . lsp-ui-peek-find-references)
+         ("C-c u" . lsp-ui-imenu))
+  :init (setq lsp-ui-doc-enable t
+         lsp-ui-doc-use-webkit nil
+         lsp-ui-doc-header nil
+         lsp-ui-doc-delay 0.2
+         lsp-ui-doc-include-signature t
+         lsp-ui-doc-alignment 'at-point
+         lsp-ui-doc-use-childframe nil
+         lsp-ui-doc-border (face-foreground 'default)
+         lsp-ui-peek-enable t
+         lsp-ui-peek-show-directory t
+         lsp-ui-sideline-update-mode 'line
+         lsp-ui-sideline-enable t
+         lsp-ui-sideline-show-code-actions t
+         lsp-ui-sideline-show-hover nil
+         lsp-ui-sideline-ignore-duplicate t)
+  :config
+  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+
+  ;; `C-g'to close doc
+  (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
+
+  ;; Reset `lsp-ui-doc-background' after loading theme
+  (add-hook 'after-load-theme-hook
+       (lambda ()
+         (setq lsp-ui-doc-border (face-foreground 'default))
+         (set-face-background 'lsp-ui-doc-background
+                              (face-background 'tooltip))))
+
+  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+  ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
+  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+    (setq mode-line-format nil)))
+
+
    (use-package company :ensure t)
-   (use-package lsp-ui :ensure t)
    (use-package lsp-java :ensure t :config (add-hook 'java-mode-hook 'lsp))
-   (use-package dap-mode :ensure t :after lsp-mode :config (dap-auto-configure-mode))
-;;   (use-package dap-java :ensure t)
-   (use-package helm-lsp :ensure t)
-   (use-package lsp-treemacs :ensure t)
+;;   (use-package dap-mode :ensure t :after lsp-mode :config (dap-auto-configure-mode))
+
+;; Debug
+(use-package dap-mode
+  :diminish dap-mode
+  :ensure t
+  :after (lsp-mode)
+  :functions dap-hydra/nil
+  :config
+  (require 'dap-java)
+  ;(dap-mode t)
+  ;(dap-ui-mode t
+  :bind (:map lsp-mode-map
+         ("<f5>" . dap-debug)
+         ("M-<f5>" . dap-hydra))
+  :hook ((dap-mode . dap-ui-mode)
+    (dap-session-created . (lambda (&_rest) (dap-hydra)))
+    (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))))
+
+(use-package lsp-treemacs
+  :after (lsp-mode treemacs)
+  :ensure t
+  :commands lsp-treemacs-errors-list
+  :bind (:map lsp-mode-map
+         ("M-9" . lsp-treemacs-errors-list)))
+
+(use-package treemacs
+  :ensure t
+  :commands (treemacs)
+  :after (lsp-mode))
 
 
-   ;; optionally if you want to use debugger
+   (use-package helm-lsp 
+   :ensure t
+   :config
+   (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))  
 
-  (use-package dap-mode
-    :ensure t :after lsp-mode
-    :config
-     (require 'dap-java)
-     (dap-mode t)
-     (dap-ui-mode t))
-     
    #+END_SRC
 
 ** Scala
