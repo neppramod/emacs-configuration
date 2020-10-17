@@ -42,7 +42,7 @@
   (setq ring-bell-function 'ignore)
   (setq-default sp-escape-quotes-after-insert nil) ;; Escape quotes properly
   (setq bookmark-save-flag 1) ; everytime bookmark is changed, automatically save
-  (desktop-save-mode 1)       ; save session, so that it loads next time
+  ;(desktop-save-mode 1)       ; save session, so that it loads next time
   (recentf-mode 1)            ; Maintain a list of recent files opened
   (setq recentf-max-saved-items 50)
   (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))   ; Move all temporary backup files to backup folder
@@ -50,8 +50,15 @@
   (show-paren-mode 1)         ; Highlight matching brackets and braces
   (global-visual-line-mode 1)	      ; Soft wrap
   (setq org-export-with-smart-quotes t)  ; Enable smart quotes in org mode
+
+
+  ;; Set initial screen to bookmark list
+(custom-set-variables
+ '(inhibit-startup-screen t))
+
+  (bookmark-bmenu-list)
+  (switch-to-buffer "*Bookmark List*")
   #+END_SRC
-  
 * Settings
 #+BEGIN_SRC emacs-lisp
 
@@ -74,7 +81,7 @@
      (use-package solarized-theme 
      :ensure t 
      :init 
-     (load-theme 'solarized-light t))
+     (load-theme 'solarized-dark t))
    #+END_SRC
 *** Font
     Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
