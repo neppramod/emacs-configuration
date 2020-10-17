@@ -90,6 +90,17 @@
     #+END_SRC
 
 * Custom settings
+** Key-Chord
+   Key-Chord allows to bind regular characters to actions.
+   #+BEGIN_SRC emacs-lisp
+   (use-package use-package-chords
+   :ensure t
+   :init 
+   :config (key-chord-mode 1)
+    (setq key-chord-two-keys-delay 0.4)
+    (setq key-chord-one-key-delay 0.5) ; default 0.2
+   )
+   #+END_SRC
 ** Helm Packages
 *** Helm
     Helm adds many functionality to search and manage buffers
@@ -98,20 +109,42 @@
       :ensure t
       :init 
       (helm-mode 1)
+      (progn (setq helm-buffers-fuzzy-matching t))
       :bind
       (("M-x" . helm-M-x))
       (("C-x C-f" . helm-find-files))
       (("C-c f" . helm-recentf))   ;; Add new key to recentf
       (("C-c g" . helm-grep-do-git-grep)))  ;; Search using grep in a git project
 
+
+      (use-package helm-descbinds
+      :ensure t
+      :bind ("C-h b" . helm-descbinds))
+
+      (use-package helm-ag
+      :ensure helm-ag
+      :bind ("C-c a" . helm-ag)
+      :commands (helm-ag)
+      :init (setq helm-ag-insert-at-point 'symbol
+      helm-ag-command-option "--path-to-ignore ~/.agignore"))
+
     #+END_SRC
+
+    #+RESULTS:
+    : helm-projectile-ag
 
 *** Swoop Helm
     Swoop allows easy way to search current buffer
     #+BEGIN_SRC emacs-lisp
-    (use-package helm-swoop :ensure t)
+    (use-package helm-swoop 
+    :ensure t
+    :chords
+    ("js" . helm-swoop)
+    ("jb" . helm-swoop-back-to-last-point)
+    :init
+    (bind-key "M-m" 'helm-swoop-from-isearch isearch-mode-map)
+    )
     #+END_SRC
-
 *** Wgrep Helm
     Wgrep allows to modify results of grep command and save changes to all affected buffers
     #+BEGIN_SRC emacs-lisp
@@ -157,18 +190,6 @@
      :ensure t
      :config
      (add-hook 'org-mode-hook 'org-bullets-mode))   
-   #+END_SRC
-
-** Key-Chord
-   Key-Chord allows to bind regular characters to actions.
-   #+BEGIN_SRC emacs-lisp
-   (use-package use-package-chords
-   :ensure t
-   :init 
-   :config (key-chord-mode 1)
-    (setq key-chord-two-keys-delay 0.4)
-    (setq key-chord-one-key-delay 0.5) ; default 0.2
-   )
    #+END_SRC
 
 ** Avy
@@ -341,8 +362,17 @@ Failed to recognize this system, trying to continue.
    #+BEGIN_SRC emacs-lisp
    (setq lsp-keymap-prefix "C-c l")
 
+   (use-package ag
+   :ensure t
+   :commands (ag ag-regexp ag-project))
+
    ;;(key-chord-define-global "ll" 'lsp-command-keymap)
-   (use-package projectile :ensure t)
+   (use-package projectile 
+   :ensure t
+   :init (projectile-mode +1)
+   :config 
+   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+   )
    (use-package flycheck :ensure t :init (global-flycheck-mode))
    (use-package yasnippet :ensure t :config (yas-global-mode))
    (use-package lsp-mode :ensure t :hook ((lsp-mode . lsp-enable-which-key-integration))
@@ -366,6 +396,7 @@ Failed to recognize this system, trying to continue.
      (dap-ui-mode t))
      
    #+END_SRC
+
 ** Scala
 #+BEGIN_SRC emacs-lisp
 (use-package scala-mode
@@ -380,7 +411,7 @@ Failed to recognize this system, trying to continue.
 
    #+BEGIN_SRC emacs-lisp
    ;; Search with helm-swoop
-   (key-chord-define-global "js" 'helm-swoop)
+   ;;   (key-chord-define-global "js" 'helm-swoop)
 
    ;; Go to buffer menu
    (key-chord-define-global "bb" 'buffer-menu)
