@@ -51,14 +51,26 @@
   (global-visual-line-mode 1)	      ; Soft wrap
   (setq org-export-with-smart-quotes t)  ; Enable smart quotes in org mode
 
+  ;; Org-mode issue with src block not expanding
+  (when (version<= "9.2" (org-version))
+    (require 'org-tempo))
+
+  ;; Set indentation properly in org-mode
+
+  (setq org-src-preserve-indentation nil 
+	org-edit-src-content-indentation 0)
 
   ;; Set initial screen to bookmark list
-(custom-set-variables
+  (custom-set-variables
  '(inhibit-startup-screen t))
 
   (bookmark-bmenu-list)
   (switch-to-buffer "*Bookmark List*")
   #+END_SRC
+
+  #+RESULTS:
+  : #<buffer *Bookmark List*>
+
 * Settings
 #+BEGIN_SRC emacs-lisp
 
@@ -81,7 +93,7 @@
      (use-package solarized-theme 
      :ensure t 
      :init 
-     (load-theme 'solarized-dark t))
+     (load-theme 'solarized-zenburn t))
    #+END_SRC
 *** Font
     Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
