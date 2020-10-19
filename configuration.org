@@ -387,6 +387,7 @@ Failed to recognize this system, trying to continue.
    )
    (use-package flycheck :ensure t :init (global-flycheck-mode))
    (use-package yasnippet :ensure t :config (yas-global-mode))
+   (use-package yasnippet-snippets :ensure t)
 
    (use-package helm-lsp
    :ensure t
