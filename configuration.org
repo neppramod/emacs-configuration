@@ -521,7 +521,7 @@ Failed to recognize this system, trying to continue.
    ;;   (key-chord-define-global "js" 'helm-swoop)
 
    ;; Go to buffer menu
-   (key-chord-define-global "bb" 'buffer-menu)
+   ;   (key-chord-define-global "bb" 'buffer-menu)
 
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
@@ -783,3 +783,63 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
      )
      (key-chord-define-global "EE" 'hydra-emms/body)
 #+END_SRC
+* Personal
+  This part is for my personal settings. Nothing fancy, just to learn elisp
+** Google a query or region
+   #+begin_src emacs-lisp
+  (defun google-this ()
+  "Googles a query or region if any."
+  (interactive)
+  (browse-url
+   (concat
+    "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
+    (if mark-active
+        (buffer-substring (region-beginning) (region-end))
+      (read-string "Google: ")))))
+   #+end_src
+** Browse to my wordpress
+   #+begin_src emacs-lisp
+   (defun my/wordpress()
+   (interactive)
+   (browse-url "http://www.neppramod.wordpress.com"))
+   #+end_src
+** Go to reddit
+   #+begin_src emacs-lisp
+   (defun my/reddit()
+     (interactive)
+     (browse-url "https://www.reddit.com/"))  
+   #+end_src
+** Go to dota2 twitch
+   #+begin_src emacs-lisp
+   (defun my/twitch()
+     (interactive)
+     (browse-url "https://www.twitch.tv/directory/game/Dota%202"))  
+   #+end_src
+** Go to hackerearth competitive programming page
+   #+begin_src emacs-lisp
+      (defun my/he-competitive()
+      (interactive)
+      (browse-url "https://www.hackerearth.com/getstarted-competitive-programming/"))  
+   #+end_src
+** Go to email
+   #+begin_src emacs-lisp
+      (defun my/email()
+      (interactive)
+      (browse-url "https://www.gmail.com/"))  
+   #+end_src
+
+** Personal Config with Hyrda
+*** Jump to online websites
+    #+begin_src emacs-lisp
+     (defhydra hydra-online()
+       "online"
+      ("r" my/reddit "reddit")
+      ("g" google-this "google this")
+      ("t" my/twitch "dota 2 twitch")
+      ("e" my/email "email")
+      ("h" my/he-competitive "he compeitive")
+      ("w" my/wordpress "wordpress")
+      ("q" nil "quit")
+      )
+     (key-chord-define-global "JJ" 'hydra-online/body)
+    #+end_src
