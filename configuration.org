@@ -7,9 +7,7 @@
    (require 'package)
 
    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("elpa" . "http://tromey.com/elpa/")
-                            ("gnu" . "http://elpa.gnu.org/packages/")
-                            ("marmalade" . "http://marmalade-repo.org/packages/")))
+			 ("elpa" . "http://tromey.com/elpa/")))
 
    (package-initialize)
 
@@ -100,8 +98,36 @@
     #+BEGIN_SRC emacs-lisp
     (set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
     #+END_SRC
+*** Behavior
+**** Change yes/no to y/n
+     #+begin_src emacs-lisp
+     (fset 'yes-or-no-p 'y-or-n-p)
+     #+end_src>
+**** Pop to mark
+     #+begin_src emacs-lisp
 
+     (defun unpop-to-mark-command ()
+     "Unpop off mark ring. Does nothing if mark ring is empty."
+     (interactive)
+     (when mark-ring
+     (let ((pos (marker-position (car (last mark-ring)))))
+     (if (not (= (point) pos))
+     (goto-char pos)
+     (setq mark-ring (cons (copy-marker (mark-marker)) mark-ring))
+     (set-marker (mark-marker) pos)
+     (setq mark-ring (nbutlast mark-ring))
+     (goto-char (marker-position (car (last mark-ring))))))))
+
+     (bind-key "M-[" 'pop-to-mark-command)
+     (bind-key "M-]" 'unpop-to-mark-command)
+     (setq set-mark-command-repeat-pop t)
+     #+end_src
 * Custom settings
+** Diminish and Dash
+   #+begin_src emacs-lisp
+   (use-package dash :ensure t)
+   (use-package diminish :ensure t)
+   #+end_src>
 ** Key-Chord
    Key-Chord allows to bind regular characters to actions.
    #+BEGIN_SRC emacs-lisp
@@ -350,6 +376,33 @@ Failed to recognize this system, trying to continue.
       (which-key-mode)
       )
    #+END_SRC
+** Smart Modeline
+   #+begin_src emacs-lisp
+   (use-package smart-mode-line 
+   :ensure t
+   :init
+   (smart-mode-line-enable))
+   #+end_src
+** Undo tree
+   #+begin_src emacs-lisp
+   (use-package undo-tree
+   :diminish undo-tree-mode
+   :config
+   (progn
+   (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t)))
+   #+end_src
+** Guide key
+   #+begin_src emacs-lisp
+   (use-package guide-key
+  :defer t
+  :diminish guide-key-mode
+  :config
+  (progn
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
+  (guide-key-mode 1)))  ; Enable guide-key-mode
+   #+end_src
 * Programming Language Specific
 ** Java
    #+BEGIN_SRC emacs-lisp
@@ -827,7 +880,18 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
       (interactive)
       (browse-url "https://www.gmail.com/"))  
    #+end_src
-
+** Open youtube
+   #+begin_src emacs-lisp
+      (defun my/youtube()
+      (interactive)
+      (browse-url "https://www.youtube.com/"))  
+   #+end_src
+** Open youtube in incognito mode
+    #+begin_src emacs-lisp
+      (defun my/youtube-incognito()
+      (interactive)
+      (shell-command "google-chrome --incognito https://youtube.com"))
+    #+end_src
 ** Personal Config with Hyrda
 *** Jump to online websites
     #+begin_src emacs-lisp
@@ -838,6 +902,8 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
       ("t" my/twitch "dota 2 twitch")
       ("e" my/email "email")
       ("h" my/he-competitive "he compeitive")
+      ("y" my/youtube "youtube")
+      ("i" my/youtube-incognito "youtube-incognito")
       ("w" my/wordpress "wordpress")
       ("q" nil "quit")
       )
