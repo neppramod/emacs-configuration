@@ -7,7 +7,8 @@
    (require 'package)
 
    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("elpa" . "http://tromey.com/elpa/")))
+			 ("elpa" . "http://tromey.com/elpa/")
+			 ("org" . "https://orgmode.org/elpa/"))
 
    (package-initialize)
 
@@ -180,10 +181,6 @@
       helm-ag-command-option "--path-to-ignore ~/.agignore"))
 
     #+END_SRC
-
-    #+RESULTS:
-    : helm-projectile-ag
-
 *** Swoop Helm
     Swoop allows easy way to search current buffer
     #+BEGIN_SRC emacs-lisp
