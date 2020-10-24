@@ -15,11 +15,9 @@
 ** Details
   - Read [[configuration.org][configuration.org]], and go through each section on how things are set. I believe it is well documented. Github also loads org file in proper displayable format, so it should be easy to follow.
   - Few custom keys are set, and most of them are found in individual ~use-package~ or [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#key-bindings][Key bindings section]]. Usage of default keys are listed in individual Notes section and global [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#notes-2][Notes]] section.
+  - You may also want to configure [[https://github.com/neppramod/emacs-configuration/blob/master/configuration.org#personal][Personal]] section to your liking. It is easy to copy paste and change those settings. Specially make sure org file directory is setup correctly. Default is set to ~/Dropbox/org. If you don't want to setup org-mode note taking, you can delete that part.
+  - Some of the operating system specific portions are in individual files like linux.el, mac.el and windows.el. Feel free to change them to match your system and directories.
   
 ** Screenshot
 [[screenshot-01.png]]
 
-  
-** Custom Packages 
-Make sure to edit [[custom.org]] to setup custom packages and uncomment 
-~(org-babel-load-file "~/.emacs.d/custom.org")~ in init.el to load it.
