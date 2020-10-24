@@ -19,5 +19,5 @@
   - Some of the operating system specific portions are in individual files like linux.el, mac.el and windows.el. Feel free to change them to match your system and directories.
   
 ** Screenshot
-[[screenshot-01.png]]
+[[dap-mode.png]]
 
