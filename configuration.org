@@ -833,7 +833,7 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
   This part is for my personal settings. Nothing fancy, just to learn elisp
 ** Org-mode
    #+begin_src emacs-lisp
-   (setq org-directory "~/git/org")
+   (setq org-directory "~/Dropbox/org")
    (setq org-default-notes-file "~/Dropbox/org/tasks.org")
 
    ;; Use C-c c to start capture mode
