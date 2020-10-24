@@ -122,6 +122,19 @@
      (bind-key "M-]" 'unpop-to-mark-command)
      (setq set-mark-command-repeat-pop t)
      #+end_src
+**** Load Theme After Service Start
+     #+begin_src emacs-lisp
+     (defun load-custom-after-frame (frame)
+        (select-frame frame)
+	(load-theme 'solarized-zenburn t)  ;; theme
+	(set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
+;;	(bookmark-bmenu-list)
+;;	(switch-to-buffer "*Bookmark List*")
+     )
+
+     (if (daemonp)
+        (add-hook 'after-make-frame-functions #'load-custom-after-frame))
+     #+end_src
 * Custom settings
 ** Diminish and Dash
    #+begin_src emacs-lisp
@@ -161,7 +174,7 @@
 
       (use-package helm-ag
       :ensure helm-ag
-      :bind ("C-c a" . helm-ag)
+      :bind ("C-c h" . helm-ag)
       :commands (helm-ag)
       :init (setq helm-ag-insert-at-point 'symbol
       helm-ag-command-option "--path-to-ignore ~/.agignore"))
@@ -383,16 +396,6 @@ Failed to recognize this system, trying to continue.
    :init
    (smart-mode-line-enable))
    #+end_src
-** Undo tree
-   #+begin_src emacs-lisp
-   (use-package undo-tree
-   :diminish undo-tree-mode
-   :config
-   (progn
-   (global-undo-tree-mode)
-    (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t)))
-   #+end_src
 ** Guide key
    #+begin_src emacs-lisp
    (use-package guide-key
@@ -410,18 +413,8 @@ Failed to recognize this system, trying to continue.
    (add-hook 'java-mode-hook (lambda () (setq c-default-style "bsd")))
    (add-hook 'java-mode-hook (lambda () (setq c-basic-offset 4 tab-width 4 indent-tabs-mode t)))
 
-   ;; Build java file
-   ;(defun java-build ()
-   ;(interactive)
-   ;(shell-command (concat "javac " buffer-file-name)))
-
-   ;(defun java-run()
-   ;(interactive)
-   ;(shell-command (concat "java " (file-name-base buffer-file-name))))
-
-
    (use-package quickrun :ensure t)
-   (global-set-key (kbd "C-c c") 'quickrun)
+   (global-set-key (kbd "C-c r") 'quickrun)
    #+END_SRC
 ** LSP
    #+BEGIN_SRC emacs-lisp
@@ -580,7 +573,7 @@ Failed to recognize this system, trying to continue.
    (global-set-key (kbd "C-;") 'replace-regexp)
 
    (defun reload-init-file() (interactive) (load-file USER_INIT_FILE))
-   (global-set-key (kbd "C-c r") 'reload-init-file)
+   (global-set-key (kbd "C-c i") 'reload-init-file)
    #+END_SRC
 
 ** Magit
@@ -838,6 +831,24 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
 #+END_SRC
 * Personal
   This part is for my personal settings. Nothing fancy, just to learn elisp
+** Org-mode
+   #+begin_src emacs-lisp
+   (setq org-directory "~/git/org")
+   (setq org-default-notes-file "~/Dropbox/org/tasks.org")
+
+   ;; Use C-c c to start capture mode
+   (global-set-key (kbd "C-c c") 'org-capture)
+   (global-set-key (kbd "C-c a") 'org-agenda)
+
+   (setq org-capture-templates
+         (quote (("t" "Personal Task" entry (file "~/Dropbox/org/tasks.org")
+	          "* TODO %?" :empty-lines 1)
+		 ("w" "Work-related Task" entry (file "~/Dropbox/org/work.org")
+	          "* TODO %?" :empty-lines 1)
+                 )))
+
+   
+   #+end_src
 ** Google a query or region
    #+begin_src emacs-lisp
   (defun google-this ()
