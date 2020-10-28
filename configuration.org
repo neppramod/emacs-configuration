@@ -1,219 +1,217 @@
 #+TITLE: Emacs Configuration
-  This file contains basic emacs configuration
+This file contains basic emacs configuration
 
 * Initialize use-package
 ** Set repo using package and initialize use-package
-   #+BEGIN_SRC emacs-lisp
-   (require 'package)
+#+BEGIN_SRC emacs-lisp
+(require 'package)
 
-   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("elpa" . "http://tromey.com/elpa/")))
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+		 ("elpa" . "http://tromey.com/elpa/")))
 
-   (package-initialize)
+(package-initialize)
 
-   ; Fetch the list of packages available 
-   (unless package-archive-contents (package-refresh-contents))
+; Fetch the list of packages available 
+(unless package-archive-contents (package-refresh-contents))
 
-    ; Install use-package
-    (setq package-list '(use-package))
-    (dolist (package package-list)
-    (unless (package-installed-p package) (package-install package)))
+; Install use-package
+(setq package-list '(use-package))
+(dolist (package package-list)
+(unless (package-installed-p package) (package-install package)))
 
-   #+END_SRC
-
-* Basic bells and whistles settings
-  #+BEGIN_SRC emacs-lisp
-
-  ;; make return key also do indent, for current buffer only
-  (electric-indent-local-mode 1)
-  (setq-default tab-always-indent 'complete)	
-
-  ;; make return key also do indent, globally
-  (electric-indent-mode 1)
-		
-  (set-language-environment "UTF-8")
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
-  (global-linum-mode 0)
-  (setq whitespace-line-column 1000) ;; Longer whitespace
-  (setq ring-bell-function 'ignore)
-  (setq-default sp-escape-quotes-after-insert nil) ;; Escape quotes properly
-  (setq bookmark-save-flag 1) ; everytime bookmark is changed, automatically save
-  ;(desktop-save-mode 1)       ; save session, so that it loads next time
-  (recentf-mode 1)            ; Maintain a list of recent files opened
-  (setq recentf-max-saved-items 50)
-  (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))   ; Move all temporary backup files to backup folder
-  (electric-pair-mode 1)      ; Automatically add ending brackets and braces
-  (show-paren-mode 1)         ; Highlight matching brackets and braces
-  (global-visual-line-mode 1)	      ; Soft wrap
-  (setq org-export-with-smart-quotes t)  ; Enable smart quotes in org mode
-
-  ;; Org-mode issue with src block not expanding
-  (when (version<= "9.2" (org-version))
-    (require 'org-tempo))
-
-  ;; Set indentation properly in org-mode
-
-  (setq org-src-preserve-indentation nil 
-	org-edit-src-content-indentation 0)
-
-  ;; Set initial screen to bookmark list
-  (custom-set-variables
- '(inhibit-startup-screen t))
-
-  (bookmark-bmenu-list)
-  (switch-to-buffer "*Bookmark List*")
-  #+END_SRC
-
-  #+RESULTS:
-  : #<buffer *Bookmark List*>
+#+END_SRC
 
 * Settings
 #+BEGIN_SRC emacs-lisp
 
- ;; Install exec-path-from-shell-package to load environment variable
- (use-package exec-path-from-shell :ensure t)
+;; Install exec-path-from-shell-package to load environment variable
+(use-package exec-path-from-shell :ensure t)
 
- (setq EMACS_DIR "~/.emacs.d/")
- (setq USER_INIT_FILE (concat EMACS_DIR "init.el"))
+(setq EMACS_DIR "~/.emacs.d/")
+(setq USER_INIT_FILE (concat EMACS_DIR "init.el"))
+(setq ORG_DIR "~/Dropbox/org/")
+(setq MUSIC_DIR "~/Music/")
 
- ;; Load platform specific variables using specific files. E.g linux.el. 
- ;; Make necessary changes as needed
- (cond ((eq system-type 'windows-nt) (load (concat EMACS_DIR "windows")))
-      ((eq system-type 'gnu/linux) (load (concat EMACS_DIR "linux")))
-      ((eq system-type 'darwin) (load (concat EMACS_DIR "mac")))
-      (t (load-library "default")))
+;; Load platform specific variables using specific files. E.g linux.el. 
+;; Make necessary changes as needed
+(cond ((eq system-type 'windows-nt) (load (concat EMACS_DIR "windows")))
+((eq system-type 'gnu/linux) (load (concat EMACS_DIR "linux")))
+((eq system-type 'darwin) (load (concat EMACS_DIR "mac")))
+(t (load-library "default")))
 #+END_SRC
+* Basic bells and whistles settings
+#+BEGIN_SRC emacs-lisp
+
+;; make return key also do indent, for current buffer only
+(electric-indent-local-mode 1)
+(setq-default tab-always-indent 'complete)	
+
+;; make return key also do indent, globally
+(electric-indent-mode 1)
+	
+(set-language-environment "UTF-8")
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(global-linum-mode 0)
+(setq whitespace-line-column 1000) ;; Longer whitespace
+(setq ring-bell-function 'ignore)
+(setq-default sp-escape-quotes-after-insert nil) ;; Escape quotes properly
+(setq bookmark-save-flag 1) ; everytime bookmark is changed, automatically save
+;(desktop-save-mode 1)       ; save session, so that it loads next time
+(recentf-mode 1)            ; Maintain a list of recent files opened
+(setq recentf-max-saved-items 50)
+;(setq backup-directory-alist '(("" . (concat EMACS_DIR "backup"))))   ; Move all temporary backup files to backup folder
+(electric-pair-mode 1)      ; Automatically add ending brackets and braces
+(show-paren-mode 1)         ; Highlight matching brackets and braces
+(global-visual-line-mode 1)	      ; Soft wrap
+(setq org-export-with-smart-quotes t)  ; Enable smart quotes in org mode
+
+;; Org-mode issue with src block not expanding
+(when (version<= "9.2" (org-version))
+(require 'org-tempo))
+
+;; Set indentation properly in org-mode
+
+(setq org-src-preserve-indentation nil 
+org-edit-src-content-indentation 0)
+
+;; Set initial screen to org agenda view
+(custom-set-variables '(inhibit-startup-screen t))
+(org-agenda nil "n")
+;(setq initial-buffer-choice '(lambda () (get-buffer org-agenda-buffer-name)))
+#+END_SRC
+
 * Looks
 *** Theme
-   #+BEGIN_SRC emacs-lisp
-     (use-package solarized-theme 
-     :ensure t 
-     :init 
-     (load-theme 'solarized-zenburn t))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package solarized-theme 
+:ensure t 
+:init 
+(load-theme 'solarized-light t))
+#+END_SRC
 *** Font
-    Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
-    #+BEGIN_SRC emacs-lisp
-    (set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
-    #+END_SRC
+Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
+#+BEGIN_SRC emacs-lisp
+(set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
+#+END_SRC
 *** Behavior
 **** Change yes/no to y/n
-     #+begin_src emacs-lisp
-     (fset 'yes-or-no-p 'y-or-n-p)
-     #+end_src>
+#+begin_src emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+#+end_src>
 **** Pop to mark
-     #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 
-     (defun unpop-to-mark-command ()
-     "Unpop off mark ring. Does nothing if mark ring is empty."
-     (interactive)
-     (when mark-ring
-     (let ((pos (marker-position (car (last mark-ring)))))
-     (if (not (= (point) pos))
-     (goto-char pos)
-     (setq mark-ring (cons (copy-marker (mark-marker)) mark-ring))
-     (set-marker (mark-marker) pos)
-     (setq mark-ring (nbutlast mark-ring))
-     (goto-char (marker-position (car (last mark-ring))))))))
+(defun unpop-to-mark-command ()
+"Unpop off mark ring. Does nothing if mark ring is empty."
+(interactive)
+(when mark-ring
+(let ((pos (marker-position (car (last mark-ring)))))
+(if (not (= (point) pos))
+(goto-char pos)
+(setq mark-ring (cons (copy-marker (mark-marker)) mark-ring))
+(set-marker (mark-marker) pos)
+(setq mark-ring (nbutlast mark-ring))
+(goto-char (marker-position (car (last mark-ring))))))))
 
-     (bind-key "M-[" 'pop-to-mark-command)
-     (bind-key "M-]" 'unpop-to-mark-command)
-     (setq set-mark-command-repeat-pop t)
-     #+end_src
+(bind-key "M-[" 'pop-to-mark-command)
+(bind-key "M-]" 'unpop-to-mark-command)
+(setq set-mark-command-repeat-pop t)
+#+end_src
 **** Load Theme After Service Start
-     #+begin_src emacs-lisp
-     (defun load-custom-after-frame (frame)
-        (select-frame frame)
-	(load-theme 'solarized-zenburn t)  ;; theme
-	(set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
-;;	(bookmark-bmenu-list)
-;;	(switch-to-buffer "*Bookmark List*")
-     )
+#+begin_src emacs-lisp
+(defun load-custom-after-frame (frame)
+(select-frame frame)
+(load-theme 'solarized-light t)  ;; theme
+(set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
+(org-agenda nil "n")
+(setq initial-buffer-choice '(lambda () (get-buffer org-agenda-buffer-name)))
+(switch-to-buffer "*Org Agenda*")
+)
 
-     (if (daemonp)
-        (add-hook 'after-make-frame-functions #'load-custom-after-frame))
-     #+end_src
+(if (daemonp)
+(add-hook 'after-make-frame-functions #'load-custom-after-frame))
+#+end_src
 * Custom settings
 ** Diminish and Dash
-   #+begin_src emacs-lisp
-   (use-package dash :ensure t)
-   (use-package diminish :ensure t)
-   #+end_src>
+#+begin_src emacs-lisp
+(use-package dash :ensure t)
+(use-package diminish :ensure t)
+#+end_src>
 ** Key-Chord
-   Key-Chord allows to bind regular characters to actions.
-   #+BEGIN_SRC emacs-lisp
-   (use-package use-package-chords
-   :ensure t
-   :init 
-   :config (key-chord-mode 1)
-    (setq key-chord-two-keys-delay 0.4)
-    (setq key-chord-one-key-delay 0.5) ; default 0.2
-   )
-   #+END_SRC
+Key-Chord allows to bind regular characters to actions.
+#+BEGIN_SRC emacs-lisp
+(use-package use-package-chords
+:ensure t
+:init 
+:config (key-chord-mode 1)
+(setq key-chord-two-keys-delay 0.4)
+(setq key-chord-one-key-delay 0.5) ; default 0.2
+)
+#+END_SRC
 ** Helm Packages
 *** Helm
-    Helm adds many functionality to search and manage buffers
-    #+BEGIN_SRC emacs-lisp
-      (use-package helm
-      :ensure t
-      :init 
-      (helm-mode 1)
-      (progn (setq helm-buffers-fuzzy-matching t))
-      :bind
-      (("M-x" . helm-M-x))
-      (("C-x C-f" . helm-find-files))
-      (("C-c f" . helm-recentf))   ;; Add new key to recentf
-      (("C-c g" . helm-grep-do-git-grep)))  ;; Search using grep in a git project
+Helm adds many functionality to search and manage buffers
+#+BEGIN_SRC emacs-lisp
+(use-package helm
+:ensure t
+:init 
+(helm-mode 1)
+(progn (setq helm-buffers-fuzzy-matching t))
+:bind
+(("M-x" . helm-M-x))
+(("C-x C-f" . helm-find-files))
+(("C-c f" . helm-recentf))   ;; Add new key to recentf
+(("C-c g" . helm-grep-do-git-grep)))  ;; Search using grep in a git project
 
 
-      (use-package helm-descbinds
-      :ensure t
-      :bind ("C-h b" . helm-descbinds))
+(use-package helm-descbinds
+:ensure t
+:bind ("C-h b" . helm-descbinds))
 
-      (use-package helm-ag
-      :ensure helm-ag
-      :bind ("C-c h" . helm-ag)
-      :commands (helm-ag)
-      :init (setq helm-ag-insert-at-point 'symbol
-      helm-ag-command-option "--path-to-ignore ~/.agignore"))
+(use-package helm-ag
+:ensure helm-ag
+:bind ("C-c h" . helm-ag)
+:commands (helm-ag)
+:init (setq helm-ag-insert-at-point 'symbol
+helm-ag-command-option "--path-to-ignore ~/.agignore"))
 
-    #+END_SRC
+#+END_SRC
 
-    #+RESULTS:
-    : helm-projectile-ag
+#+RESULTS:
+: helm-projectile-ag
 
 *** Swoop Helm
-    Swoop allows easy way to search current buffer
-    #+BEGIN_SRC emacs-lisp
-    (use-package helm-swoop 
-    :ensure t
-    :chords
-    ("js" . helm-swoop)
-    ("jb" . helm-swoop-back-to-last-point)
-    :init
-    (bind-key "M-m" 'helm-swoop-from-isearch isearch-mode-map)
-    )
-    #+END_SRC
+Swoop allows easy way to search current buffer
+#+BEGIN_SRC emacs-lisp
+(use-package helm-swoop 
+:ensure t
+:chords
+("js" . helm-swoop)
+("jp" . helm-swoop-back-to-last-point)
+:init
+(bind-key "M-m" 'helm-swoop-from-isearch isearch-mode-map)
+)
+#+END_SRC
 *** Wgrep Helm
-    Wgrep allows to modify results of grep command and save changes to all affected buffers
-    #+BEGIN_SRC emacs-lisp
-    (use-package wgrep-helm 
-    :ensure t
-    :custom
-    (wgrep-enable-key "e")
-    (wgrep-auto-save-buffer t)
-    (wgrep-change-readonly-file t))
-    #+END_SRC
+Wgrep allows to modify results of grep command and save changes to all affected buffers
+#+BEGIN_SRC emacs-lisp
+(use-package wgrep-helm 
+:ensure t
+:custom
+(wgrep-enable-key "e")
+(wgrep-auto-save-buffer t)
+(wgrep-change-readonly-file t))
+#+END_SRC
 
 ***  Notes
 **** Change multiple files in minibuffer using wgrep
-    - ~C-c g~ (~helm-git-do-grep~) command in a git project to search files using grep
-    - ~C-c C-s~ save buffer, after edit save to all files
-    - ~e~ enable editing in wgrep buffer
-    - ~C-h m~ see instruction on particular mode for extra information
-    - ~C-c C-k~ discard change in wgrep buffer
+- ~C-c g~ (~helm-git-do-grep~) command in a git project to search files using grep
+- ~C-c C-s~ save buffer, after edit save to all files
+- ~e~ enable editing in wgrep buffer
+- ~C-h m~ see instruction on particular mode for extra information
+- ~C-c C-k~ discard change in wgrep buffer
 
 ** Hydra
 #+BEGIN_SRC emacs-lisp
@@ -226,246 +224,246 @@
 #+END_SRC
 ** Muban    
 
-   Muban allows to insert templates at specific points in current document using keywords. A key binding of ~C-c m~ is assigned to ~muban-apply~, which inserts template associated to certain keyword, defined in *.emacs.muban* file (stored in home directory). See my [[emacs.muban][current setting]]
-    #+BEGIN_SRC emacs-lisp
-     (use-package muban 
-     :ensure t
-     :bind
-     (("C-c m" . muban-apply)))
-    #+END_SRC
+Muban allows to insert templates at specific points in current document using keywords. A key binding of ~C-c m~ is assigned to ~muban-apply~, which inserts template associated to certain keyword, defined in *.emacs.muban* file (stored in home directory). See my [[emacs.muban][current setting]]
+#+BEGIN_SRC emacs-lisp
+(use-package muban 
+:ensure t
+:bind
+(("C-c m" . muban-apply)))
+#+END_SRC
 
 ** Org-Bullets
-   Org-bullets is used to show asterisk's as bullets in ~org-mode~
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-bullets 
-     :ensure t
-     :config
-     (add-hook 'org-mode-hook 'org-bullets-mode))   
-   #+END_SRC
+Org-bullets is used to show asterisk's as bullets in ~org-mode~
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets 
+:ensure t
+:config
+(add-hook 'org-mode-hook 'org-bullets-mode))   
+#+END_SRC
 
 ** Avy
-   Avy is used to jump within current document using characters. Here we bind *jc* to jump to characer, and *jw* to jump to word within the document. Later we also bind *js* to enable ~helm-swoop~ to quickly search in current document.
-   #+BEGIN_SRC emacs-lisp
-     (use-package avy 
-     :ensure t
-     :chords
-     ("jc" . avy-goto-char)
-     ("jw" . avy-goto-word-1)
-     ("jl" . avy-goto-line))
-   #+END_SRC
-   
+Avy is used to jump within current document using characters. Here we bind *jc* to jump to characer, and *jw* to jump to word within the document. Later we also bind *js* to enable ~helm-swoop~ to quickly search in current document.
+#+BEGIN_SRC emacs-lisp
+(use-package avy 
+:ensure t
+:chords
+("jc" . avy-goto-char)
+("jw" . avy-goto-word-1)
+("jl" . avy-goto-line))
+#+END_SRC
+
 ** Htmlize
-   Htmlize is used to export org file to html file
-    #+BEGIN_SRC emacs-lisp
-     (use-package htmlize :ensure t)
-    #+END_SRC
+Htmlize is used to export org file to html file
+#+BEGIN_SRC emacs-lisp
+(use-package htmlize :ensure t)
+#+END_SRC
 
 ** Magit
-   Magit package works with git project
-   #+BEGIN_SRC emacs-lisp
-     (use-package magit :ensure t)
-   #+END_SRC
- 
+Magit package works with git project
+#+BEGIN_SRC emacs-lisp
+(use-package magit :ensure t)
+#+END_SRC
+
 ** Eyebrowse
-   Different configuration for window view. This allows you to setup different window view for particular work. For more [[https://depp.brause.cc/eyebrowse/][see this]]
-   #+BEGIN_SRC emacs-lisp
-       (use-package eyebrowse 
-       :ensure t
-       :config (eyebrowse-mode 1))
-   #+END_SRC
+Different configuration for window view. This allows you to setup different window view for particular work. For more [[https://depp.brause.cc/eyebrowse/][see this]]
+#+BEGIN_SRC emacs-lisp
+(use-package eyebrowse 
+:ensure t
+:config (eyebrowse-mode 1))
+#+END_SRC
 *** Notes
-   - ~C-c C-w 0~ Take to setting number 0
-   - ~C-c C-w 1~ Take to setting number 1 and so on
-   - C-c C-w ' Go to last setting
-   - C-c C-w " Close current setting
+- ~C-c C-w 0~ Take to setting number 0
+- ~C-c C-w 1~ Take to setting number 1 and so on
+- C-c C-w ' Go to last setting
+- C-c C-w " Close current setting
 
 ** Emacs Multimedia System (EMMS)
-     EMMS lets you play media. For this we need to install the player in our system
-     before we can configure this. In this example, we need to install ~mplayer~ and
-     set its location. This setup is a basic setup and here we only enable music playback.
+EMMS lets you play media. For this we need to install the player in our system
+before we can configure this. In this example, we need to install ~mplayer~ and
+set its location. This setup is a basic setup and here we only enable music playback.
 
-    #+BEGIN_SRC emacs-lisp
-    (use-package emms
-    :ensure t
-    :config
-    (setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION)))
-    (setq emms-source-file-default-directory "~/Music/")  
-    (emms-all)
-    (emms-default-players)
-    (setq  emms-player-mplayer-parameters '("-novideo"))
-    )
-    #+END_SRC
-   
-    Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name to MPLAYER_DIRECTORY_LOCATION variable where mplayer is located. 
-    E.g ~/user/local/bin~ in Mac. In windows, I installed in ~Documents/mplayer~, so it will be something like ~c:/Users/<username>/Documents/mplayer~
+#+BEGIN_SRC emacs-lisp
+(use-package emms
+:ensure t
+:config
+(setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION)))
+(setq emms-source-file-default-directory MUSIC_DIR)  
+(emms-all)
+(emms-default-players)
+(setq  emms-player-mplayer-parameters '("-novideo"))
+)
+#+END_SRC
+
+Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name to MPLAYER_DIRECTORY_LOCATION variable where mplayer is located. 
+E.g ~/user/local/bin~ in Mac. In windows, I installed in ~Documents/mplayer~, so it will be something like ~c:/Users/<username>/Documents/mplayer~
 
 ** Pdf-Tools
-    Pdf-tools is a set of packages that allows to view pdf in emacs. 
-    Follow [[https://github.com/politza/pdf-tools][instructions here]] to install required packages for pdf-tools in your system.
-    Once you install the required packages, you can install pdf-tools in emacs using following setting.
-    
-    I was having one issue with pdf viewing. When I closed the pdf next time it did not
-    load the pdf from last position. I found a script, that asks to set the bookmark for current
-    pdf file. That is what ~kill-buffer-hook-setup~ does. I also enabled ~pdf-view-midnight-minor-mode~
-    so that pdf loads in dark mode.
-    
-   #+BEGIN_SRC emacs-lisp
+Pdf-tools is a set of packages that allows to view pdf in emacs. 
+Follow [[https://github.com/politza/pdf-tools][instructions here]] to install required packages for pdf-tools in your system.
+Once you install the required packages, you can install pdf-tools in emacs using following setting.
 
-   ;; This allows us to save bookmark while closing pdf
-   (defun kill-buffer-hook-setup ()
-   (if (and buffer-file-name
-   (file-name-extension buffer-file-name)
-   (string= (downcase (file-name-extension buffer-file-name)) "pdf")
-   (yes-or-no-p "Set bookmark with current file name?"))
-   (bookmark-set (file-name-nondirectory buffer-file-name) nil)))
+I was having one issue with pdf viewing. When I closed the pdf next time it did not
+load the pdf from last position. I found a script, that asks to set the bookmark for current
+pdf file. That is what ~kill-buffer-hook-setup~ does. I also enabled ~pdf-view-midnight-minor-mode~
+so that pdf loads in dark mode.
 
-   (use-package pdf-tools
-   :ensure t
-   :config
-   ;; initialise
-   (pdf-tools-install)
-   ;; open pdfs scaled to fit page
-   (setq-default pdf-view-display-size 'fit-page)
-   ;; automatically annotate highlights
-   (setq pdf-annot-activate-created-annotations t)
-   ;; use normal isearch
-   (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-   ;; turn off cua so copy works
-   (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
-   ;; save pdf at kill
-   (add-hook 'kill-buffer-hook 'kill-buffer-hook-setup)
-   ;; midnight node (enable if change to dark font)
-   ; (add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode)
-   ;; more fine-grained zooming
-   (setq pdf-view-resize-factor 1.1)
-   ;; keyboard shortcuts
-   (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
-   (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
-   (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete)
-   (define-key pdf-view-mode-map (kbd ",") 'pdf-view-scroll-down-or-previous-page)
-   (define-key pdf-view-mode-map (kbd ".") 'pdf-view-scroll-up-or-next-page))
-      #+END_SRC
-   Once you add above setting, and load the file and after that call ~M-x pdf-tools-install~ if you see similar error message as below
-   
-   #+BEGIN_EXAMPLE
-   /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/build/server/autobuild -i /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/
+#+BEGIN_SRC emacs-lisp
+
+;; This allows us to save bookmark while closing pdf
+(defun kill-buffer-hook-setup ()
+(if (and buffer-file-name
+(file-name-extension buffer-file-name)
+(string= (downcase (file-name-extension buffer-file-name)) "pdf")
+(yes-or-no-p "Set bookmark with current file name?"))
+(bookmark-set (file-name-nondirectory buffer-file-name) nil)))
+
+(use-package pdf-tools
+:ensure t
+:config
+;; initialise
+(pdf-tools-install)
+;; open pdfs scaled to fit page
+(setq-default pdf-view-display-size 'fit-page)
+;; automatically annotate highlights
+(setq pdf-annot-activate-created-annotations t)
+;; use normal isearch
+(define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+;; turn off cua so copy works
+(add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
+;; save pdf at kill
+(add-hook 'kill-buffer-hook 'kill-buffer-hook-setup)
+;; midnight node (enable if change to dark font)
+; (add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode)
+;; more fine-grained zooming
+(setq pdf-view-resize-factor 1.1)
+;; keyboard shortcuts
+(define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
+(define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
+(define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete)
+(define-key pdf-view-mode-map (kbd ",") 'pdf-view-scroll-down-or-previous-page)
+(define-key pdf-view-mode-map (kbd ".") 'pdf-view-scroll-up-or-next-page))
+#+END_SRC
+Once you add above setting, and load the file and after that call ~M-x pdf-tools-install~ if you see similar error message as below
+
+#+BEGIN_EXAMPLE
+/Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/build/server/autobuild -i /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/
 Failed to recognize this system, trying to continue.
-   #+END_EXAMPLE
-   
-   Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have ~pkg-config~, ~poppler~ and ~automake~ installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
- 
- - Use ~h, t, D, , and .~ for various actions shown in keyboard shortcuts section when using a pdf. The first 3 command changes can be saved, so that it is enabled for external applicaton as well.
- 
-** Aspell
-    Aspell allows to use dictionary to correct words while writing.
-    Make sure to install aspell before activating it. 
-    
-    *Note*: For windows use mingw64 packages and install aspell using following commands.
-    #+BEGIN_EXAMPLE
-    pacman -S mingw64/mingw-w64-x86_64-aspell
-    pacman -S mingw64/mingw-w64-x86_64-aspell-en
-    
-    Then below set ispell-program-name (see Settings abovel) as
-    (setq-default ispell-program-name "C:/msys64/mingw64/bin/aspell.exe")
-    #+END_EXAMPLE
+#+END_EXAMPLE
 
-    Set location of ~aspell~ executable using ~ispell-program-name~ variable.
- 
-    #+BEGIN_SRC emacs lisp
-    (setq-default ispell-program-name ASPELL_BIN)
-    #+END_SRC
-    
-    
+Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have ~pkg-config~, ~poppler~ and ~automake~ installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
+
+- Use ~h, t, D, , and .~ for various actions shown in keyboard shortcuts section when using a pdf. The first 3 command changes can be saved, so that it is enabled for external applicaton as well.
+
+** Aspell
+Aspell allows to use dictionary to correct words while writing.
+Make sure to install aspell before activating it. 
+
+*Note*: For windows use mingw64 packages and install aspell using following commands.
+#+BEGIN_EXAMPLE
+pacman -S mingw64/mingw-w64-x86_64-aspell
+pacman -S mingw64/mingw-w64-x86_64-aspell-en
+
+Then below set ispell-program-name (see Settings abovel) as
+(setq-default ispell-program-name "C:/msys64/mingw64/bin/aspell.exe")
+#+END_EXAMPLE
+
+Set location of ~aspell~ executable using ~ispell-program-name~ variable.
+
+#+BEGIN_SRC emacs lisp
+(setq-default ispell-program-name ASPELL_BIN)
+#+END_SRC
+
+
 **** Notes
-   - ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
-   - ~M-C-i~ Auto correct current word
+- ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
+- ~M-C-i~ Auto correct current word
 
 ** Which Key
-   Show more options for keys
-   #+BEGIN_SRC emacs-lisp
-    (use-package which-key 
-      :ensure t 
-      :init
-      (which-key-mode)
-      )
-   #+END_SRC
+Show more options for keys
+#+BEGIN_SRC emacs-lisp
+(use-package which-key 
+:ensure t 
+:init
+(which-key-mode)
+)
+#+END_SRC
 ** Smart Modeline
-   #+begin_src emacs-lisp
-   (use-package smart-mode-line 
-   :ensure t
-   :init
-   (smart-mode-line-enable))
-   #+end_src
+#+begin_src emacs-lisp
+(use-package smart-mode-line 
+:ensure t
+:init
+(smart-mode-line-enable))
+#+end_src
 ** Guide key
-   #+begin_src emacs-lisp
-   (use-package guide-key
-  :defer t
-  :diminish guide-key-mode
-  :config
-  (progn
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
-  (guide-key-mode 1)))  ; Enable guide-key-mode
-   #+end_src
+#+begin_src emacs-lisp
+(use-package guide-key
+:defer t
+:diminish guide-key-mode
+:config
+(progn
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
+(guide-key-mode 1)))  ; Enable guide-key-mode
+#+end_src
 * Programming Language Specific
 ** Java
-   #+BEGIN_SRC emacs-lisp
-   ;; Following makes sure curly braces are indented
-   (add-hook 'java-mode-hook (lambda () (setq c-default-style "bsd")))
-   (add-hook 'java-mode-hook (lambda () (setq c-basic-offset 4 tab-width 4 indent-tabs-mode t)))
+#+BEGIN_SRC emacs-lisp
+;; Following makes sure curly braces are indented
+(add-hook 'java-mode-hook (lambda () (setq c-default-style "bsd")))
+(add-hook 'java-mode-hook (lambda () (setq c-basic-offset 4 tab-width 4 indent-tabs-mode t)))
 
-   (use-package quickrun :ensure t)
-   (global-set-key (kbd "C-c r") 'quickrun)
-   #+END_SRC
+(use-package quickrun :ensure t)
+(global-set-key (kbd "C-c r") 'quickrun)
+#+END_SRC
 ** LSP
-   #+BEGIN_SRC emacs-lisp
-   ;(setq lsp-keymap-prefix "C-c l")
+#+BEGIN_SRC emacs-lisp
+;(setq lsp-keymap-prefix "C-c l")
 
-   (use-package ag
-   :ensure t
-   :commands (ag ag-regexp ag-project))
+(use-package ag
+:ensure t
+:commands (ag ag-regexp ag-project))
 
-   ;;(key-chord-define-global "ll" 'lsp-command-keymap)
-   (use-package projectile 
-   :ensure t
-   :init (projectile-mode +1)
-   :config 
-   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-   )
-   (use-package flycheck :ensure t :init (global-flycheck-mode))
-   (use-package yasnippet :ensure t :config (yas-global-mode))
-   (use-package yasnippet-snippets :ensure t)
+;;(key-chord-define-global "ll" 'lsp-command-keymap)
+(use-package projectile 
+:ensure t
+:init (projectile-mode +1)
+:config 
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+)
+(use-package flycheck :ensure t :init (global-flycheck-mode))
+(use-package yasnippet :ensure t :config (yas-global-mode))
+(use-package yasnippet-snippets :ensure t)
 
-   (use-package helm-lsp
-   :ensure t
-   :after (lsp-mode)
-   :commands (helm-lsp-workspace-symbol)
-   :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
+(use-package helm-lsp
+:ensure t
+:after (lsp-mode)
+:commands (helm-lsp-workspace-symbol)
+:init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 
-   (use-package lsp-mode 
-   :diminish (lsp-mode . "lsp")
-   :bind (:map lsp-mode-map ("C-c C-d" . lsp-describe-thing-at-point)) 
-   :hook (
-       (lsp-mode . lsp-enable-which-key-integration)
-       (java-mode . #'lsp-deferred)
-    )
-    :init
-  (setq lsp-auto-guess-root t       ; Detect project root
-   lsp-log-io nil
-   lsp-enable-indentation t
-   lsp-enable-imenu t
-   lsp-keymap-prefix "C-l"
-   lsp-file-watch-threshold 500
-   lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
+(use-package lsp-mode 
+:diminish (lsp-mode . "lsp")
+:bind (:map lsp-mode-map ("C-c C-d" . lsp-describe-thing-at-point)) 
+:hook (
+(lsp-mode . lsp-enable-which-key-integration)
+(java-mode . #'lsp-deferred)
+)
+:init
+(setq lsp-auto-guess-root t       ; Detect project root
+lsp-log-io nil
+lsp-enable-indentation t
+lsp-enable-imenu t
+lsp-keymap-prefix "C-l"
+lsp-file-watch-threshold 500
+lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
 
-   (setq lsp-enable-file-watchers nil) 
+(setq lsp-enable-file-watchers nil) 
 
-   (defun lsp-on-save-operation ()
-   (when (or (boundp 'lsp-mode)
-   (bound-p 'lsp-deferred))
-   (lsp-organize-imports)
-   (lsp-format-buffer)))
+(defun lsp-on-save-operation ()
+(when (or (boundp 'lsp-mode)
+(bound-p 'lsp-deferred))
+(lsp-organize-imports)
+(lsp-format-buffer)))
 
-   :config (setq lsp-completion-enable-additional-text-edit nil))
+:config (setq lsp-completion-enable-additional-text-edit nil))
 
 (use-package lsp-ui
   :ensure t
@@ -833,18 +831,23 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
   This part is for my personal settings. Nothing fancy, just to learn elisp
 ** Org-mode
    #+begin_src emacs-lisp
-   (setq org-directory "~/Dropbox/org")
-   (setq org-default-notes-file "~/Dropbox/org/tasks.org")
+   (setq org-directory ORG_DIR)
+   (setq org-default-notes-file (concat ORG_DIR "tasks.org"))
+   (setq org-journal-file (concat ORG_DIR "journal.org"))
+   (setq org-log-done 'time)   ;; Add time when a task was done
+   ;;(setq org-log-done 'note)   ;; Add a note along with closing task
 
    ;; Use C-c c to start capture mode
    (global-set-key (kbd "C-c c") 'org-capture)
    (global-set-key (kbd "C-c a") 'org-agenda)
 
    (setq org-capture-templates
-         (quote (("t" "Personal Task" entry (file "~/Dropbox/org/tasks.org")
-	          "* TODO %?" :empty-lines 1)
-		 ("w" "Work-related Task" entry (file "~/Dropbox/org/work.org")
-	          "* TODO %?" :empty-lines 1)
+         (quote (("p" "Personal Task" entry (file+headline org-default-notes-file "Personal Tasks")
+	          "* TODO %?\n  %i\n")
+		 ("w" "Work-related Task" entry (file+headline org-default-notes-file "Work Tasks")
+		 "* TODO %?\n  %i\n")
+		 ("j" "Journal entry" entry (file+datetree  org-journal-file)
+		   "**** %U %^{Title}\n    %?")
                  )))
 
    
