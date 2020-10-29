@@ -7,7 +7,10 @@ This file contains basic emacs configuration
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-		 ("elpa" . "http://tromey.com/elpa/")))
+                         ("elpa" . "https://elpa.gnu.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")
+))
+
 
 (package-initialize)
 
@@ -93,17 +96,17 @@ org-edit-src-content-indentation 0)
 * Looks
 *** Theme
 #+BEGIN_SRC emacs-lisp
-(use-package solarized-theme 
+(use-package doom-themes
 :ensure t 
 :init 
-(load-theme 'solarized-light t))
+(load-theme 'doom-palenight t))
 
 (use-package heaven-and-hell
   :init
   (setq heaven-and-hell-theme-type 'light)
   (setq heaven-and-hell-themes
-        '((light . solarized-light)
-          (dark . solarized-dark)))
+        '((light . doom-acario-light)
+          (dark . doom-palenight)))
   :hook (after-init . heaven-and-hell-init-hook)
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
          ("<f6>" . heaven-and-hell-toggle-theme)))
@@ -142,7 +145,7 @@ Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Do
 #+begin_src emacs-lisp
 (defun load-custom-after-frame (frame)
 (select-frame frame)
-(load-theme 'solarized-light t)  ;; theme
+;(load-theme 'solarized-light t)  ;; theme
 (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
 (org-agenda nil "n")
 (setq initial-buffer-choice '(lambda () (get-buffer org-agenda-buffer-name)))
@@ -260,6 +263,27 @@ Org-bullets is used to show asterisk's as bullets in ~org-mode~
 (add-hook 'org-mode-hook 'org-bullets-mode))   
 #+END_SRC
 
+** Dark Room
+   #+begin_src emacs-lisp
+   (use-package darkroom
+   :ensure t)
+
+   (defun my/enter-focus-mode ()
+   (interactive)
+   (darkroom-mode 1))
+
+   (defun my/leave-focus-mode ()
+   (interactive)
+   (darkroom-mode 0))
+
+   (defun my/toggle-focus-mode ()
+   (interactive)
+   (if (symbol-value darkroom-mode)
+   (my/leave-focus-mode)
+   (my/enter-focus-mode)))
+
+   (global-set-key (kbd "<f7>") 'my/toggle-focus-mode)
+   #+end_src
 ** Alert
    Alert notifications from different packages
    #+begin_src emacs-lisp
