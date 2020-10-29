@@ -93,7 +93,7 @@ org-edit-src-content-indentation 0)
 *** Font
 Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
 #+BEGIN_SRC emacs-lisp
-(set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
+(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
 #+END_SRC
 *** Behavior
 **** Change yes/no to y/n
@@ -124,7 +124,7 @@ Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Do
 (defun load-custom-after-frame (frame)
 (select-frame frame)
 (load-theme 'solarized-light t)  ;; theme
-(set-frame-font "DejaVu Sans Mono 12" nil t) ;; Font
+(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
 (org-agenda nil "n")
 (setq initial-buffer-choice '(lambda () (get-buffer org-agenda-buffer-name)))
 (switch-to-buffer "*Org Agenda*")
