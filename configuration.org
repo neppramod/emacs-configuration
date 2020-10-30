@@ -192,6 +192,7 @@ Helm adds many functionality to search and manage buffers
 (helm-mode 1)
 (progn (setq helm-buffers-fuzzy-matching t))
 :bind
+(("C-x b" . helm-buffers-list))
 (("M-x" . helm-M-x))
 (("C-x C-f" . helm-find-files))
 (("C-c f" . helm-recentf))   ;; Add new key to recentf
@@ -224,6 +225,32 @@ Swoop allows easy way to search current buffer
 ("jp" . helm-swoop-back-to-last-point)
 :init
 (bind-key "M-m" 'helm-swoop-from-isearch isearch-mode-map)
+
+;; If you prefer fuzzy matching
+(setq helm-swoop-use-fuzzy-match t)
+
+;; Move up and down like isearch
+(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+(define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+
+
+;; Save buffer when helm-multi-swoop-edit complete
+(setq helm-multi-swoop-edit-save t)
+
+;; If this value is t, split window inside the current window
+(setq helm-swoop-split-with-multiple-windows nil)
+
+;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+(setq helm-swoop-split-direction 'split-window-vertically)
+
+;; If nil, you can slightly boost invoke speed in exchange for text color
+(setq helm-swoop-speed-or-color nil)
+
+;; ;; Go to the opposite side of line from the end or beginning of line
+(setq helm-swoop-move-to-line-cycle t)
+
 )
 #+END_SRC
 *** Wgrep Helm
@@ -301,7 +328,7 @@ Org-bullets is used to show asterisk's as bullets in ~org-mode~
    :ensure t
    :custom (alert-default-style 'notifications)
    :config
-   (setq org-alert-interval 300
+   (setq org-alert-interval 900
          org-alert-notification-title "Org Alert Reminder!")
    (org-alert-enable)
    )
@@ -626,12 +653,6 @@ lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
 ** Global
 
    #+BEGIN_SRC emacs-lisp
-   ;; Search with helm-swoop
-   ;;   (key-chord-define-global "js" 'helm-swoop)
-
-   ;; Go to buffer menu
-   ;   (key-chord-define-global "bb" 'buffer-menu)
-
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
 
