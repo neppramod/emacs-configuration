@@ -25,23 +25,32 @@ This file contains basic emacs configuration
 #+END_SRC
 
 * Settings
-#+BEGIN_SRC emacs-lisp
 
-;; Install exec-path-from-shell-package to load environment variable
-(use-package exec-path-from-shell :ensure t)
+** Set location of your emacs directory
+   Set location of your .emacs directory. Some of the files and folders inside this directory uses value of following variable. Make sure to include the ending / or \ depending upon your system. Here we also initialize the init file that starts this configuration. It is helpful to reload this script after change
+   #+begin_src emacs-lisp
+   (setq EMACS_DIR "~/.emacs.d/")
+   (setq USER_INIT_FILE (concat EMACS_DIR "init.el"))
+   #+end_src
 
-(setq EMACS_DIR "~/.emacs.d/")
-(setq USER_INIT_FILE (concat EMACS_DIR "init.el"))
-(setq ORG_DIR "~/Dropbox/org/")
-(setq MUSIC_DIR "~/Music/")
+** Install exec-path-from-shell and load environment variable
+   #+begin_src emacs-lisp
+    (use-package exec-path-from-shell :ensure t)
+    (exec-path-from-shell-initialize)
+   #+end_src
 
-;; Load platform specific variables using specific files. E.g linux.el. 
-;; Make necessary changes as needed
-(cond ((eq system-type 'windows-nt) (load (concat EMACS_DIR "windows")))
-((eq system-type 'gnu/linux) (load (concat EMACS_DIR "linux")))
-((eq system-type 'darwin) (load (concat EMACS_DIR "mac")))
-(t (load-library "default")))
-#+END_SRC
+** Set operating system specific constants and locations
+   Adjust the directory names in each file windows.el, linux.el and mac.el
+
+ #+BEGIN_SRC emacs-lisp
+
+ ;; Load platform specific variables using specific files. E.g linux.el. 
+ ;; Make necessary changes as needed
+ (cond ((eq system-type 'windows-nt) (load (concat EMACS_DIR "windows")))
+ ((eq system-type 'gnu/linux) (load (concat EMACS_DIR "linux")))
+ ((eq system-type 'darwin) (load (concat EMACS_DIR "mac")))
+ (t (load-library "default")))
+ #+END_SRC
 * Basic bells and whistles settings
 #+BEGIN_SRC emacs-lisp
 
@@ -103,7 +112,7 @@ org-edit-src-content-indentation 0)
 
 (use-package heaven-and-hell
   :init
-  (setq heaven-and-hell-theme-type 'light)
+  (setq heaven-and-hell-theme-type 'dark)
   (setq heaven-and-hell-themes
         '((light . doom-acario-light)
           (dark . doom-palenight)))
@@ -141,15 +150,16 @@ Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Do
 (bind-key "M-]" 'unpop-to-mark-command)
 (setq set-mark-command-repeat-pop t)
 #+end_src
-**** Load Theme After Service Start
+**** Load Functions After Service Start
+     This is useful for emacsclient, when running emacs as server client
 #+begin_src emacs-lisp
 (defun load-custom-after-frame (frame)
 (select-frame frame)
-;(load-theme 'solarized-light t)  ;; theme
 (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
 (org-agenda nil "n")
 (setq initial-buffer-choice '(lambda () (get-buffer org-agenda-buffer-name)))
 (switch-to-buffer "*Org Agenda*")
+(delete-other-windows)
 )
 
 (if (daemonp)
