@@ -88,8 +88,8 @@ This file contains basic emacs configuration
 (setq org-export-with-smart-quotes t)  ; Enable smart quotes in org mode
 
 ;; Org-mode issue with src block not expanding
-(when (version<= "9.2" (org-version))
-(require 'org-tempo))
+;(when (version<= "9.2" (org-version))
+;(require 'org-tempo))
 
 ;; Set indentation properly in org-mode
 
@@ -228,13 +228,6 @@ Swoop allows easy way to search current buffer
 
 ;; If you prefer fuzzy matching
 (setq helm-swoop-use-fuzzy-match t)
-
-;; Move up and down like isearch
-(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-(define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
-
 
 ;; Save buffer when helm-multi-swoop-edit complete
 (setq helm-multi-swoop-edit-save t)
@@ -777,16 +770,20 @@ lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
    (:body-pre (next-line))
    "move"
    ("n" next-line  "next line")
+   ("j" next-line  "next line")
    ("p" previous-line "previous line")
-   ("f" forward-char "forward")
-   ("b" backward-char "backward")
+   ("k" previous-line "previous line")
+   ("l" forward-char "forward in line")
+   ("h" backward-char "backward in line")
    ("a" beginning-of-line "beginning of line")
+   ("w" forward-word "forward word")
+   ("b" backward-word "backward word")
    ("e" move-end-of-line  "end of line")
    ("v" scroll-up-command "scroll up")
    ("o" other-window "other window")
    ;; Converting M-v to V here by analogy.
    ("V" scroll-down-command "scroll down")
-   ("l" recenter-top-bottom  "recenter")
+   ("r" recenter-top-bottom  "recenter")
    ("q" nil "quit")
    ("SPC" nil "quit")
    )
@@ -950,6 +947,18 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
         (buffer-substring (region-beginning) (region-end))
       (read-string "Google: ")))))
    #+end_src
+** Duckduckgo a query or region
+   #+begin_src emacs-lisp
+  (defun duckduck-this ()
+  "Duckduck a query or region if any."
+  (interactive)
+  (browse-url
+   (concat
+   "https://duckduckgo.com/?va=b&t=hc&ia=web&q="
+    (if mark-active
+        (buffer-substring (region-beginning) (region-end))
+      (read-string "Duckduck: ")))))
+   #+end_src
 ** Browse to my wordpress
    #+begin_src emacs-lisp
    (defun my/wordpress()
@@ -999,6 +1008,7 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
        "online"
       ("r" my/reddit "reddit")
       ("g" google-this "google this")
+      ("d" duckduck-this "duckduck this")
       ("t" my/twitch "dota 2 twitch")
       ("e" my/email "email")
       ("h" my/he-competitive "he compeitive")
