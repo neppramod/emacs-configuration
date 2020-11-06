@@ -9,4 +9,3 @@
   (lambda ()
     (setq gc-cons-threshold 16777216 ; 16mb
           gc-cons-percentage 0.1)))
-
