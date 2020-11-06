@@ -562,8 +562,10 @@ Remove clutter from modeline
 #+begin_src emacs-lisp
 (use-package smart-mode-line 
 :ensure t
-:init
-(smart-mode-line-enable))
+:config
+(setq sml/no-confirm-load-theme t)
+   (setq sml/theme 'respectful)
+   (sml/setup))
 #+end_src
 
 ** Ace-Window
