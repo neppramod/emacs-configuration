@@ -1,5 +1,5 @@
 (setq ORG_DIR "")
-(setq MUSIC_DIR "")
+(setq MUSIC_DIR "~/Music/")
 (setq BIN_DIRECTORY "/usr/local/bin/")
 (setq MPLAYER_DIRECTORY_LOCATION BIN_DIRECTORY)
 (setq ASPELL_BIN (concat BIN_DIRECTORY "aspell"))

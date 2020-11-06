@@ -1,49 +1,45 @@
 #+TITLE: Emacs Configuration
-This file contains basic emacs configuration
+This file contains every thing from [[https://github.com/neppramod/java_emacs/blob/master/emacs-configuration.org][Java Programming in Emacs]] and more
 
-* Initialize use-package
-** Set repo using package and initialize use-package
-#+BEGIN_SRC emacs-lisp
-(require 'package)
-
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")
-			 ("org" . "https://orgmode.org/elpa/")
-))
+* Setup
+  Since this is an org file, I am using ~org-babel-load-file~ command to load this file from [[init.el]] file. Emacs loads [[init.el]] when it starts. I have setup a variable called ~EMACS_DIR~ to point to *.emacs.d* as the setup directory. Adjust it to match your system. To speed up loading time of emacs, I have ~used gc-cons-threshold~ and ~gc-cons-percentage~ variables, before and after loading this configuration file. I have set ~gc-cons-threshold~ value to 300 mb after startup. Adjust it to comfortable value according to memory in your system. ~lsp-java~ package however has ~1GB~ setup as default.
 
 
-(package-initialize)
-
-; Fetch the list of packages available 
-(unless package-archive-contents (package-refresh-contents))
-
-; Install use-package
-(setq package-list '(use-package))
-(dolist (package package-list)
-(unless (package-installed-p package) (package-install package)))
-
-#+END_SRC
-
-* Settings
-
-** Set location of your emacs directory
-   Set location of your .emacs directory. Some of the files and folders inside this directory uses value of following variable. Make sure to include the ending / or \ depending upon your system. Here we also initialize the init file that starts this configuration. It is helpful to reload this script after change
-   #+begin_src emacs-lisp
-   (setq EMACS_DIR "~/.emacs.d/")
-   (setq USER_INIT_FILE (concat EMACS_DIR "init.el"))
-   #+end_src
-
-** Install exec-path-from-shell and load environment variable
-   #+begin_src emacs-lisp
-    (use-package exec-path-from-shell :ensure t)
-    (exec-path-from-shell-initialize)
-   #+end_src
-
-** Set operating system specific constants and locations
-   Adjust the directory names in each file windows.el, linux.el and mac.el
+** Setup repository in org file
+In the following code block, we will initialize package repositories and after that install ~use-package~. This package is used to install other packages.
 
  #+BEGIN_SRC emacs-lisp
+ (require 'package)
 
+ (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                          ("elpa" . "https://elpa.gnu.org/packages/")
+			  ("org" . "https://orgmode.org/elpa/")
+ ))
+
+
+ (package-initialize)
+
+ ; Fetch the list of packages available 
+ (unless package-archive-contents (package-refresh-contents))
+
+ ; Install use-package
+ (setq package-list '(use-package))
+ (dolist (package package-list)
+ (unless (package-installed-p package) (package-install package)))
+
+ #+END_SRC
+
+** Environment Setup
+In some operating systems Emacs does not load environment variables properly. Therefore, below we install a package called ~exec-path-from-shell~ and initialize it.
+ #+begin_src emacs-lisp
+ (use-package exec-path-from-shell :ensure t)
+ (exec-path-from-shell-initialize)
+ #+end_src
+
+** Operating System specific variable setup
+   Since we want to use same emacs configuration for each of our operating systems, we want to separate values that are different between different operating systems. In my setup, I have different values for ~JAVA_HOME~ in my linux.el and mac.el. Adjust these values accordingly for your setup if you are using different versions of Java. Following code loads mac.el, linux.el or windows.el based on where you run this configuration.
+
+#+BEGIN_SRC emacs-lisp
  ;; Load platform specific variables using specific files. E.g linux.el. 
  ;; Make necessary changes as needed
  (cond ((eq system-type 'windows-nt) (load (concat EMACS_DIR "windows")))
@@ -51,59 +47,73 @@ This file contains basic emacs configuration
  ((eq system-type 'darwin) (load (concat EMACS_DIR "mac")))
  (t (load-library "default")))
  #+END_SRC
-* Basic bells and whistles settings
+
+** Basic setup
+Here, I add some basic emacs setup like loading the language, disabling the toolbar, setting up backup directory etc. I have added comments to each setting.
+
 #+BEGIN_SRC emacs-lisp
+;; Disable annoying ring-bell when backspace key is pressed in certain situations
+(setq ring-bell-function 'ignore)
 
-;; make return key also do indent, for current buffer only
-(electric-indent-local-mode 1)
-(setq-default tab-always-indent 'complete)	
-
-;; make return key also do indent, globally
-(electric-indent-mode 1)
-	
-(set-language-environment "UTF-8")
+;; Disable scrollbar and toolbar
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
-(menu-bar-mode -1)
-(global-linum-mode 0)
-(setq whitespace-line-column 1000) ;; Longer whitespace
-(setq ring-bell-function 'ignore)
-(setq-default sp-escape-quotes-after-insert nil) ;; Escape quotes properly
-(setq bookmark-save-flag 1) ; everytime bookmark is changed, automatically save
-;(desktop-save-mode 1)       ; save session, so that it loads next time
-(recentf-mode 1)            ; Maintain a list of recent files opened
+
+;; Set language environment to UTF-8
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+
+;; Longer whitespace, otherwise syntax highlighting is limited to default column
+(setq whitespace-line-column 1000) 
+
+;; Enable soft-wrap
+(global-visual-line-mode 1)
+
+;; Everytime bookmark is changed, automatically save
+(setq bookmark-save-flag 1)
+
+;; Maintain a list of recent files opened
+(recentf-mode 1)            
 (setq recentf-max-saved-items 50)
 
-;(setq backup-directory-alist '(("" . (concat EMACS_DIR "backup"))))   ; Move all temporary backup files to backup folder
+;; Move all the backup files to specific cache directory
+;; This way you won't have annoying temporary files starting with ~(tilde) in each directory
+;; Following setting will move temporary files to specific folders inside cache directory in EMACS_DIR
+
 (setq user-cache-directory (concat EMACS_DIR "cache"))
 (setq backup-directory-alist `(("." . ,(expand-file-name "backups" user-cache-directory)))
       url-history-file (expand-file-name "url/history" user-cache-directory)
       auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-cache-directory)
       projectile-known-projects-file (expand-file-name "projectile-bookmarks.eld" user-cache-directory))
 
-
-(electric-pair-mode 1)      ; Automatically add ending brackets and braces
-(show-paren-mode 1)         ; Highlight matching brackets and braces
-(global-visual-line-mode 1)	      ; Soft wrap
-(setq org-export-with-smart-quotes t)  ; Enable smart quotes in org mode
-
 ;; Org-mode issue with src block not expanding
-;(when (version<= "9.2" (org-version))
-;(require 'org-tempo))
+;; This is a fix for bug in org-mode where <s TAB does not expand SRC block
+(when (version<= "9.2" (org-version))
+(require 'org-tempo))
 
-;; Set indentation properly in org-mode
+;; Coding specific setting
 
-(setq org-src-preserve-indentation nil 
-org-edit-src-content-indentation 0)
+;; Automatically add ending brackets and braces
+(electric-pair-mode 1)
+
+;; Make sure tab-width is 4 and not 8
+(setq-default tab-width 4)
+
+;; Highlight matching brackets and braces
+(show-paren-mode 1) 
+
+;; Change yes/no to y/n
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Set initial screen to org agenda view
 (custom-set-variables '(inhibit-startup-screen t))
 (org-agenda nil "n")
-;(setq initial-buffer-choice '(lambda () (get-buffer org-agenda-buffer-name)))
 #+END_SRC
 
 * Looks
-*** Theme
+** Theme
+   I tend to like *doom-themes* package. Below we will install doom theme. In addition, I will also install a package called *heaven-and-hell*. This allows us to toggle between two themes using a shortcut key. I will assign ~F6~ key to toggling the theme and ~C-c F6~ to set to default theme.
+
 #+BEGIN_SRC emacs-lisp
 (use-package doom-themes
 :ensure t 
@@ -111,6 +121,7 @@ org-edit-src-content-indentation 0)
 (load-theme 'doom-palenight t))
 
 (use-package heaven-and-hell
+  :ensure t
   :init
   (setq heaven-and-hell-theme-type 'dark)
   (setq heaven-and-hell-themes
@@ -121,19 +132,33 @@ org-edit-src-content-indentation 0)
          ("<f6>" . heaven-and-hell-toggle-theme)))
 
 #+END_SRC
-*** Font
-Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Download.html][Download Dejavu Fonts]]
+
+If you press F6 key in your keyboard, it should switch between doom-palenight and doom-acario-light themes. If you want to go back to the default theme press ~Ctrl + C and F6~.
+
+** Font
+Fonts are integral part of a text editor / IDE. I tend to like *DejaVu Sans Mono* fonts. If you have not setup this font in your Operating System, it is time to do so now. Go ahead and install it [[https://dejavu-fonts.github.io/Download.html][from this link]]. After that add following configuration.
+
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
 #+END_SRC
-*** Behavior
-**** Change yes/no to y/n
-#+begin_src emacs-lisp
-(fset 'yes-or-no-p 'y-or-n-p)
-#+end_src>
-**** Pop to mark
-#+begin_src emacs-lisp
 
+** Disable ansi color in compilation mode
+   This will help eliminate weird escape sequences during compilation of projects.
+   #+begin_src emacs-lisp
+
+   (defun my/ansi-colorize-buffer ()
+   (let ((buffer-read-only nil))
+   (ansi-color-apply-on-region (point-min) (point-max))))
+   
+   (use-package ansi-color
+   :ensure t
+   :config
+   (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
+   )
+   #+end_src
+
+** Jump to previous positions
+#+BEGIN_SRC emacs-lisp
 (defun unpop-to-mark-command ()
 "Unpop off mark ring. Does nothing if mark ring is empty."
 (interactive)
@@ -149,31 +174,14 @@ Note: Make sure following font is installed. [[https://dejavu-fonts.github.io/Do
 (bind-key "M-[" 'pop-to-mark-command)
 (bind-key "M-]" 'unpop-to-mark-command)
 (setq set-mark-command-repeat-pop t)
-#+end_src
-**** Load Functions After Service Start
-     This is useful for emacsclient, when running emacs as server client
-#+begin_src emacs-lisp
-(defun load-custom-after-frame (frame)
-(select-frame frame)
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
-(org-agenda nil "n")
-(setq initial-buffer-choice '(lambda () (get-buffer org-agenda-buffer-name)))
-(switch-to-buffer "*Org Agenda*")
-(delete-other-windows)
-)
+#+END_SRC
 
-(if (daemonp)
-(add-hook 'after-make-frame-functions #'load-custom-after-frame))
-#+end_src
-* Custom settings
-** Diminish and Dash
-#+begin_src emacs-lisp
-(use-package dash :ensure t)
-(use-package diminish :ensure t)
-#+end_src>
+* Custom Packages
+  In this section we will install some of the packages that we will use for various project and file management.
 ** Key-Chord
-Key-Chord allows to bind regular characters to actions.
-#+BEGIN_SRC emacs-lisp
+   Key-Chord allows us to bind regular keyboard keys for various commands without having to use prefix keys such as Ctrl, Alt or Super etc.
+
+#+begin_src emacs-lisp
 (use-package use-package-chords
 :ensure t
 :init 
@@ -181,10 +189,23 @@ Key-Chord allows to bind regular characters to actions.
 (setq key-chord-two-keys-delay 0.4)
 (setq key-chord-one-key-delay 0.5) ; default 0.2
 )
-#+END_SRC
-** Helm Packages
-*** Helm
-Helm adds many functionality to search and manage buffers
+#+end_src
+Here, we changed the delay for the consecutive key to be little higher than default. Adjust this to what you feel comfortable.
+
+** Projectile
+   Projectile helps us with easy navigation within a project. Projectile recognizes several source control managed folders e.g *git, mercurial, maven, sbt*, and a folder with empty *.projectile* file. You can use ~C-c p~ to invoke any projectile command. This is a very useful key to remember.
+
+#+begin_src emacs-lisp
+(use-package projectile 
+:ensure t
+:init (projectile-mode +1)
+:config 
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+)   
+#+end_src
+** Helm
+Helm allows for easy completion of commands. Below, we will replace several of the built in functions with helm versions and add keyboard shortcuts for couple of new useful commands.
+
 #+BEGIN_SRC emacs-lisp
 (use-package helm
 :ensure t
@@ -192,32 +213,32 @@ Helm adds many functionality to search and manage buffers
 (helm-mode 1)
 (progn (setq helm-buffers-fuzzy-matching t))
 :bind
-(("C-x b" . helm-buffers-list))
+(("C-c h" . helm-command-prefix))
 (("M-x" . helm-M-x))
 (("C-x C-f" . helm-find-files))
+(("C-x b" . helm-buffers-list))
+(("C-c b" . helm-bookmarks))
 (("C-c f" . helm-recentf))   ;; Add new key to recentf
 (("C-c g" . helm-grep-do-git-grep)))  ;; Search using grep in a git project
+#+END_SRC
 
+I want to point out, couple of interesting things from above setup. Just like we added ~C-c p~ as a prefix for projectile, here we added ~C-c h~ for helm. We also enabled fuzzy matching, so that your search text don't need to be very stict. Also, I added ~C-c g~ to helm-grep-do-git-grep. I can search files with specific text within a git project (make sure to commit it first).
 
+** Helm Descbinds
+Helm descbinds helps to easily search for keyboard shortcuts for modes that are currently active in the project. This can be helpful to discover keyboard shortcuts to various commands. Use ~C-h b~ to bring up helm-descbinds window.
+
+#+begin_src emacs-lisp
 (use-package helm-descbinds
 :ensure t
 :bind ("C-h b" . helm-descbinds))
+#+end_src
 
-(use-package helm-ag
-:ensure helm-ag
-:bind ("C-c h" . helm-ag)
-:commands (helm-ag)
-:init (setq helm-ag-insert-at-point 'symbol
-helm-ag-command-option "--path-to-ignore ~/.agignore"))
+E.g. In helm-descbinds window you could type "helm" and "projectile" and see all the shortcuts assigned to various commands.
 
-#+END_SRC
+** Helm swoop
+Helm swoop allows to quickly search for text under cursor or new text within current file. I am sure you are already using ~C-s~ and ~C-r~ to search within the file. This package compliments rather than replace it. You can quickly type ~js~ to search and jump to the target line. To go back to where you started searching, use ~jp~. You can use ~M-m~ from ~C-s~ and ~C-r~ search to start using helm-swoop as described in below setting.
 
-#+RESULTS:
-: helm-projectile-ag
-
-*** Swoop Helm
-Swoop allows easy way to search current buffer
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package helm-swoop 
 :ensure t
 :chords
@@ -235,7 +256,7 @@ Swoop allows easy way to search current buffer
 ;; If this value is t, split window inside the current window
 (setq helm-swoop-split-with-multiple-windows nil)
 
-;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+;; Split direction. 'split-window-vertically or 'split-window-horizontally
 (setq helm-swoop-split-direction 'split-window-vertically)
 
 ;; If nil, you can slightly boost invoke speed in exchange for text color
@@ -245,367 +266,73 @@ Swoop allows easy way to search current buffer
 (setq helm-swoop-move-to-line-cycle t)
 
 )
-#+END_SRC
-*** Wgrep Helm
-Wgrep allows to modify results of grep command and save changes to all affected buffers
-#+BEGIN_SRC emacs-lisp
-(use-package wgrep-helm 
-:ensure t
-:custom
-(wgrep-enable-key "e")
-(wgrep-auto-save-buffer t)
-(wgrep-change-readonly-file t))
-#+END_SRC
+#+end_src
 
-***  Notes
-**** Change multiple files in minibuffer using wgrep
-- ~C-c g~ (~helm-git-do-grep~) command in a git project to search files using grep
-- ~C-c C-s~ save buffer, after edit save to all files
-- ~e~ enable editing in wgrep buffer
-- ~C-h m~ see instruction on particular mode for extra information
-- ~C-c C-k~ discard change in wgrep buffer
+** Avy Goto
+   Avy allows you to quickly jump to certain character, word or line within the file. Use ~jc~, ~jw~ or ~jl~ to quickly jump within current file. Change it to other keys, if you feel you are using this set of keys for other purposes. 
 
-** Hydra
-#+BEGIN_SRC emacs-lisp
-(use-package hydra :ensure t)
-#+END_SRC
-
-** Ace-Window
-#+BEGIN_SRC emacs-lisp
-(use-package ace-window :ensure t)
-#+END_SRC
-** Muban    
-
-Muban allows to insert templates at specific points in current document using keywords. A key binding of ~C-c m~ is assigned to ~muban-apply~, which inserts template associated to certain keyword, defined in *.emacs.muban* file (stored in home directory). See my [[emacs.muban][current setting]]
-#+BEGIN_SRC emacs-lisp
-(use-package muban 
-:ensure t
-:bind
-(("C-c m" . muban-apply)))
-#+END_SRC
-
-** Org-Bullets
-Org-bullets is used to show asterisk's as bullets in ~org-mode~
-#+BEGIN_SRC emacs-lisp
-(use-package org-bullets 
-:ensure t
-:config
-(add-hook 'org-mode-hook 'org-bullets-mode))   
-#+END_SRC
-
-** Dark Room
-   #+begin_src emacs-lisp
-   (use-package darkroom
-   :ensure t)
-
-   (defun my/enter-focus-mode ()
-   (interactive)
-   (darkroom-mode 1))
-
-   (defun my/leave-focus-mode ()
-   (interactive)
-   (darkroom-mode 0))
-
-   (defun my/toggle-focus-mode ()
-   (interactive)
-   (if (symbol-value darkroom-mode)
-   (my/leave-focus-mode)
-   (my/enter-focus-mode)))
-
-   (global-set-key (kbd "<f7>") 'my/toggle-focus-mode)
-   #+end_src
-** Alert
-   Alert notifications from different packages
-   #+begin_src emacs-lisp
-   (use-package org-alert
-   :ensure t
-   :custom (alert-default-style 'notifications)
-   :config
-   (setq org-alert-interval 900
-         org-alert-notification-title "Org Alert Reminder!")
-   (org-alert-enable)
-   )
-   #+end_src
-** Avy
-Avy is used to jump within current document using characters. Here we bind *jc* to jump to characer, and *jw* to jump to word within the document. Later we also bind *js* to enable ~helm-swoop~ to quickly search in current document.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 (use-package avy 
 :ensure t
 :chords
 ("jc" . avy-goto-char)
 ("jw" . avy-goto-word-1)
 ("jl" . avy-goto-line))
-#+END_SRC
-
-** Htmlize
-Htmlize is used to export org file to html file
-#+BEGIN_SRC emacs-lisp
-(use-package htmlize :ensure t)
-#+END_SRC
-
-** Magit
-Magit package works with git project
-#+BEGIN_SRC emacs-lisp
-(use-package magit :ensure t)
-#+END_SRC
-
-** Eyebrowse
-Different configuration for window view. This allows you to setup different window view for particular work. For more [[https://depp.brause.cc/eyebrowse/][see this]]
-#+BEGIN_SRC emacs-lisp
-(use-package eyebrowse 
-:ensure t
-:config (eyebrowse-mode 1))
-#+END_SRC
-*** Notes
-- ~C-c C-w 0~ Take to setting number 0
-- ~C-c C-w 1~ Take to setting number 1 and so on
-- C-c C-w ' Go to last setting
-- C-c C-w " Close current setting
-
-** Emacs Multimedia System (EMMS)
-EMMS lets you play media. For this we need to install the player in our system
-before we can configure this. In this example, we need to install ~mplayer~ and
-set its location. This setup is a basic setup and here we only enable music playback.
-
-#+BEGIN_SRC emacs-lisp
-(use-package emms
-:ensure t
-:config
-(setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION)))
-(setq emms-source-file-default-directory MUSIC_DIR)  
-(emms-all)
-(emms-default-players)
-(setq  emms-player-mplayer-parameters '("-novideo"))
-)
-#+END_SRC
-
-Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name to MPLAYER_DIRECTORY_LOCATION variable where mplayer is located. 
-E.g ~/user/local/bin~ in Mac. In windows, I installed in ~Documents/mplayer~, so it will be something like ~c:/Users/<username>/Documents/mplayer~
-
-** Pdf-Tools
-Pdf-tools is a set of packages that allows to view pdf in emacs. 
-Follow [[https://github.com/politza/pdf-tools][instructions here]] to install required packages for pdf-tools in your system.
-Once you install the required packages, you can install pdf-tools in emacs using following setting.
-
-I was having one issue with pdf viewing. When I closed the pdf next time it did not
-load the pdf from last position. I found a script, that asks to set the bookmark for current
-pdf file. That is what ~kill-buffer-hook-setup~ does. I also enabled ~pdf-view-midnight-minor-mode~
-so that pdf loads in dark mode.
-
-#+BEGIN_SRC emacs-lisp
-
-;; This allows us to save bookmark while closing pdf
-(defun kill-buffer-hook-setup ()
-(if (and buffer-file-name
-(file-name-extension buffer-file-name)
-(string= (downcase (file-name-extension buffer-file-name)) "pdf")
-(yes-or-no-p "Set bookmark with current file name?"))
-(bookmark-set (file-name-nondirectory buffer-file-name) nil)))
-
-(use-package pdf-tools
-:ensure t
-:config
-;; initialise
-(pdf-tools-install)
-;; open pdfs scaled to fit page
-(setq-default pdf-view-display-size 'fit-page)
-;; automatically annotate highlights
-(setq pdf-annot-activate-created-annotations t)
-;; use normal isearch
-(define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-;; turn off cua so copy works
-(add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
-;; save pdf at kill
-(add-hook 'kill-buffer-hook 'kill-buffer-hook-setup)
-;; midnight node (enable if change to dark font)
-; (add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode)
-;; more fine-grained zooming
-(setq pdf-view-resize-factor 1.1)
-;; keyboard shortcuts
-(define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
-(define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
-(define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete)
-(define-key pdf-view-mode-map (kbd ",") 'pdf-view-scroll-down-or-previous-page)
-(define-key pdf-view-mode-map (kbd ".") 'pdf-view-scroll-up-or-next-page))
-#+END_SRC
-Once you add above setting, and load the file and after that call ~M-x pdf-tools-install~ if you see similar error message as below
-
-#+BEGIN_EXAMPLE
-/Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/build/server/autobuild -i /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/
-Failed to recognize this system, trying to continue.
-#+END_EXAMPLE
-
-Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have ~pkg-config~, ~poppler~ and ~automake~ installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
-
-- Use ~h, t, D, , and .~ for various actions shown in keyboard shortcuts section when using a pdf. The first 3 command changes can be saved, so that it is enabled for external applicaton as well.
-
-** Aspell
-Aspell allows to use dictionary to correct words while writing.
-Make sure to install aspell before activating it. 
-
-*Note*: For windows use mingw64 packages and install aspell using following commands.
-#+BEGIN_EXAMPLE
-pacman -S mingw64/mingw-w64-x86_64-aspell
-pacman -S mingw64/mingw-w64-x86_64-aspell-en
-
-Then below set ispell-program-name (see Settings abovel) as
-(setq-default ispell-program-name "C:/msys64/mingw64/bin/aspell.exe")
-#+END_EXAMPLE
-
-Set location of ~aspell~ executable using ~ispell-program-name~ variable.
-
-#+BEGIN_SRC emacs lisp
-(setq-default ispell-program-name ASPELL_BIN)
-#+END_SRC
-
-
-**** Notes
-- ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
-- ~M-C-i~ Auto correct current word
+#+end_src
 
 ** Which Key
-Show more options for keys
-#+BEGIN_SRC emacs-lisp
+For some prefix commands like ~C-c p~ or ~C-c h~ we want Emacs to visually guide you through the available options. Following package allows us to do that.
+#+begin_src emacs-lisp
 (use-package which-key 
 :ensure t 
 :init
 (which-key-mode)
 )
-#+END_SRC
-** Smart Modeline
-#+begin_src emacs-lisp
-(use-package smart-mode-line 
-:ensure t
-:init
-(smart-mode-line-enable))
 #+end_src
-** Guide key
+** Run Code
+We can use quickrun package to execute code (if it has main). E.g. If you have a java file with main method, it will run with the associated shortcut key ~C-c r~ or quickrun command. Quickrun has support for several languages.
 #+begin_src emacs-lisp
-(use-package guide-key
-:defer t
-:diminish guide-key-mode
-:config
-(progn
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
-(guide-key-mode 1)))  ; Enable guide-key-mode
+(use-package quickrun 
+:ensure t
+:bind ("C-c r" . quickrun))
 #+end_src
-* Programming Language Specific
-** Java
-#+BEGIN_SRC emacs-lisp
-;; Following makes sure curly braces are indented
-(add-hook 'java-mode-hook (lambda () (setq c-default-style "bsd")))
-(add-hook 'java-mode-hook (lambda () (setq c-basic-offset 4 tab-width 4 indent-tabs-mode t)))
 
-(use-package quickrun :ensure t)
-(global-set-key (kbd "C-c r") 'quickrun)
-#+END_SRC
-** LSP
-#+BEGIN_SRC emacs-lisp
-;(setq lsp-keymap-prefix "C-c l")
+* Language Server Protocol (LSP)
+  With above setup done, below we will setup several packages closely related to LSP.
+** Company
+Complete anything aka Company provides auto-completion. Company-capf is enabled by default when you start LSP on a project. You can also invoke ~M-x company-capf~ to enable capf (completion at point function).
+#+begin_src emacs-lisp
+(use-package company :ensure t)
+#+end_src
 
-(use-package ag
-:ensure t
-:commands (ag ag-regexp ag-project))
+** Yasnippet
+Yasnippet is a template system for Emacs. It allows you to type abbreviation and complete the associated text.
 
-;;(key-chord-define-global "ll" 'lsp-command-keymap)
-(use-package projectile 
-:ensure t
-:init (projectile-mode +1)
-:config 
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-)
-(use-package flycheck :ensure t :init (global-flycheck-mode))
-(use-package yasnippet :ensure t :config (yas-global-mode))
+#+begin_src emacs-lisp
+(use-package yasnippet :config (yas-global-mode))
 (use-package yasnippet-snippets :ensure t)
+#+end_src
 
-(use-package helm-lsp
-:ensure t
-:after (lsp-mode)
-:commands (helm-lsp-workspace-symbol)
-:init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
+E.g. In java mode, if you type ~pr~ and hit ~<TAB>~ it should complete to ~System.out.println("text");~
 
-(use-package lsp-mode 
-:diminish (lsp-mode . "lsp")
-:bind (:map lsp-mode-map ("C-c C-d" . lsp-describe-thing-at-point)) 
-:hook (
-(lsp-mode . lsp-enable-which-key-integration)
-(java-mode . #'lsp-deferred)
-)
-:init
-(setq lsp-auto-guess-root t       ; Detect project root
-lsp-log-io nil
-lsp-enable-indentation t
-lsp-enable-imenu t
-lsp-keymap-prefix "C-l"
-lsp-file-watch-threshold 500
-lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
+To create a new snippet you can use ~yas-new-snippet~ command. 
 
-(setq lsp-enable-file-watchers nil) 
+** FlyCheck
+FlyCheck checks for errors in code at run-time.
+#+begin_src emacs-lisp
+(use-package flycheck :ensure t :init (global-flycheck-mode))
+#+end_src
 
-(defun lsp-on-save-operation ()
-(when (or (boundp 'lsp-mode)
-(bound-p 'lsp-deferred))
-(lsp-organize-imports)
-(lsp-format-buffer)))
+** Dap Mode
+Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below we will integrate ~dap-mode~ with ~dap-hydra~. ~Dap-hydra~ shows keys you can use to enable various options and jump through code at runtime. After we install dap-mode we will also install ~dap-java~.
 
-:config (setq lsp-completion-enable-additional-text-edit nil))
-
-(use-package lsp-ui
-  :ensure t
-  :after (lsp-mode)
-  :commands lsp-ui-doc-hide
-  :bind (:map lsp-ui-mode-map
-         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-         ([remap xref-find-references] . lsp-ui-peek-find-references)
-         ("C-c u" . lsp-ui-imenu))
-  :init (setq lsp-ui-doc-enable t
-         lsp-ui-doc-use-webkit nil
-         lsp-ui-doc-header nil
-         lsp-ui-doc-delay 0.2
-         lsp-ui-doc-include-signature t
-         lsp-ui-doc-alignment 'at-point
-         lsp-ui-doc-use-childframe nil
-         lsp-ui-doc-border (face-foreground 'default)
-         lsp-ui-peek-enable t
-         lsp-ui-peek-show-directory t
-         lsp-ui-sideline-update-mode 'line
-         lsp-ui-sideline-enable t
-         lsp-ui-sideline-show-code-actions t
-         lsp-ui-sideline-show-hover nil
-         lsp-ui-sideline-ignore-duplicate t)
-  :config
-  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
-
-  ;; `C-g'to close doc
-  (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
-
-  ;; Reset `lsp-ui-doc-background' after loading theme
-  (add-hook 'after-load-theme-hook
-       (lambda ()
-         (setq lsp-ui-doc-border (face-foreground 'default))
-         (set-face-background 'lsp-ui-doc-background
-                              (face-background 'tooltip))))
-
-  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
-  ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
-  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
-    (setq mode-line-format nil)))
-
-
-   (use-package company :ensure t)
-   (use-package lsp-java :ensure t :config (add-hook 'java-mode-hook 'lsp))
-;;   (use-package dap-mode :ensure t :after lsp-mode :config (dap-auto-configure-mode))
-
-;; Debug
+#+begin_src emacs-lisp
 (use-package dap-mode
-  :diminish dap-mode
   :ensure t
   :after (lsp-mode)
   :functions dap-hydra/nil
   :config
   (require 'dap-java)
-  ;(dap-mode t)
-  ;(dap-ui-mode t
   :bind (:map lsp-mode-map
          ("<f5>" . dap-debug)
          ("M-<f5>" . dap-hydra))
@@ -613,6 +340,12 @@ lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
     (dap-session-created . (lambda (&_rest) (dap-hydra)))
     (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))))
 
+(use-package dap-java :ensure nil)
+#+end_src
+
+** Treemacs
+Treemacs provides UI elements used for LSP UI. Let's install lsp-treemacs and its dependency treemacs. We will also Assign ~M-9~ to show error list.
+#+begin_src emacs-lisp
 (use-package lsp-treemacs
   :after (lsp-mode treemacs)
   :ensure t
@@ -624,40 +357,85 @@ lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
   :ensure t
   :commands (treemacs)
   :after (lsp-mode))
+#+end_src
 
+** LSP UI
+LSP UI is used in various packages that require UI elements in LSP. E.g ~lsp-ui-flycheck-list~ opens a windows where you can see various coding errors while you code. You can use ~C-c l T~ to toggle several UI elements. We have also remapped some of the xref-find functions, so that we can easily jump around between symbols using ~M-.~, ~M-,~ and ~M-?~ keys.
 
-   (use-package helm-lsp 
-   :ensure t
-   :config
-   (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))  
+#+begin_src emacs-lisp
+(use-package lsp-ui
+:ensure t
+:after (lsp-mode)
+:bind (:map lsp-ui-mode-map
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+         ([remap xref-find-references] . lsp-ui-peek-find-references))
+:init (setq lsp-ui-doc-delay 1.5
+      lsp-ui-doc-position 'bottom
+	  lsp-ui-doc-max-width 100
+))
+#+end_src
 
-   #+END_SRC
+Go through this [[https://github.com/emacs-lsp/lsp-ui/blob/master/lsp-ui-doc.el][link]]  to see what other parameters are provided.
 
-** Scala
+** Helm LSP
+Helm-lsp provides various functionality to work with the code. E.g Code actions like adding *getter, setter, toString*, refactoring etc. You can use ~helm-lsp-workspace-symbol~ to find various symbols (classes) within your workspace.
+
+LSP's built in symbol explorer uses ~xref-find-apropos~ to provide symbol navigation. Below we will replace that with helm version. After that you can use ~C-c l g a~ to find workspace symbols in a more intuitive way.
+
+#+begin_src emacs-lisp
+(use-package helm-lsp
+:ensure t
+:after (lsp-mode)
+:commands (helm-lsp-workspace-symbol)
+:init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
+#+end_src
+
+** Install LSP Package
+Let's install the main package for lsp. Here we will integrate lsp with which-key. This way, when we type the prefix key ~C-c l~ we get additional help for compliting the command. 
+
+#+begin_src emacs-lisp
+(use-package lsp-mode
+:ensure t
+:hook (
+   (lsp-mode . lsp-enable-which-key-integration)
+   (java-mode . #'lsp-deferred)
+)
+:init (setq 
+    lsp-keymap-prefix "C-c l"              ; this is for which-key integration documentation, need to use lsp-mode-map
+    lsp-enable-file-watchers nil
+    read-process-output-max (* 1024 1024)  ; 1 mb
+    lsp-completion-provider :capf
+    lsp-idle-delay 0.500
+)
+:config 
+    (setq lsp-intelephense-multi-root nil) ; don't scan unnecessary projects
+    (with-eval-after-load 'lsp-intelephense
+    (setf (lsp--client-multi-root (gethash 'iph lsp-clients)) nil))
+	(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+)
+#+end_src
+
+You can start LSP server in a java project by using ~C-c l s s~. Once you type ~C-c l~ ~which-key~ package should guide you through rest of the options. In above setting I have added some memory management settings as suggested in [[https://emacs-lsp.github.io/lsp-mode/page/performance/][this guide]]. Change them to higher numbers, if you find *lsp-mode* sluggish in your computer.
+
+** LSP Java
+This is the package that handles server installation and session management.
+#+begin_src  emacs-lisp
+(use-package lsp-java 
+:ensure t
+:config (add-hook 'java-mode-hook 'lsp))
+#+end_src
+
+* Other programming and project management packages
+** Magit
+Magit package works with git project
 #+BEGIN_SRC emacs-lisp
-(use-package scala-mode
-  :ensure t
-  :interpreter
-    ("scala" . scala-mode)
-  :mode "\\.s\\(cala\\|bt\\)$"
+(use-package magit 
+:ensure t
+:bind
+ (("C-x g" . magit-status))
 )
 #+END_SRC
-* Key bindings
-** Global
 
-   #+BEGIN_SRC emacs-lisp
-   ;; Replace regexp on selected text
-   (global-set-key (kbd "C-;") 'replace-regexp)
-
-   (defun reload-init-file() (interactive) (load-file USER_INIT_FILE))
-   (global-set-key (kbd "C-c i") 'reload-init-file)
-   #+END_SRC
-
-** Magit
-   #+BEGIN_SRC emacs-lisp
-   (global-set-key (kbd "C-x g") 'magit-status)
-   #+END_SRC
-  
 *** Notes
     - ~C-x g or magit-status~ Show status of current git project
     - ~s~ Stage files from Unstaged area
@@ -678,58 +456,60 @@ lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
     - ~z~ Stashing
     - ~r~ Rebaing
     - For more see [[https://magit.vc/manual/magit-refcard.pdf][magit ref-card]]
- 
-* Notes
 
-** General
-   - ~M-/~ Complete word
-   - ~C-;~ Replace regular expression in selected text
-   - ~M-x replace-string C-q C-j RET RET~ Join all lines
-   - ~C-x r s~ Type a ~<number>~. Copy to register
-   - ~C-x r i~ Type a ~<number>~. Insert register
- 
-** Macro
-   - ~C-x (~ Start macro
-   - ~C-x )~ End macro
-   - ~C-x e~ End and call macro
-   - ~C-u 10 C-x e~ Repeat 10 times
-   - ~C-x C-k n some-name~ Name the macro. Now we can execute ~M-x some-name~
-   - ~M-x insert-kbd-macro~ Save the macro in [[Macros]] section, thus can be used later
+* Org-mode
+** Org Setup
+ Set up keys to manage org files for org-capture and org-agenda
+ #+begin_src emacs-lisp
+ (setq org-directory ORG_DIR)
+ (setq org-default-notes-file (concat ORG_DIR "tasks.org"))
+ (setq org-journal-file (concat ORG_DIR "journal.org"))
+ (setq org-log-done 'time)   ;; Add time when a task was done
+ ;;(setq org-log-done 'note)   ;; Add a note along with closing task
 
-** Rectangles
-   - ~C-x r k~ Kill rectangle. Can be yanked.
-   - ~C-x r d~ Delete rectangle
-   - ~C-x r y~ Yank rectangle
-   - ~C-x r c~ Clear rectangle. Does not shift
-   - ~C-x r o~ Open rectangle. Shifts right
-   - ~C-x r t~ Replace rectangle with string
-   - ~M-x string-insert-rectangle~ Insert string in rectangle
+ ;; Use C-c c to start capture mode
+ (global-set-key (kbd "C-c c") 'org-capture)
+ (global-set-key (kbd "C-c a") 'org-agenda)
 
-** Manage bookmark
-    - Can use ~C-x r l~ to list bookmarks
-    - Can use ~C-x r b~ to jump to bookmark
-    - Can use ~C-x r m~ to add a bookmark
-    - You can bookmark specific point in file by giving different name, bookmark remote, bookmark directory etc.
-    
-** Dired 
-   - ~C-x d~ open dired
-   - ~g~ redisplay dired
-   - ~C~ copy file to different place
-   - ~q~ quit dired
-   - ~n, p, <, >~ navigation
-   - ~^~ Go to parent
-   - ~v~ view current file, can quit with ~q~
-   - ~o~ view current file in other window
-   - ~f or enter~ open/visit current file
-   - ~+~ create subdirectory
-   - ~=~ compare file at point with file at mark (needs diff program)
-   - ~m~ Mark files
-   - ~u~ Unmark files
-   - ~d~ Mark files for deletion
-   - ~x~ Delete files marked for deletion
-   - For more info ~C-h m~ or See this [[https://www.gnu.org/software/emacs/refcards/pdf/dired-ref.pdf][dired-ref]] document
- 
-** Org Mode
+ (setq org-capture-templates
+       (quote (("p" "Personal Task" entry (file+headline org-default-notes-file "Personal Tasks")
+	           "* TODO %?\n  %i\n")
+		  ("w" "Work-related Task" entry (file+headline org-default-notes-file "Work Tasks")
+		  "* TODO %?\n  %i\n")
+		  ("j" "Journal entry" entry (file+datetree  org-journal-file)
+			"**** %U %^{Title}\n    %?")
+               )))
+ #+end_src
+
+** Org-Bullets
+Org-bullets is used to show asterisk's as bullets in ~org-mode~
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets 
+:ensure t
+:config
+(add-hook 'org-mode-hook 'org-bullets-mode))   
+#+END_SRC
+
+** Alert
+   Alert notifications from different packages
+   #+begin_src emacs-lisp
+   (use-package org-alert
+   :ensure t
+   :custom (alert-default-style 'notifications)
+   :config
+   (setq org-alert-interval 2700
+         org-alert-notification-title "Org Alert Reminder!")
+   (org-alert-enable)
+   )
+   #+end_src
+
+** Htmlize
+Htmlize is used to export org file to html file
+#+BEGIN_SRC emacs-lisp
+(use-package htmlize :ensure t)
+#+END_SRC
+
+** Notes
    - Org File. Save file with .org extension
    - ~C-c a~ View agenda mode (has various options to manage agenda)
    - ~C-c [~ Enable agenda on current file
@@ -762,36 +542,34 @@ lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
    - ~C-c C-o~ Open result of code block
    - For more see [[https://orgmode.org/orgcard.pdf][Org-Mode Reference Card]]
 
-* Hydra
-** Movement
+* Window and Movement Management
+In this section I will cover packages needed to manage and windows and movement in emacs.
+** Eyebrowse
+Different configuration for window view. This allows you to setup different window view for particular work. For more [[https://depp.brause.cc/eyebrowse/][see this]]
 #+BEGIN_SRC emacs-lisp
-
- (defhydra hydra-move
-   (:body-pre (next-line))
-   "move"
-   ("n" next-line  "next line")
-   ("j" next-line  "next line")
-   ("p" previous-line "previous line")
-   ("k" previous-line "previous line")
-   ("l" forward-char "forward in line")
-   ("h" backward-char "backward in line")
-   ("a" beginning-of-line "beginning of line")
-   ("w" forward-word "forward word")
-   ("b" backward-word "backward word")
-   ("e" move-end-of-line  "end of line")
-   ("v" scroll-up-command "scroll up")
-   ("o" other-window "other window")
-   ;; Converting M-v to V here by analogy.
-   ("V" scroll-down-command "scroll down")
-   ("r" recenter-top-bottom  "recenter")
-   ("q" nil "quit")
-   ("SPC" nil "quit")
-   )
-   (key-chord-define-global "jj" 'hydra-move/body)
+(use-package eyebrowse 
+:ensure t
+:config (eyebrowse-mode 1))
 #+END_SRC
+*** Notes
+- ~C-c C-w 0~ Take to setting number 0
+- ~C-c C-w 1~ Take to setting number 1 and so on
+- C-c C-w ' Go to last setting
+- C-c C-w " Close current setting
 
-** Window
+** Smart Modeline
+Remove clutter from modeline 
+#+begin_src emacs-lisp
+(use-package smart-mode-line 
+:ensure t
+:init
+(smart-mode-line-enable))
+#+end_src
+
+** Ace-Window
+Ace window is used to move and manage windows. Here we use hydra to help with keybindings.
 #+BEGIN_SRC emacs-lisp
+(use-package ace-window :ensure t)
 
 (defun hydra-move-splitter-left (arg)
   "Move window splitter left."
@@ -892,9 +670,53 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
    )
    (key-chord-define-global "ww" 'hydra-window/body)
 #+END_SRC
-** EMMS
+
+** Move with hydra
+Some time you want to just be lazy and use vim like key bindings to move around. Following code allows you to do that.
 #+BEGIN_SRC emacs-lisp
-     (defhydra hydra-emms()
+
+ (defhydra hydra-move
+   (:body-pre (next-line))
+   "move"
+   ("n" next-line  "next line")
+   ("j" next-line  "next line")
+   ("p" previous-line "previous line")
+   ("k" previous-line "previous line")
+   ("l" forward-char "forward in line")
+   ("h" backward-char "backward in line")
+   ("a" beginning-of-line "beginning of line")
+   ("w" forward-word "forward word")
+   ("b" backward-word "backward word")
+   ("e" move-end-of-line  "end of line")
+   ("v" scroll-up-command "scroll up")
+   ("o" other-window "other window")
+   ;; Converting M-v to V here by analogy.
+   ("V" scroll-down-command "scroll down")
+   ("r" recenter-top-bottom  "recenter")
+   ("q" nil "quit")
+   ("SPC" nil "quit")
+   )
+   (key-chord-define-global "jj" 'hydra-move/body)
+#+END_SRC
+
+* Music Management
+** Emacs Multimedia System (EMMS)
+EMMS lets you play media. For this we need to install the player in our system
+before we can configure this. In this example, we need to install ~mplayer~ and
+set its location. This setup is a basic setup and here we only enable music playback.
+We can use ~EE~ key to invoke emms and use hydra to manage various functions.
+
+#+BEGIN_SRC emacs-lisp
+(use-package emms
+:ensure t
+:config
+(setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION)))
+(setq emms-source-file-default-directory MUSIC_DIR)  
+(emms-all)
+(emms-default-players)
+(setq  emms-player-mplayer-parameters '("-novideo"))
+
+(defhydra hydra-emms()
      "emms"
      ("i" emms "show interface")
      ("n" emms-next "next")
@@ -909,32 +731,130 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
      ("q" nil "quit")
      )
      (key-chord-define-global "EE" 'hydra-emms/body)
+)
+
 #+END_SRC
-* Personal
-  This part is for my personal settings. Nothing fancy, just to learn elisp
-** Org-mode
+
+Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name to MPLAYER_DIRECTORY_LOCATION variable where mplayer is located. 
+E.g ~/user/local/bin~ in Mac. In windows, I installed in ~Documents/mplayer~, so it will be something like ~c:/Users/<username>/Documents/mplayer~
+
+* PDF Viewer
+** Pdf-Tools
+Pdf-tools is a set of packages that allows to view pdf in emacs. 
+Follow [[https://github.com/politza/pdf-tools][instructions here]] to install required packages for pdf-tools in your system.
+Once you install the required packages, you can install pdf-tools in emacs using following setting.
+
+I was having one issue with pdf viewing. When I closed the pdf next time it did not
+load the pdf from last position. I found a script, that asks to set the bookmark for current
+pdf file. That is what ~kill-buffer-hook-setup~ does. I also enabled ~pdf-view-midnight-minor-mode~
+so that pdf loads in dark mode.
+
+#+BEGIN_SRC emacs-lisp
+
+;; This allows us to save bookmark while closing pdf
+(defun kill-buffer-hook-setup ()
+(if (and buffer-file-name
+(file-name-extension buffer-file-name)
+(string= (downcase (file-name-extension buffer-file-name)) "pdf")
+(yes-or-no-p "Set bookmark with current file name?"))
+(bookmark-set (file-name-nondirectory buffer-file-name) nil)))
+
+(use-package pdf-tools
+:ensure t
+:config
+;; initialise
+(pdf-tools-install)
+;; open pdfs scaled to fit page
+(setq-default pdf-view-display-size 'fit-page)
+;; automatically annotate highlights
+(setq pdf-annot-activate-created-annotations t)
+;; use normal isearch
+(define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+;; turn off cua so copy works
+(add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
+;; save pdf at kill
+(add-hook 'kill-buffer-hook 'kill-buffer-hook-setup)
+;; midnight node (enable if change to dark font)
+; (add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode)
+;; more fine-grained zooming
+(setq pdf-view-resize-factor 1.1)
+;; keyboard shortcuts
+(define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
+(define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
+(define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete)
+(define-key pdf-view-mode-map (kbd ",") 'pdf-view-scroll-down-or-previous-page)
+(define-key pdf-view-mode-map (kbd ".") 'pdf-view-scroll-up-or-next-page))
+#+END_SRC
+Once you add above setting, and load the file and after that call ~M-x pdf-tools-install~ if you see similar error message as below
+
+#+BEGIN_EXAMPLE
+/Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/build/server/autobuild -i /Users/<username>/.emacs.d/elpa/pdf-tools-20200512.1524/
+Failed to recognize this system, trying to continue.
+#+END_EXAMPLE
+
+Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have ~pkg-config~, ~poppler~ and ~automake~ installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
+
+- Use ~h, t, D, , and .~ for various actions shown in keyboard shortcuts section when using a pdf. The first 3 command changes can be saved, so that it is enabled for external applicaton as well.
+
+* Writer
+Here we will add packages that helps you write regular text. Allows you to focus and add autocorrection to words.
+** Dark Room
+Allows you to enter focus mode by pressing F7 key.
    #+begin_src emacs-lisp
-   (setq org-directory ORG_DIR)
-   (setq org-default-notes-file (concat ORG_DIR "tasks.org"))
-   (setq org-journal-file (concat ORG_DIR "journal.org"))
-   (setq org-log-done 'time)   ;; Add time when a task was done
-   ;;(setq org-log-done 'note)   ;; Add a note along with closing task
+   (use-package darkroom
+   :ensure t)
 
-   ;; Use C-c c to start capture mode
-   (global-set-key (kbd "C-c c") 'org-capture)
-   (global-set-key (kbd "C-c a") 'org-agenda)
+   (defun my/enter-focus-mode ()
+   (interactive)
+   (darkroom-mode 1))
 
-   (setq org-capture-templates
-         (quote (("p" "Personal Task" entry (file+headline org-default-notes-file "Personal Tasks")
-	          "* TODO %?\n  %i\n")
-		 ("w" "Work-related Task" entry (file+headline org-default-notes-file "Work Tasks")
-		 "* TODO %?\n  %i\n")
-		 ("j" "Journal entry" entry (file+datetree  org-journal-file)
-		   "**** %U %^{Title}\n    %?")
-                 )))
+   (defun my/leave-focus-mode ()
+   (interactive)
+   (darkroom-mode 0))
 
-   
+   (defun my/toggle-focus-mode ()
+   (interactive)
+   (if (symbol-value darkroom-mode)
+   (my/leave-focus-mode)
+   (my/enter-focus-mode)))
+
+   (global-set-key (kbd "<f7>") 'my/toggle-focus-mode)
    #+end_src
+
+** Aspell
+Aspell allows to use dictionary to correct words while writing.
+Make sure to install aspell before activating it. 
+
+*Note*: For windows use mingw64 packages and install aspell using following commands.
+#+BEGIN_EXAMPLE
+pacman -S mingw64/mingw-w64-x86_64-aspell
+pacman -S mingw64/mingw-w64-x86_64-aspell-en
+
+Then below set ispell-program-name (see Settings abovel) as
+(setq-default ispell-program-name "C:/msys64/mingw64/bin/aspell.exe")
+#+END_EXAMPLE
+
+Set location of ~aspell~ executable using ~ispell-program-name~ variable.
+
+#+BEGIN_SRC emacs lisp
+(setq-default ispell-program-name ASPELL_BIN)
+#+END_SRC
+
+
+**** Notes
+- ~M-x flyspell-buffer~ Enable grammar highlight in current buffer
+- ~M-C-i~ Auto correct current word
+
+* Custom Keys
+Sometime you use a function so much, you want to give it a key anyway. This section contains keybindings for commands, that did not fit in above sections.
+
+#+BEGIN_SRC emacs-lisp
+   ;; Replace regexp on selected text
+   (global-set-key (kbd "C-;") 'replace-regexp)
+#+END_SRC
+
+* Personal
+This part is for my personal settings. Nothing fancy, just to ease my everyday taks. Use similar functions to automate mundance tasks.
 ** Google a query or region
    #+begin_src emacs-lisp
   (defun google-this ()
@@ -1001,7 +921,7 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
       (interactive)
       (shell-command "google-chrome --incognito https://youtube.com"))
     #+end_src
-** Personal Config with Hyrda
+** Keys to above commands.
 *** Jump to online websites
     #+begin_src emacs-lisp
      (defhydra hydra-online()
@@ -1019,3 +939,53 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
       )
      (key-chord-define-global "JJ" 'hydra-online/body)
     #+end_src
+
+* Notes for popular commands
+    This section contains notes for things I want to remember, and use often. I hope I will remember them, when I need them. :)
+** General
+   - ~M-/~ Complete word
+   - ~C-;~ Replace regular expression in selected text
+   - ~M-x replace-string C-q C-j RET RET~ Join all lines
+   - ~C-x r s~ Type a ~<number>~. Copy to register
+   - ~C-x r i~ Type a ~<number>~. Insert register
+ 
+** Macro
+   - ~C-x (~ Start macro
+   - ~C-x )~ End macro
+   - ~C-x e~ End and call macro
+   - ~C-u 10 C-x e~ Repeat 10 times
+   - ~C-x C-k n some-name~ Name the macro. Now we can execute ~M-x some-name~
+   - ~M-x insert-kbd-macro~ Save the macro in [[Macros]] section, thus can be used later
+
+** Rectangles
+   - ~C-x r k~ Kill rectangle. Can be yanked.
+   - ~C-x r d~ Delete rectangle
+   - ~C-x r y~ Yank rectangle
+   - ~C-x r c~ Clear rectangle. Does not shift
+   - ~C-x r o~ Open rectangle. Shifts right
+   - ~C-x r t~ Replace rectangle with string
+   - ~M-x string-insert-rectangle~ Insert string in rectangle
+
+** Manage bookmark
+    - Can use ~C-x r l~ to list bookmarks
+    - Can use ~C-x r b~ to jump to bookmark
+    - Can use ~C-x r m~ to add a bookmark
+    - You can bookmark specific point in file by giving different name, bookmark remote, bookmark directory etc.
+    
+** Dired 
+   - ~C-x d~ open dired
+   - ~g~ redisplay dired
+   - ~C~ copy file to different place
+   - ~q~ quit dired
+   - ~n, p, <, >~ navigation
+   - ~^~ Go to parent
+   - ~v~ view current file, can quit with ~q~
+   - ~o~ view current file in other window
+   - ~f or enter~ open/visit current file
+   - ~+~ create subdirectory
+   - ~=~ compare file at point with file at mark (needs diff program)
+   - ~m~ Mark files
+   - ~u~ Unmark files
+   - ~d~ Mark files for deletion
+   - ~x~ Delete files marked for deletion
+   - For more info ~C-h m~ or See this [[https://www.gnu.org/software/emacs/refcards/pdf/dired-ref.pdf][dired-ref]] document 
