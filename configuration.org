@@ -105,9 +105,8 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 ;; Change yes/no to y/n
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; Set initial screen to org agenda view
-(custom-set-variables '(inhibit-startup-screen t))
-(org-agenda nil "n")
+;; Clean scratch buffer
+(setq initial-scratch-message "")
 #+END_SRC
 
 * Looks
@@ -470,6 +469,15 @@ Magit package works with git project
  ;; Use C-c c to start capture mode
  (global-set-key (kbd "C-c c") 'org-capture)
  (global-set-key (kbd "C-c a") 'org-agenda)
+ 
+ (defun org-agenda-weekly () 
+    (interactive)
+    (org-agenda nil "n")
+ )
+
+ ;; My favorite org-agenda-weekly view. Let's add nn key for this.
+ (key-chord-define-global "gg" 'org-agenda-weekly)
+ 
 
  (setq org-capture-templates
        (quote (("p" "Personal Task" entry (file+headline org-default-notes-file "Personal Tasks")
@@ -712,7 +720,7 @@ We can use ~EE~ key to invoke emms and use hydra to manage various functions.
 (use-package emms
 :ensure t
 :config
-(setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION)))
+(setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION "")))
 (setq emms-source-file-default-directory MUSIC_DIR)  
 (emms-all)
 (emms-default-players)
