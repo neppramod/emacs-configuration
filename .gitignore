@@ -4,6 +4,7 @@
 .dap-breakpoints
 .lsp-session*
 *.el
+projectile.cache
 eclipse.*
 configuration.el
 elpa/
