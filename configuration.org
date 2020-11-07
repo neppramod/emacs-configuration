@@ -720,7 +720,7 @@ We can use ~EE~ key to invoke emms and use hydra to manage various functions.
 (use-package emms
 :ensure t
 :config
-(setq exec-path (append exec-path '(MPLAYER_DIRECTORY_LOCATION "")))
+;(setq exec-path (append exec-path (MPLAYER_DIRECTORY_LOCATION)))
 (setq emms-source-file-default-directory MUSIC_DIR)  
 (emms-all)
 (emms-default-players)
@@ -742,7 +742,6 @@ We can use ~EE~ key to invoke emms and use hydra to manage various functions.
      )
      (key-chord-define-global "EE" 'hydra-emms/body)
 )
-
 #+END_SRC
 
 Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name to MPLAYER_DIRECTORY_LOCATION variable where mplayer is located. 

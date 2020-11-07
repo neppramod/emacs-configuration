@@ -14,6 +14,8 @@ server/
 transient/
 emms/
 workspace/
+cache/
+tramp
 network-security.data
 recentf
 bookmarks
