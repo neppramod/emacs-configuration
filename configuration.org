@@ -105,8 +105,12 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 ;; Change yes/no to y/n
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; Inhibit startup screen
+(setq inhibit-startup-screen t)
+
 ;; Clean scratch buffer
 (setq initial-scratch-message "")
+
 #+END_SRC
 
 * Looks
