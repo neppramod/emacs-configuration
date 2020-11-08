@@ -117,22 +117,22 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 (use-package doom-themes
 :ensure t 
 :init 
-(load-theme 'doom-palenight t))
+(load-theme 'doom-monokai-spectrum t))
 
 (use-package heaven-and-hell
   :ensure t
   :init
   (setq heaven-and-hell-theme-type 'dark)
   (setq heaven-and-hell-themes
-        '((light . doom-acario-light)
-          (dark . doom-palenight)))
+        '((light . doom-one-light)
+          (dark . doom-monokai-spectrum)))
   :hook (after-init . heaven-and-hell-init-hook)
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
          ("<f6>" . heaven-and-hell-toggle-theme)))
 
 #+END_SRC
 
-If you press F6 key in your keyboard, it should switch between doom-palenight and doom-acario-light themes. If you want to go back to the default theme press ~Ctrl + C and F6~.
+If you press F6 key in your keyboard, it should switch between doom-monokai-spectrum and doom-one-light themes. If you want to go back to the default theme press ~Ctrl + C and F6~.
 
 ** Font
 Fonts are integral part of a text editor / IDE. I tend to like *DejaVu Sans Mono* fonts. If you have not setup this font in your Operating System, it is time to do so now. Go ahead and install it [[https://dejavu-fonts.github.io/Download.html][from this link]]. After that add following configuration.
@@ -288,6 +288,20 @@ For some prefix commands like ~C-c p~ or ~C-c h~ we want Emacs to visually guide
 (which-key-mode)
 )
 #+end_src
+** General Key
+   #+begin_src emacs-lisp
+   (use-package general
+       :ensure
+       :config
+	   (general-create-definer my/general-keys
+	       :prefix "C-c k"
+	   )
+   )
+
+ ; Use following example, when needed
+ ;  (my/general-keys "m" '(hydra-move/body :which-key "move keys"))
+   #+end_src
+
 ** Run Code
 We can use quickrun package to execute code (if it has main). E.g. If you have a java file with main method, it will run with the associated shortcut key ~C-c r~ or quickrun command. Quickrun has support for several languages.
 #+begin_src emacs-lisp
@@ -350,7 +364,8 @@ Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below
 ("q" nil "quit")
 )
 
-(key-chord-define-global "RR" 'hydra-run/body)
+;(key-chord-define-global "RR" 'hydra-run/body)
+(my/general-keys "r" '(hydra-run/body :which-key "run java"))
 #+end_src
 
 ** Treemacs
@@ -415,7 +430,7 @@ Let's install the main package for lsp. Here we will integrate lsp with which-ke
     lsp-enable-file-watchers nil
     read-process-output-max (* 1024 1024)  ; 1 mb
     lsp-completion-provider :capf
-    lsp-idle-delay 0.500
+    lsp-idle-delay 1.000
 )
 :config 
     (setq lsp-intelephense-multi-root nil) ; don't scan unnecessary projects
@@ -692,7 +707,8 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
    ("Z" winner-redo)
    ("q" nil)
    )
-   (key-chord-define-global "ww" 'hydra-window/body)
+   ;(key-chord-define-global "ww" 'hydra-window/body)
+   (my/general-keys "w" '(hydra-window/body :which-key "window manage"))
 #+END_SRC
 
 ** Move with hydra
@@ -720,6 +736,9 @@ Some time you want to just be lazy and use vim like key bindings to move around.
    ("q" nil "quit")
    ("SPC" nil "quit")
    )
+
+   ;; Use two set of keys to interact with hydra-move
+   (my/general-keys "m" '(hydra-move/body :which-key "move"))
    (key-chord-define-global "jj" 'hydra-move/body)
 #+END_SRC
 
@@ -754,7 +773,8 @@ We can use ~EE~ key to invoke emms and use hydra to manage various functions.
      ("rt" emms-toggle-repeat-track "repeat track")
      ("q" nil "quit")
      )
-     (key-chord-define-global "EE" 'hydra-emms/body)
+     ;(key-chord-define-global "EE" 'hydra-emms/body)
+	 (my/general-keys "e" '(hydra-emms/body :which-key "emms"))
 )
 #+END_SRC
 
@@ -960,7 +980,8 @@ This part is for my personal settings. Nothing fancy, just to ease my everyday t
       ("w" my/wordpress "wordpress")
       ("q" nil "quit")
       )
-     (key-chord-define-global "JJ" 'hydra-online/body)
+;     (key-chord-define-global "JJ" 'hydra-online/body)
+	 (my/general-keys "o" '(hydra-online/body :which-key "online"))
     #+end_src
 
 * Notes for popular commands
