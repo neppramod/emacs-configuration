@@ -199,12 +199,16 @@ Here, we changed the delay for the consecutive key to be little higher than defa
    Projectile helps us with easy navigation within a project. Projectile recognizes several source control managed folders e.g *git, mercurial, maven, sbt*, and a folder with empty *.projectile* file. You can use ~C-c p~ to invoke any projectile command. This is a very useful key to remember.
 
 #+begin_src emacs-lisp
-(use-package projectile 
+(use-package projectile
+:diminish projectile-mode
+:custom 
+  ((projectile-completion-system 'helm))
 :ensure t
-:init (projectile-mode +1)
-:config 
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-)   
+:init 
+    (projectile-mode +1)
+	(setq projectile-switch-project-action #'projectile-dired)
+:bind-keymap ("C-c p" . projectile-command-map)
+)
 #+end_src
 ** Helm
 Helm allows for easy completion of commands. Below, we will replace several of the built in functions with helm versions and add keyboard shortcuts for couple of new useful commands.
@@ -218,6 +222,7 @@ Helm allows for easy completion of commands. Below, we will replace several of t
 :bind
 (("C-c h" . helm-command-prefix))
 (("M-x" . helm-M-x))
+(("M-y" . helm-show-kill-ring))
 (("C-x C-f" . helm-find-files))
 (("C-x b" . helm-buffers-list))
 (("C-c b" . helm-bookmarks))
@@ -401,10 +406,17 @@ LSP UI is used in various packages that require UI elements in LSP. E.g ~lsp-ui-
 :init (setq lsp-ui-doc-delay 1.5
       lsp-ui-doc-position 'bottom
 	  lsp-ui-doc-max-width 100
+	  lsp-enable-symbol-highlighting nil
+	  lsp-ui-doc-show-with-mouse nil
+	  lsp-ui-sideline-enable nil
+	  lsp-eldoc-enable-hover nil
+	  lsp-signature-auto-activate nil
+	  lsp-signature-render-documentation nil
+	  lsp-modeline-diagnostics-enable nil
 ))
 #+end_src
 
-Go through this [[https://github.com/emacs-lsp/lsp-ui/blob/master/lsp-ui-doc.el][link]]  to see what other parameters are provided.
+Go through this [[https://github.com/emacs-lsp/lsp-ui/blob/master/lsp-ui-doc.el][link]]  to see what other parameters are provided. See this [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][link]] if you want to disable UI elements.
 
 ** Helm LSP
 Helm-lsp provides various functionality to work with the code. E.g Code actions like adding *getter, setter, toString*, refactoring etc. You can use ~helm-lsp-workspace-symbol~ to find various symbols (classes) within your workspace.
