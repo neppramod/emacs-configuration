@@ -137,7 +137,6 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 #+END_SRC
 
 If you press F6 key in your keyboard, it should switch between doom-monokai-spectrum and doom-one-light themes. If you want to go back to the default theme press ~Ctrl + C and F6~.
-
 ** Font
 Fonts are integral part of a text editor / IDE. I tend to like *DejaVu Sans Mono* fonts. If you have not setup this font in your Operating System, it is time to do so now. Go ahead and install it [[https://dejavu-fonts.github.io/Download.html][from this link]]. After that add following configuration.
 
@@ -370,6 +369,7 @@ Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below
 ("m" dap-java-run-test-method "run test method")
 ("c" dap-java-run-test-class "run test class")
 ("i" delete-other-windows "maximize")
+("f" flycheck-list-errors "flycheck list errors")
 ("q" nil "quit")
 )
 
@@ -600,6 +600,28 @@ Different configuration for window view. This allows you to setup different wind
 (use-package eyebrowse 
 :ensure t
 :config (eyebrowse-mode 1))
+
+(defhydra hydra-eyebrowse()
+    "Eyebrowse"
+    ("l"  eyebrowse-last-window-config "last")
+	("p"  eyebrowse-prev-window-config "prev")
+	("n"  eyebrowse-next-window-config "next")
+	("d"  eyebrowse-close-window-config "delete")
+	("0"  eyebrowse-switch-to-window-config-0)
+	("1"  eyebrowse-switch-to-window-config-1)
+	("2"  eyebrowse-switch-to-window-config-2)
+	("3"  eyebrowse-switch-to-window-config-3)
+	("4"  eyebrowse-switch-to-window-config-4)
+	("5"  eyebrowse-switch-to-window-config-5)
+	("6"  eyebrowse-switch-to-window-config-6)
+	("7"  eyebrowse-switch-to-window-config-7)
+	("8"  eyebrowse-switch-to-window-config-8)
+	("9"  eyebrowse-switch-to-window-config-9)
+	("q" nil "quit"))
+
+;(key-chord-define-global "RR" 'hydra-run/body)
+(my/general-keys "e" '(hydra-eyebrowse/body :which-key "eyebrowse"))
+
 #+END_SRC
 *** Notes
 - ~C-c C-w 0~ Take to setting number 0
@@ -659,19 +681,19 @@ Ace window is used to move and manage windows. Here we use hydra to help with ke
     (enlarge-window arg)))
 
 
-(defhydra hydra-window ()
-   "
+(defhydra hydra-window (:hint nil)
+"
 Movement^^        ^Split^         ^Switch^		^Resize^
 ----------------------------------------------------------------
-_h_ ←       	_v_ertical    	_b_uffer	        _,_ X←
+_h_ ←       	_v_ertical    	_b_uffer	    _,_ X←
 _j_ ↓        	_x_ horizontal	_f_ind files	_n_ X↓
 _k_ ↑        	_z_ undo      	_a_ce 1		_p_ X↑
 _l_ →        	_Z_ reset      	_s_wap		_._ X→
-_F_ollow	        _D_lt Other   	_S_ave		max_i_mize
+_F_ollow	    _D_lt Other   	_S_ave		max_i_mize
 _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
-                                _m_ bookmark      _-_ zoom out
+_m_ bookmark                              _-_ zoom out
 "
-   ("h" windmove-left )
+   ("h" windmove-left)
    ("j" windmove-down )
    ("k" windmove-up )
    ("l" windmove-right )
@@ -679,10 +701,10 @@ _q_ cancel	_o_ other   	_d_elete	        _=_ zoom in
    ("n" hydra-move-splitter-down)
    ("p" hydra-move-splitter-up)
    ("." hydra-move-splitter-right)
-   ("=" text-scale-increase "in") 
-   ("-" text-scale-decrease "out")
-   ("b" buffer-menu "buffer-menu")
-   ("m" bookmark-bmenu-list "bookmark")
+   ("=" text-scale-increase) 
+   ("-" text-scale-decrease)
+   ("b" buffer-menu)
+   ("m" bookmark-bmenu-list)
    ("f" helm-find-files)
    ("F" follow-mode)
    ("a" (lambda ()
