@@ -121,7 +121,7 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 (use-package doom-themes
 :ensure t 
 :init 
-(load-theme 'doom-monokai-spectrum t))
+(load-theme 'doom-one t))
 
 (use-package heaven-and-hell
   :ensure t
@@ -129,7 +129,7 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
   (setq heaven-and-hell-theme-type 'dark)
   (setq heaven-and-hell-themes
         '((light . doom-one-light)
-          (dark . doom-monokai-spectrum)))
+          (dark . doom-one)))
   :hook (after-init . heaven-and-hell-init-hook)
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
          ("<f6>" . heaven-and-hell-toggle-theme)))
@@ -178,6 +178,13 @@ Fonts are integral part of a text editor / IDE. I tend to like *DejaVu Sans Mono
 (setq set-mark-command-repeat-pop t)
 #+END_SRC
 
+** Buffer Icons
+Install nice icons
+#+begin_src emacs-lisp
+
+;; Treemacs
+(use-package treemacs-all-the-icons :ensure t)
+#+end_src
 * Custom Packages
   In this section we will install some of the packages that we will use for various project and file management.
 ** Key-Chord
@@ -205,7 +212,8 @@ Here, we changed the delay for the consecutive key to be little higher than defa
 :ensure t
 :init 
     (projectile-mode +1)
-	(setq projectile-switch-project-action #'projectile-dired)
+	(setq projectile-switch-project-action #'projectile-dired
+	      projectile-create-missing-test-files t)
 :bind-keymap ("C-c p" . projectile-command-map)
 )
 #+end_src
@@ -306,8 +314,6 @@ For some prefix commands like ~C-c p~ or ~C-c h~ we want Emacs to visually guide
 	   )
    )
 
- ; Use following example, when needed
- ;  (my/general-keys "m" '(hydra-move/body :which-key "move keys"))
    #+end_src
 
 ** Run Code
@@ -370,6 +376,7 @@ Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below
 ("c" dap-java-run-test-class "run test class")
 ("i" delete-other-windows "maximize")
 ("f" flycheck-list-errors "flycheck list errors")
+("t" create-unit-test-class "create unit test class")
 ("q" nil "quit")
 )
 
@@ -518,7 +525,7 @@ Magit package works with git project
  )
 
  ;; My favorite org-agenda-weekly view. Let's add nn key for this.
- (key-chord-define-global "gg" 'org-agenda-weekly)
+ ;; (key-chord-define-global "gg" 'org-agenda-weekly)
  
 
  (setq org-capture-templates
@@ -529,6 +536,9 @@ Magit package works with git project
 		  ("j" "Journal entry" entry (file+datetree  org-journal-file)
 			"**** %U %^{Title}\n    %?")
                )))
+			   
+
+   (my/general-keys "a" '(org-agenda-weekly :which-key "org-agenda"))
  #+end_src
 
 ** Org-Bullets
@@ -777,9 +787,31 @@ Some time you want to just be lazy and use vim like key bindings to move around.
 
    ;; Use two set of keys to interact with hydra-move
    (my/general-keys "m" '(hydra-move/body :which-key "move"))
-   (key-chord-define-global "jj" 'hydra-move/body)
+   ;;(key-chord-define-global "jj" 'hydra-move/body)
 #+END_SRC
 
+* File Management
+  This section contains packages to manage files
+  #+begin_src emacs-lisp
+  
+  ;; Use single buffer
+  (use-package dired-single
+  :ensure t)
+  
+  (use-package dired
+  :ensure nil
+  :commands (dired dired-jump)
+  :custom ((dired-listing-switches "-AlBGh --group-directories-first"))
+  :bind (:map dired-mode-map
+         ("C-x C-j" . dired-jump)
+		 ("h" . dired-single-up-directory)
+		 ("l" . dired-single-buffer)))
+
+  ;; Install nice icons
+  (use-package all-the-icons-dired
+     :ensure t
+     :hook (dired-mode . all-the-icons-dired-mode))
+  #+end_src
 * Music Management
 ** Emacs Multimedia System (EMMS)
 EMMS lets you play media. For this we need to install the player in our system
@@ -818,7 +850,6 @@ We can use ~EE~ key to invoke emms and use hydra to manage various functions.
 
 Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name to MPLAYER_DIRECTORY_LOCATION variable where mplayer is located. 
 E.g ~/user/local/bin~ in Mac. In windows, I installed in ~Documents/mplayer~, so it will be something like ~c:/Users/<username>/Documents/mplayer~
-
 * PDF Viewer
 ** Pdf-Tools
 Pdf-tools is a set of packages that allows to view pdf in emacs. 
@@ -935,92 +966,140 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
 #+END_SRC
 
 * Personal
-This part is for my personal settings. Nothing fancy, just to ease my everyday taks. Use similar functions to automate mundance tasks.
-** Google a query or region
-   #+begin_src emacs-lisp
-  (defun google-this ()
-  "Googles a query or region if any."
-  (interactive)
-  (browse-url
-   (concat
-    "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
-    (if mark-active
-        (buffer-substring (region-beginning) (region-end))
-      (read-string "Google: ")))))
-   #+end_src
-** Duckduckgo a query or region
-   #+begin_src emacs-lisp
-  (defun duckduck-this ()
-  "Duckduck a query or region if any."
-  (interactive)
-  (browse-url
-   (concat
-   "https://duckduckgo.com/?va=b&t=hc&ia=web&q="
-    (if mark-active
-        (buffer-substring (region-beginning) (region-end))
-      (read-string "Duckduck: ")))))
-   #+end_src
-** Browse to my wordpress
-   #+begin_src emacs-lisp
-   (defun my/wordpress()
+** Online
+ This part is for my personal settings. Nothing fancy, just to ease my everyday taks. Use similar functions to automate mundance tasks.
+*** Google a query or region
+	#+begin_src emacs-lisp
+   (defun google-this ()
+   "Googles a query or region if any."
    (interactive)
-   (browse-url "http://www.neppramod.wordpress.com"))
-   #+end_src
-** Go to reddit
-   #+begin_src emacs-lisp
-   (defun my/reddit()
-     (interactive)
-     (browse-url "https://www.reddit.com/"))  
-   #+end_src
-** Go to dota2 twitch
-   #+begin_src emacs-lisp
-   (defun my/twitch()
-     (interactive)
-     (browse-url "https://www.twitch.tv/directory/game/Dota%202"))  
-   #+end_src
-** Go to hackerearth competitive programming page
-   #+begin_src emacs-lisp
-      (defun my/he-competitive()
+   (browse-url
+	(concat
+     "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
+     (if mark-active
+         (buffer-substring (region-beginning) (region-end))
+       (read-string "Google: ")))))
+	#+end_src
+*** Duckduckgo a query or region
+	#+begin_src emacs-lisp
+   (defun duckduck-this ()
+   "Duckduck a query or region if any."
+   (interactive)
+   (browse-url
+	(concat
+	"https://duckduckgo.com/?va=b&t=hc&ia=web&q="
+     (if mark-active
+         (buffer-substring (region-beginning) (region-end))
+       (read-string "Duckduck: ")))))
+	#+end_src
+*** Browse to my wordpress
+	#+begin_src emacs-lisp
+	(defun my/wordpress()
+	(interactive)
+	(browse-url "http://www.neppramod.wordpress.com"))
+	#+end_src
+*** Go to reddit
+	#+begin_src emacs-lisp
+	(defun my/reddit()
       (interactive)
-      (browse-url "https://www.hackerearth.com/getstarted-competitive-programming/"))  
-   #+end_src
-** Go to email
-   #+begin_src emacs-lisp
-      (defun my/email()
+      (browse-url "https://www.reddit.com/"))  
+	#+end_src
+*** Go to dota2 twitch
+	#+begin_src emacs-lisp
+	(defun my/twitch()
       (interactive)
-      (browse-url "https://www.gmail.com/"))  
-   #+end_src
-** Open youtube
-   #+begin_src emacs-lisp
-      (defun my/youtube()
-      (interactive)
-      (browse-url "https://www.youtube.com/"))  
-   #+end_src
-** Open youtube in incognito mode
-    #+begin_src emacs-lisp
-      (defun my/youtube-incognito()
-      (interactive)
-      (shell-command "google-chrome --incognito https://youtube.com"))
-    #+end_src
-** Keys to above commands.
-*** Jump to online websites
-    #+begin_src emacs-lisp
-     (defhydra hydra-online()
-       "online"
-      ("r" my/reddit "reddit")
-      ("g" google-this "google this")
-      ("d" duckduck-this "duckduck this")
-      ("t" my/twitch "dota 2 twitch")
-      ("e" my/email "email")
-      ("h" my/he-competitive "he compeitive")
-      ("y" my/youtube "youtube")
-      ("i" my/youtube-incognito "youtube-incognito")
-      ("w" my/wordpress "wordpress")
-      ("q" nil "quit")
-      )
-;     (key-chord-define-global "JJ" 'hydra-online/body)
-	 (my/general-keys "o" '(hydra-online/body :which-key "online"))
-    #+end_src
+      (browse-url "https://www.twitch.tv/directory/game/Dota%202"))  
+	#+end_src
+*** Go to hackerearth competitive programming page
+	#+begin_src emacs-lisp
+       (defun my/he-competitive()
+       (interactive)
+       (browse-url "https://www.hackerearth.com/getstarted-competitive-programming/"))  
+	#+end_src
+*** Go to email
+	#+begin_src emacs-lisp
+       (defun my/email()
+       (interactive)
+       (browse-url "https://www.gmail.com/"))  
+	#+end_src
+*** Open youtube
+	#+begin_src emacs-lisp
+       (defun my/youtube()
+       (interactive)
+       (browse-url "https://www.youtube.com/"))  
+	#+end_src
+*** Open youtube in incognito mode
+     #+begin_src emacs-lisp
+       (defun my/youtube-incognito()
+       (interactive)
+       (shell-command "google-chrome --incognito https://youtube.com"))
+     #+end_src
+*** Keys to above commands.
+**** Jump to online websites
+     #+begin_src emacs-lisp
+      (defhydra hydra-online()
+		"online"
+       ("r" my/reddit "reddit")
+       ("g" google-this "google this")
+       ("d" duckduck-this "duckduck this")
+       ("t" my/twitch "dota 2 twitch")
+       ("e" my/email "email")
+       ("h" my/he-competitive "he compeitive")
+       ("y" my/youtube "youtube")
+       ("i" my/youtube-incognito "youtube-incognito")
+       ("w" my/wordpress "wordpress")
+       ("q" nil "quit")
+       )
+ ;     (key-chord-define-global "JJ" 'hydra-online/body)
+	  (my/general-keys "o" '(hydra-online/body :which-key "online"))
+     #+end_src
+** Programming
+*** Create test class in maven directory
+ #+begin_src emacs-lisp
+ (defun create-unit-test-class()
+ (interactive)
+
+ ;; Get full directory name and split to list and replace "main"" with "test" in maven src path
+ (setq x (split-string default-directory "/" t))
+ (setq y (-replace "main" "test" x))
+
+ ;; Concat list to create directory path name appending slash in the path
+ (setq formattedpath (mapconcat 'identity y "/"))
+ (setq testdir (concat "/" formattedpath "/"))
+
+ ;; Create directory if it does not exist using testdir directory path
+ (if (file-directory-p testdir)
+   (print (concat "Directory: " testdir " exists"))
+   (make-directory testdir))
+
+ ;; Use current file name and append Test.java to set test file with full path
+ (setq curfilename (file-name-base (or (buffer-file-name)(buffer-name))))
+ (setq testfilename (concat testdir curfilename "Test.java"))
+
+ ;; If file does not exist
+ ;; set template code for test file package, imports, classname
+ ;; use package name using folder that starts after java 
+ ;; (works for both test and main directories)
+ (if (file-exists-p testfilename)
+    (print (concat "File: " testfilename " exists"))
+	;; else
+	(setq packagename (mapconcat 'identity (cdr (member "java" (split-string default-directory "/" t))) "."))
+	(setq imports (concat "\nimport static org.hamcrest.CoreMatchers.is;\n"
+						  "import static org.hamcrest.MatcherAssert.*;"
+						  "\n\n"
+						  "import org.junit.Test;\n\n"))
+	(setq classname (concat "public class " curfilename "Test" " {"
+					  "\n\n"
+					  "}"))
+
+	;; Use above variables to write text in test class
+    (write-region (concat "package " packagename ";\n"
+					 imports
+					 classname) nil testfilename))
+
+ ;; Finally open the test file
+ (find-file testfilename))
+ #+end_src
 
 * Notes for popular commands
     This section contains notes for things I want to remember, and use often. I hope I will remember them, when I need them. :)
@@ -1071,3 +1150,7 @@ This part is for my personal settings. Nothing fancy, just to ease my everyday t
    - ~d~ Mark files for deletion
    - ~x~ Delete files marked for deletion
    - For more info ~C-h m~ or See this [[https://www.gnu.org/software/emacs/refcards/pdf/dired-ref.pdf][dired-ref]] document 
+* Org-Mode
+  #+begin_src emacs-lisp
+  (use-package org :ensure t)
+  #+end_src
