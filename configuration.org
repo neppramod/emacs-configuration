@@ -370,18 +370,16 @@ Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below
 (use-package dap-java :ensure nil)
 
 ;; Let's add easy hydra to debug and run our program using RR key
-(defhydra hydra-run()
-"Run"
-("m" dap-java-run-test-method "run test method")
-("c" dap-java-run-test-class "run test class")
-("i" delete-other-windows "maximize")
-("f" flycheck-list-errors "flycheck list errors")
-("t" create-unit-test-class "create unit test class")
-("q" nil "quit")
-)
+(defhydra hydra-java()
+  "Run"
+  ("m" dap-java-run-test-method "run test method")
+  ("t" dap-java-run-test-class "run test class")
+  ("i" delete-other-windows "maximize")
+  ("f" flycheck-list-errors "flycheck list errors")
+  ("c" create-unit-test-class "create unit test class")
+  ("q" nil "quit"))
 
-;(key-chord-define-global "RR" 'hydra-run/body)
-(my/general-keys "r" '(hydra-run/body :which-key "run java"))
+(my/general-keys "j" '(hydra-java/body :which-key "java"))
 #+end_src
 
 ** Treemacs
