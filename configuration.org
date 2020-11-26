@@ -119,9 +119,12 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 
 #+BEGIN_SRC emacs-lisp
 (use-package doom-themes
-:ensure t 
-:init 
-(load-theme 'doom-one t))
+:ensure t)
+
+(use-package night-owl-theme
+:ensure t
+:init
+(load-theme 'night-owl t))
 
 (use-package heaven-and-hell
   :ensure t
@@ -129,14 +132,14 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
   (setq heaven-and-hell-theme-type 'dark)
   (setq heaven-and-hell-themes
         '((light . doom-one-light)
-          (dark . doom-one)))
+          (dark . night-owl)))
   :hook (after-init . heaven-and-hell-init-hook)
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
          ("<f6>" . heaven-and-hell-toggle-theme)))
 
 #+END_SRC
 
-If you press F6 key in your keyboard, it should switch between doom-monokai-spectrum and doom-one-light themes. If you want to go back to the default theme press ~Ctrl + C and F6~.
+If you press F6 key in your keyboard, it should switch between night-owl and doom-one-light themes. If you want to go back to the default theme press ~Ctrl + C and F6~.
 ** Font
 Fonts are integral part of a text editor / IDE. I tend to like *DejaVu Sans Mono* fonts. If you have not setup this font in your Operating System, it is time to do so now. Go ahead and install it [[https://dejavu-fonts.github.io/Download.html][from this link]]. After that add following configuration.
 
@@ -351,7 +354,7 @@ FlyCheck checks for errors in code at run-time.
 #+end_src
 
 ** Dap Mode
-Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below we will integrate ~dap-mode~ with ~dap-hydra~. ~Dap-hydra~ shows keys you can use to enable various options and jump through code at runtime. After we install dap-mode we will also install ~dap-java~.
+   Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below we will integrate ~dap-mode~ with ~dap-hydra~. ~Dap-hydra~ shows keys you can use to enable various options and jump through code at runtime. After we install dap-mode we will also install ~dap-java~.
 
 #+begin_src emacs-lisp
 (use-package dap-mode
@@ -360,6 +363,9 @@ Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below
   :functions dap-hydra/nil
   :config
   (require 'dap-java)
+  (dap-mode 1)
+  (dap-tooltip-mode 1)
+  (tooltip-mode 1)
   :bind (:map lsp-mode-map
          ("<f5>" . dap-debug)
          ("M-<f5>" . dap-hydra))
@@ -375,6 +381,7 @@ Emacs Debug Adapter Protocol aka DAP Mode allows us to debug your program. Below
   ("m" dap-java-run-test-method "run test method")
   ("t" dap-java-run-test-class "run test class")
   ("i" delete-other-windows "maximize")
+  ("l" lsp-jt-lens-mode "Lens")
   ("f" flycheck-list-errors "flycheck list errors")
   ("c" create-unit-test-class "create unit test class")
   ("q" nil "quit"))
@@ -411,13 +418,13 @@ LSP UI is used in various packages that require UI elements in LSP. E.g ~lsp-ui-
 :init (setq lsp-ui-doc-delay 1.5
       lsp-ui-doc-position 'bottom
 	  lsp-ui-doc-max-width 100
-	  lsp-enable-symbol-highlighting nil
-	  lsp-ui-doc-show-with-mouse nil
-	  lsp-ui-sideline-enable nil
-	  lsp-eldoc-enable-hover nil
-	  lsp-signature-auto-activate nil
-	  lsp-signature-render-documentation nil
-	  lsp-modeline-diagnostics-enable nil
+	 ;; lsp-enable-symbol-highlighting nil
+	 ;; lsp-ui-doc-show-with-mouse nil
+	 ;; lsp-ui-sideline-enable nil
+	 ;; lsp-eldoc-enable-hover nil
+	 ;; lsp-signature-auto-activate nil
+	 ;; lsp-signature-render-documentation nil
+	 ;; lsp-modeline-diagnostics-enable nil
 ))
 #+end_src
 
@@ -452,6 +459,7 @@ Let's install the main package for lsp. Here we will integrate lsp with which-ke
     read-process-output-max (* 1024 1024)  ; 1 mb
     lsp-completion-provider :capf
     lsp-idle-delay 1.000
+	lsp-lens-mode 1
 )
 :config 
     (setq lsp-intelephense-multi-root nil) ; don't scan unnecessary projects
@@ -1152,3 +1160,11 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
   #+begin_src emacs-lisp
   (use-package org :ensure t)
   #+end_src
+
+
+
+
+
+
+
+  
