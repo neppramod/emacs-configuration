@@ -105,12 +105,18 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 ;; Change yes/no to y/n
 (fset 'yes-or-no-p 'y-or-n-p)
 
+
 ;; Inhibit startup screen
 (setq inhibit-startup-screen t)
 
 ;; Clean scratch buffer
 (setq initial-scratch-message "")
 
+
+(display-time)
+
+;; Disable flicker
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t)
 #+END_SRC
 
 * Looks
@@ -125,6 +131,9 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 :ensure t
 :init
 (load-theme 'night-owl t))
+
+;; set same theme for pdf-tools midnight
+(setq pdf-view-midnight-colors (quote ("#ffffff" . "#061526"))
 
 (use-package heaven-and-hell
   :ensure t
