@@ -111,6 +111,14 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 ;; Clean scratch buffer
 (setq initial-scratch-message "")
 
+;; Disable flicker
+;(add-to-list 'default-frame-alist '(inhibit-double-buffering . t)
+
+(setq desktop-load-locked-desktop t)
+(desktop-save-mode 1)
+(desktop-read)
+
+
 #+END_SRC
 
 * Looks
@@ -283,6 +291,9 @@ Helm swoop allows to quickly search for text under cursor or new text within cur
 ;; ;; Go to the opposite side of line from the end or beginning of line
 (setq helm-swoop-move-to-line-cycle t)
 
+;; Clear text at point
+(setq helm-swoop-pre-input-function (lambda () ""))
+
 )
 #+end_src
 
@@ -327,6 +338,10 @@ We can use quickrun package to execute code (if it has main). E.g. If you have a
 :bind ("C-c r" . quickrun))
 #+end_src
 
+** Javadoc Loopkup
+   #+begin_src emacs-lisp
+   (use-package javadoc-lookup :ensure t)
+   #+end_src
 * Language Server Protocol (LSP)
   With above setup done, below we will setup several packages closely related to LSP.
 ** Company
@@ -520,6 +535,10 @@ Magit package works with git project
  (setq org-journal-file (concat ORG_DIR "journal.org"))
  (setq org-log-done 'time)   ;; Add time when a task was done
  ;;(setq org-log-done 'note)   ;; Add a note along with closing task
+
+
+(setq org-src-preserve-indentation t
+org-src-tab-acts-natively t)
 
  ;; Use C-c c to start capture mode
  (global-set-key (kbd "C-c c") 'org-capture)
@@ -807,7 +826,7 @@ Some time you want to just be lazy and use vim like key bindings to move around.
   (use-package dired
   :ensure nil
   :commands (dired dired-jump)
-  :custom ((dired-listing-switches "-AlBGh --group-directories-first"))
+  ;;:custom ((dired-listing-switches "-AlBGh --group-directories-first"))  ;; problem in mac
   :bind (:map dired-mode-map
          ("C-x C-j" . dired-jump)
 		 ("h" . dired-single-up-directory)
@@ -856,7 +875,7 @@ We can use ~EE~ key to invoke emms and use hydra to manage various functions.
 
 Find out the location of mplayer installation with ~which mplayer~ in terminal (in mac, linux), and paste above the directory name to MPLAYER_DIRECTORY_LOCATION variable where mplayer is located. 
 E.g ~/user/local/bin~ in Mac. In windows, I installed in ~Documents/mplayer~, so it will be something like ~c:/Users/<username>/Documents/mplayer~
-* PDF Viewer
+* Viewer
 ** Pdf-Tools
 Pdf-tools is a set of packages that allows to view pdf in emacs. 
 Follow [[https://github.com/politza/pdf-tools][instructions here]] to install required packages for pdf-tools in your system.
@@ -901,7 +920,17 @@ so that pdf loads in dark mode.
 (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
 (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete)
 (define-key pdf-view-mode-map (kbd ",") 'pdf-view-scroll-down-or-previous-page)
-(define-key pdf-view-mode-map (kbd ".") 'pdf-view-scroll-up-or-next-page))
+(define-key pdf-view-mode-map (kbd ".") 'pdf-view-scroll-up-or-next-page)
+(define-key pdf-view-mode-map (kbd "j") 'pdf-view-scroll-down-or-previous-page)
+(define-key pdf-view-mode-map (kbd "k") 'pdf-view-scroll-up-or-next-page)
+
+)
+
+;; midnight theme
+(custom-set-variables
+'(pdf-view-midnight-colors (cons "#D6DEEB" "#011627"))
+)
+
 #+END_SRC
 Once you add above setting, and load the file and after that call ~M-x pdf-tools-install~ if you see similar error message as below
 
@@ -913,7 +942,16 @@ Failed to recognize this system, trying to continue.
 Copy the whole line and paste it in external terminal emulator. When I ran it in external terminal outside emacs, it worked without any issues. Make sure thought, you have ~pkg-config~, ~poppler~ and ~automake~ installed (in Mac throught HomeBrew). Above link has proper instructions for windows as well.
 
 - Use ~h, t, D, , and .~ for various actions shown in keyboard shortcuts section when using a pdf. The first 3 command changes can be saved, so that it is enabled for external applicaton as well.
-
+** EPub Reader
+#+begin_src emacs-lisp
+(use-package nov 
+:ensure t
+:config
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+:bind (:map nov-mode-map
+			("," . nov-scroll-down)
+			("." . nov-scroll-up)))
+#+end_src
 * Writer
 Here we will add packages that helps you write regular text. Allows you to focus and add autocorrection to words.
 ** Dark Room
