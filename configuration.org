@@ -550,7 +550,7 @@ org-src-tab-acts-natively t)
  )
 
 (setq org-todo-keywords
-      '((sequence "TODO" "STARTED" "|" "DONE" "CANCELLED")))
+      '((sequence "TODO" "INPROGRESS" "WAITING" "|" "DONE" "CANCELLED")))
 
  ;; My favorite org-agenda-weekly view. Let's add nn key for this.
  ;; (key-chord-define-global "gg" 'org-agenda-weekly)
