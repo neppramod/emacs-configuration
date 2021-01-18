@@ -549,6 +549,9 @@ org-src-tab-acts-natively t)
     (org-agenda nil "n")
  )
 
+(setq org-todo-keywords
+      '((sequence "TODO" "STARTED" "|" "DONE" "CANCELLED")))
+
  ;; My favorite org-agenda-weekly view. Let's add nn key for this.
  ;; (key-chord-define-global "gg" 'org-agenda-weekly)
  
