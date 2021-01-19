@@ -1147,7 +1147,39 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
  ;; Finally open the test file
  (find-file testfilename))
  #+end_src
+** Utilities
+*** Increment Decrement number at point
+	#+begin_src emacs-lisp
+(defun increment-number-at-point ()
+      (interactive)
+      (skip-chars-backward "0-9")
+      (or (looking-at "[0-9]+")
+          (error "No number at point"))
+      (replace-match (number-to-string (1+ (string-to-number (match-string 0)))))
+	  (backward-word)
+)
 
+(defun decrement-number-at-point ()
+      (interactive)
+      (skip-chars-backward "0-9")
+      (or (looking-at "[0-9]+")
+          (error "No number at point"))
+      (replace-match (number-to-string (1- (string-to-number (match-string 0)))))
+	  (backward-word)
+)
+
+	#+end_src
+*** Hydra for above utilities
+	#+begin_src emacs-lisp
+	(defhydra hydra-utilities()
+		"utilities"
+       ("i" increment-number-at-point "increment number")
+       ("d" decrement-number-at-point "decrement number")
+       ("q" nil "quit")
+       )
+ ;     (key-chord-define-global "JJ" 'hydra-online/body)
+	  (my/general-keys "u" '(hydra-utilities/body :which-key "utilities"))
+	#+end_src
 * Notes for popular commands
     This section contains notes for things I want to remember, and use often. I hope I will remember them, when I need them. :)
 ** General
