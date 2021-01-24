@@ -127,17 +127,19 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 
 #+BEGIN_SRC emacs-lisp
 (use-package doom-themes
-:ensure t)
+:ensure t
+:init
+(load-theme 'doom-one-light t)
+)
 
 (use-package night-owl-theme
 :ensure t
-:init
-(load-theme 'night-owl t))
+)
 
 (use-package heaven-and-hell
   :ensure t
   :init
-  (setq heaven-and-hell-theme-type 'dark)
+  (setq heaven-and-hell-theme-type 'light)
   (setq heaven-and-hell-themes
         '((light . doom-one-light)
           (dark . night-owl)))
@@ -152,7 +154,7 @@ If you press F6 key in your keyboard, it should switch between night-owl and doo
 Fonts are integral part of a text editor / IDE. I tend to like *DejaVu Sans Mono* fonts. If you have not setup this font in your Operating System, it is time to do so now. Go ahead and install it [[https://dejavu-fonts.github.io/Download.html][from this link]]. After that add following configuration.
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
+(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-16"))
 #+END_SRC
 
 ** Disable ansi color in compilation mode
@@ -335,7 +337,9 @@ We can use quickrun package to execute code (if it has main). E.g. If you have a
 #+begin_src emacs-lisp
 (use-package quickrun 
 :ensure t
-:bind ("C-c r" . quickrun))
+:bind 
+("C-c r" . quickrun)
+("C-c s" . quickrun-shell))
 #+end_src
 
 ** Javadoc Loopkup
@@ -530,12 +534,16 @@ Magit package works with git project
 ** Org Setup
  Set up keys to manage org files for org-capture and org-agenda
  #+begin_src emacs-lisp
+(use-package org :ensure t)
+
  (setq org-directory ORG_DIR)
  (setq org-default-notes-file (concat ORG_DIR "tasks.org"))
  (setq org-journal-file (concat ORG_DIR "journal.org"))
  (setq org-log-done 'time)   ;; Add time when a task was done
  ;;(setq org-log-done 'note)   ;; Add a note along with closing task
 
+;; Set default column view headings: Task Total-Time Time-Stamp
+(setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
 
 (setq org-src-preserve-indentation t
 org-src-tab-acts-natively t)
@@ -550,8 +558,9 @@ org-src-tab-acts-natively t)
  )
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+      '((sequence "TODO(t)" "NEXT(n)" "INACTIVE(i)" "|" "DONE(d)" "CANCELLED(c)")))
 
+(setq org-tag-alist '(("@emacs" . ?e) ("@linux" . ?l) ("games" . ?g) ("apps" . ?a) ("java" . ?j) ("study" . ?s) ("coding" . ?c) ("word" . ?w) ("meeting" . ?m) ("ideas" . ?i) ("journal" . ?u) ("personal" . ?p)))
 
  ;; My favorite org-agenda-weekly view. Let's add nn key for this.
  ;; (key-chord-define-global "gg" 'org-agenda-weekly)
@@ -559,15 +568,25 @@ org-src-tab-acts-natively t)
 
  (setq org-capture-templates
        (quote (("p" "Personal Task" entry (file+headline org-default-notes-file "Personal Tasks")
-	           "* TODO %?\n  %i\n")
+	           "* TODO %?\n  %i\n" :clock-in t :clock-resume t)
 		  ("w" "Work-related Task" entry (file+headline org-default-notes-file "Work Tasks")
-		  "* TODO %?\n  %i\n")
+		  "* TODO %?\n  %i\n" :clock-in t :clock-resume t)
+		  ("i" "Ideas" entry (file+headline org-default-notes-file "Ideas")
+		  "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
 		  ("j" "Journal entry" entry (file+datetree  org-journal-file)
-			"**** %U %^{Title}\n    %?")
+			"**** %U %^{Title}\n    %?" :clock-in t :clock-resume t)
                )))
 			   
 
    (my/general-keys "a" '(org-agenda-weekly :which-key "org-agenda"))
+
+    (defhydra org-mode()
+		"org-mode"
+       ("a" org-agenda-weekly "org-agenda-weekly")
+       ("f" org-refile "org-refile")
+       ("q" nil "quit")
+       )
+	  (my/general-keys "a" '(org-mode/body :which-key "org"))
  #+end_src
 
 ** Org-Bullets
@@ -950,7 +969,7 @@ Copy the whole line and paste it in external terminal emulator. When I ran it in
 #+begin_src emacs-lisp
 (use-package nov 
 :ensure t
-:config
+:init
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 :bind (:map nov-mode-map
 			("," . nov-scroll-down)
@@ -1230,11 +1249,6 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
    - ~d~ Mark files for deletion
    - ~x~ Delete files marked for deletion
    - For more info ~C-h m~ or See this [[https://www.gnu.org/software/emacs/refcards/pdf/dired-ref.pdf][dired-ref]] document 
-* Org-Mode
-  #+begin_src emacs-lisp
-  (use-package org :ensure t)
-  #+end_src
-
 
 
 
