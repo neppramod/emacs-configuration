@@ -358,7 +358,7 @@ Complete anything aka Company provides auto-completion. Company-capf is enabled 
 Yasnippet is a template system for Emacs. It allows you to type abbreviation and complete the associated text.
 
 #+begin_src emacs-lisp
-(use-package yasnippet :config (yas-global-mode))
+(use-package yasnippet :ensure t)
 (use-package yasnippet-snippets :ensure t)
 #+end_src
 
@@ -382,6 +382,7 @@ FlyCheck checks for errors in code at run-time.
   :functions dap-hydra/nil
   :config
   (require 'dap-java)
+  (require 'dap-cpptools)
   (dap-mode 1)
   (dap-tooltip-mode 1)
   (tooltip-mode 1)
@@ -471,19 +472,25 @@ Let's install the main package for lsp. Here we will integrate lsp with which-ke
 :hook (
    (lsp-mode . lsp-enable-which-key-integration)
    (java-mode . #'lsp-deferred)
+   (c++-mode . #'lsp-deferred)
 )
 :init (setq 
     lsp-keymap-prefix "C-c l"              ; this is for which-key integration documentation, need to use lsp-mode-map
     lsp-enable-file-watchers nil
     read-process-output-max (* 1024 1024)  ; 1 mb
     lsp-completion-provider :capf
-    lsp-idle-delay 1.000
+	company-idle-delay 0.0
+	lsp-headerline-breadcrumb-enable t
+    lsp-idle-delay 0.1
 	lsp-lens-mode 1
 )
 :config 
     (setq lsp-intelephense-multi-root nil) ; don't scan unnecessary projects
     (with-eval-after-load 'lsp-intelephense
     (setf (lsp--client-multi-root (gethash 'iph lsp-clients)) nil))
+	;; `-background-index' requires clangd v8+!
+	(setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))
+	(yas-global-mode)
 	(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 )
 #+end_src
