@@ -195,7 +195,10 @@ FlyCheck checks for errors in code at run-time.
    (cpp-mode . #'lsp-deferred)
 )
 :init
-(setq lsp-keymap-prefix "C-c l")
+(setq lsp-keymap-prefix "C-c l"
+  lsp-enable-file-watchers nil
+  read-process-output-max (* 1024 1024)  ; 1mb
+  lsp-completion-provider :capf)
 :config
 (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 )
@@ -270,10 +273,6 @@ For some prefix commands like C-c p or C-c h we want Emacs to visually guide you
 )
 #+END_SRC
 
-** VTerm
-#+begin_src emacs-lisp
-(use-package vterm
-:ensure t)
 #+end_src
 * Custom Commands
 ** Switch to previous buffer
@@ -331,6 +330,7 @@ For some prefix commands like C-c p or C-c h we want Emacs to visually guide you
                )))
 
 
+
 (use-package org-alert
 :ensure t
 :custom (alert-default-style 'osx-notifier)
@@ -341,5 +341,6 @@ For some prefix commands like C-c p or C-c h we want Emacs to visually guide you
 )
 
 (setq pandoc-binary "/usr/local/bin/pandoc")
+(use-package exec-path-from-shell :ensure t)
 (exec-path-from-shell-initialize)
 #+END_SRC
