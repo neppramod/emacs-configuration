@@ -109,9 +109,7 @@ In this section we will install a new theme and set font. If the DejaVu Sans fon
 #+BEGIN_SRC emacs-lisp
 
 (use-package leuven-theme
-:ensure t
-:init
-(load-theme 'leuven t))
+:ensure t)
 
 (use-package night-owl-theme
 :ensure t
@@ -120,7 +118,7 @@ In this section we will install a new theme and set font. If the DejaVu Sans fon
 (use-package heaven-and-hell
   :ensure t
   :init
-  (setq heaven-and-hell-theme-type 'light)
+  (setq heaven-and-hell-theme-type 'dark)
   (setq heaven-and-hell-themes
         '((light . leuven)
           (dark . night-owl)))
@@ -128,7 +126,7 @@ In this section we will install a new theme and set font. If the DejaVu Sans fon
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
          ("<f6>" . heaven-and-hell-toggle-theme)))
 
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-14"))
+(add-to-list 'default-frame-alist '(font . "Hack-16"))
 #+END_SRC
 * Programming specific package
 Here, we include essential packages needed for coding
@@ -204,6 +202,40 @@ FlyCheck checks for errors in code at run-time.
 )
 
 (use-package lsp-java :ensure t :config (add-hook 'java-mode-hook 'lsp))
+
+
+
+(use-package lsp-treemacs
+  :after (lsp-mode treemacs)
+  :ensure t
+  :commands lsp-treemacs-errors-list
+  :bind (:map lsp-mode-map
+         ("M-9" . lsp-treemacs-errors-list)))
+
+(use-package treemacs
+  :ensure t
+  :commands (treemacs)
+  :after (lsp-mode))
+
+
+(use-package lsp-ui
+:ensure t
+:after (lsp-mode)
+:bind (:map lsp-ui-mode-map
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+         ([remap xref-find-references] . lsp-ui-peek-find-references))
+:init (setq lsp-ui-doc-delay 1.5
+      lsp-ui-doc-position 'bottom
+	  lsp-ui-doc-max-width 100
+	 ;; lsp-enable-symbol-highlighting nil
+	 ;; lsp-ui-doc-show-with-mouse nil
+	 ;; lsp-ui-sideline-enable nil
+	 ;; lsp-eldoc-enable-hover nil
+	 ;; lsp-signature-auto-activate nil
+	 ;; lsp-signature-render-documentation nil
+	 ;; lsp-modeline-diagnostics-enable nil
+))
+
 #+end_src
 
 * Custom packages
@@ -239,7 +271,7 @@ Jump to a buffer
 (use-package frog-jump-buffer
 :ensure t
 :chords
-("jb" . frog-jump-buffer)
+("jf" . frog-jump-buffer)
 )
 #+end_src
 ** Helm
@@ -296,6 +328,212 @@ For some prefix commands like C-c p or C-c h we want Emacs to visually guide you
 (global-set-key (kbd "s-;") 'next-line)
 (global-set-key (kbd "s-0") 'delete-window)
 (global-set-key (kbd "s-1") 'delete-other-windows)
+#+end_src
+
+** Go to Previous Line
+#+begin_src emacs-lisp
+(fset 'lineabove
+(kmacro-lambda-form [?\C-a tab ?\C-o] 0 "%d"))
+#+end_src
+** Randomize region
+#+begin_src emacs-lisp
+(defun randomize-region (beg end)
+    "Randomize the order of words in region."
+    (interactive "*r")
+    (let ((all (mapcar
+                (lambda (w) (if (string-match "\\w" w)
+                                ;; Randomize words,
+                                (cons (random) w)
+                              ;; keep everything else in order.
+                              (cons -1 w)))
+                (split-string
+                 (delete-and-extract-region beg end) "\\b")))
+          words sorted)
+      (mapc (lambda (x)
+              ;; Words are numbers >= 0.
+              (unless (> 0 (car x))
+                (setq words (cons x words))))
+            all)
+      ;; Random sort!
+      (setq sorted (sort words
+                         (lambda (a b) (< (car a) (car b)))))
+      (mapc
+       'insert
+       ;; Insert using original list, `all', 
+       ;; but pull *words* from randomly-sorted list, `sorted'.
+       (mapcar (lambda (x)
+                 (if (> 0 (car x))
+                     (cdr x)
+                   (prog1 (cdar sorted)
+                     (setq sorted (cdr sorted)))))
+               all))))
+#+end_src
+** Create empty buffer 
+#+begin_src emacs-lisp
+(defun new-empty-buffer ()
+  "Create a new empty buffer.
+New buffer will be named “untitled” or “untitled<2>”, “untitled<3>”, etc.
+
+It returns the buffer (for elisp programing).
+
+URL `http://ergoemacs.org/emacs/emacs_new_empty_buffer.html'
+Version 2017-11-01"
+  (interactive)
+  (let (($buf (generate-new-buffer "untitled")))
+    (switch-to-buffer $buf)
+    (funcall initial-major-mode)
+    (setq buffer-offer-save t)
+    $buf
+    ))
+(global-set-key (kbd "C-c n") 'new-empty-buffer)
+#+end_src
+
+** Change Bracket Pairs
+#+begin_src emacs-lisp
+(defun change-bracket-pairs ( @from-chars @to-chars)
+  "Change bracket pairs from one type to another.
+
+For example, change all parenthesis () to square brackets [].
+
+Works on selected text, or current text block.
+
+When called in lisp program, @from-chars or @to-chars is a string of bracket pair. eg \"(paren)\",  \"[bracket]\", etc.
+The first and last characters are used. (the middle is for convenience in ido selection.)
+If the string contains “,2”, then the first 2 chars and last 2 chars are used, for example  \"[[bracket,2]]\".
+If @to-chars is equal to string “none”, the brackets are deleted.
+
+URL `http://ergoemacs.org/emacs/elisp_change_brackets.html'
+Version 2020-11-01"
+  (interactive
+   (let (($bracketsList
+          '("(paren)"
+            "{brace}"
+            "[square]"
+            "<greater>"
+            "`emacs'"
+            "`markdown`"
+            "~tilde~"
+            "=equal="
+            "\"ascii quote\""
+            "[[double square,2]]"
+            "“curly quote”"
+            "‘single quote’"
+            "‹french angle›"
+            "«french double angle»"
+            "「corner」"
+            "『white corner』"
+            "【lenticular】"
+            "〖white lenticular〗"
+            "〈angle〉"
+            "《double angle》"
+            "〔tortoise〕"
+            "〘white tortoise〙"
+            "⦅white paren⦆"
+            "〚white square〛"
+            "⦃white curly⦄"
+            "〈pointing angle〉"
+            "⦑ANGLE WITH DOT⦒"
+            "⧼CURVED ANGLE⧽"
+            "⟦math square⟧"
+            "⟨math angle⟩"
+            "⟪math DOUBLE ANGLE⟫"
+            "⟮math FLATTENED PARENTHESIS⟯"
+            "⟬math WHITE TORTOISE SHELL⟭"
+            "❛HEAVY SINGLE QUOTATION MARK ORNAMENT❜"
+            "❝HEAVY DOUBLE TURNED COMMA QUOTATION MARK ORNAMENT❞"
+            "❨MEDIUM LEFT PARENTHESIS ORNAMENT❩"
+            "❪MEDIUM FLATTENED LEFT PARENTHESIS ORNAMENT❫"
+            "❴MEDIUM LEFT CURLY ORNAMENT❵"
+            "❬MEDIUM LEFT-POINTING ANGLE ORNAMENT❭"
+            "❮HEAVY LEFT-POINTING ANGLE QUOTATION MARK ORNAMENT❯"
+            "❰HEAVY LEFT-POINTING ANGLE ORNAMENT❱"
+            "none"
+            )))
+     (list
+      (ido-completing-read "Replace this:" $bracketsList )
+      (ido-completing-read "To:" $bracketsList ))))
+  (let ( $p1 $p2 )
+    (if (use-region-p)
+        (setq $p1 (region-beginning) $p2 (region-end))
+      (save-excursion
+        (if (re-search-backward "\n[ \t]*\n" nil "move")
+            (progn (re-search-forward "\n[ \t]*\n")
+                   (setq $p1 (point)))
+          (setq $p1 (point)))
+        (if (re-search-forward "\n[ \t]*\n" nil "move")
+            (progn (re-search-backward "\n[ \t]*\n")
+                   (setq $p2 (point)))
+          (setq $p2 (point)))))
+    (save-excursion
+      (save-restriction
+        (narrow-to-region $p1 $p2)
+        (let ( (case-fold-search nil)
+               $fromLeft
+               $fromRight
+               $toLeft
+               $toRight)
+          (cond
+           ((string-match ",2" @from-chars  )
+            (progn
+              (setq $fromLeft (substring @from-chars 0 2))
+              (setq $fromRight (substring @from-chars -2))))
+           (t
+            (progn
+              (setq $fromLeft (substring @from-chars 0 1))
+              (setq $fromRight (substring @from-chars -1)))))
+          (cond
+           ((string-match ",2" @to-chars)
+            (progn
+              (setq $toLeft (substring @to-chars 0 2))
+              (setq $toRight (substring @to-chars -2))))
+           ((string-match "none" @to-chars)
+            (progn
+              (setq $toLeft "")
+              (setq $toRight "")))
+           (t
+            (progn
+              (setq $toLeft (substring @to-chars 0 1))
+              (setq $toRight (substring @to-chars -1)))))
+          (cond
+           ((string-match "markdown" @from-chars)
+            (progn
+              (goto-char (point-min))
+              (while
+                  (re-search-forward "`\\([^`]+?\\)`" nil t)
+                (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
+                (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
+           ((string-match "tilde" @from-chars)
+            (progn
+              (goto-char (point-min))
+              (while
+                  (re-search-forward "~\\([^~]+?\\)~" nil t)
+                (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
+                (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
+           ((string-match "ascii quote" @from-chars)
+            (progn
+              (goto-char (point-min))
+              (while
+                  (re-search-forward "\"\\([^\"]+?\\)\"" nil t)
+                (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
+                (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
+           ((string-match "equal" @from-chars)
+            (progn
+              (goto-char (point-min))
+              (while
+                  (re-search-forward "=\\([^=]+?\\)=" nil t)
+                (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
+                (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
+           (t (progn
+                (progn
+                  (goto-char (point-min))
+                  (while (search-forward $fromLeft nil t)
+                    (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
+                    (replace-match $toLeft "FIXEDCASE" "LITERAL")))
+                (progn
+                  (goto-char (point-min))
+                  (while (search-forward $fromRight nil t)
+                    (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
+                    (replace-match $toRight "FIXEDCASE" "LITERAL")))))))))))
 #+end_src
 
 * Org-Mode
