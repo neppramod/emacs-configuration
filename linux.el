@@ -1,4 +1,4 @@
-(setq ORG_DIR "~/Dropbox/org/")
+(setq ORG_DIR "~/Notes/org/")
 (setq MUSIC_DIR "~/Music/")
 (setq BIN_DIRECTORY "/usr/bin/")
 (setq MPLAYER_DIRECTORY_LOCATION "/usr/bin")
