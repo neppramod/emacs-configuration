@@ -58,7 +58,7 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 ;; Disable scrollbar and toolbar
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
-
+(menu-bar-mode -1)
 ;; Set language environment to UTF-8
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
@@ -129,7 +129,7 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 (use-package doom-themes
 :ensure t
 :init
-(load-theme 'doom-one-light t)
+(load-theme 'night-owl-theme t)
 )
 
 (use-package night-owl-theme
@@ -154,7 +154,7 @@ If you press F6 key in your keyboard, it should switch between night-owl and doo
 Fonts are integral part of a text editor / IDE. I tend to like *DejaVu Sans Mono* fonts. If you have not setup this font in your Operating System, it is time to do so now. Go ahead and install it [[https://dejavu-fonts.github.io/Download.html][from this link]]. After that add following configuration.
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-16"))
+(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
 #+END_SRC
 
 ** Disable ansi color in compilation mode
@@ -200,6 +200,14 @@ Install nice icons
 #+end_src
 * Custom Packages
   In this section we will install some of the packages that we will use for various project and file management.
+** Evil Mode
+   Evil Mode is used to enable VI like functionality in emacs. It is good for easy navigation
+#+begin_src text
+(use-package evil
+:ensure t
+:init (evil-mode t)
+)
+#+end_src
 ** Key-Chord
    Key-Chord allows us to bind regular keyboard keys for various commands without having to use prefix keys such as Ctrl, Alt or Super etc.
 
@@ -1037,6 +1045,9 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
 #+BEGIN_SRC emacs-lisp
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
+   
+   ;; Close current window
+   (global-set-key (kbd "M-0") 'delete-window)
 #+END_SRC
 
 * Personal
