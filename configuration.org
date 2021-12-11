@@ -119,6 +119,9 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 (desktop-read)
 
 
+;; Raise frame
+(add-hook 'server-switch-hook (lambda () (select-frame-set-input-focus (selected-frame))))
+
 #+END_SRC
 
 * Looks
@@ -129,7 +132,7 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 (use-package doom-themes
 :ensure t
 :init
-(load-theme 'doom-one t)
+(load-theme 'doom-city-lights t)
 )
 
 (use-package night-owl-theme
@@ -142,7 +145,7 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
   (setq heaven-and-hell-theme-type 'dark)
   (setq heaven-and-hell-themes
         '((light . doom-one-light)
-          (dark . night-owl)))
+          (dark . doom-city-lights)))
   :hook (after-init . heaven-and-hell-init-hook)
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
          ("<f6>" . heaven-and-hell-toggle-theme)))
@@ -153,7 +156,7 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 
 If you press F6 key in your keyboard, it should switch between night-owl and doom-one-light themes. If you want to go back to the default theme press ~Ctrl + C and F6~.
 ** Font
-Fonts are integral part of a text editor / IDE. I tend to like *DejaVu Sans Mono* fonts. If you have not setup this font in your Operating System, it is time to do so now. Go ahead and install it [[https://dejavu-fonts.github.io/Download.html][from this link]]. After that add following configuration.
+Fonts are integral part of a text editor / IDE. I tend to like *DejaVu S17~ans Mono* fonts. If you have not setup this font in your Operating System, it is time to do so now. Go ahead and install it [[https://dejavu-fonts.github.io/Download.html][from this link]]. After that add following configuration.
 
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12"))
@@ -1058,7 +1061,7 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
    (global-set-key (kbd "<f5>") 'helm-buffers-list)
 
    ;; Open dired F12
-   (global-set-key (kbd "<f12>") 'dired)
+   (global-set-key (kbd "<f12>") 'dired-jump)
 #+END_SRC
 
 * Personal
