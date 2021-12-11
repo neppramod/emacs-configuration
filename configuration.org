@@ -1052,10 +1052,13 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
    (global-set-key (kbd "M-0") 'delete-window)
 
    ;; Open eshell F9
-   (global-set-key (kbd "<f9>") 'eshell)
+   (global-set-key (kbd "<f9>") (lambda() (interactive) (ansi-term "bash")))
 
    ;; Open buffer F5
    (global-set-key (kbd "<f5>") 'helm-buffers-list)
+
+   ;; Open dired F12
+   (global-set-key (kbd "<f12>") 'dired)
 #+END_SRC
 
 * Personal
