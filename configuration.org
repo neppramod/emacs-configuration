@@ -129,7 +129,7 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 (use-package doom-themes
 :ensure t
 :init
-(load-theme 'night-owl-theme t)
+(load-theme 'doom-one t)
 )
 
 (use-package night-owl-theme
@@ -139,13 +139,15 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 (use-package heaven-and-hell
   :ensure t
   :init
-  (setq heaven-and-hell-theme-type 'light)
+  (setq heaven-and-hell-theme-type 'dark)
   (setq heaven-and-hell-themes
         '((light . doom-one-light)
           (dark . night-owl)))
   :hook (after-init . heaven-and-hell-init-hook)
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
          ("<f6>" . heaven-and-hell-toggle-theme)))
+
+(add-hook 'c-mode-hook (function (lambda ()(font-lock-fontify-buffer))))
 
 #+END_SRC
 
@@ -1048,6 +1050,12 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
    
    ;; Close current window
    (global-set-key (kbd "M-0") 'delete-window)
+
+   ;; Open eshell F9
+   (global-set-key (kbd "<f9>") 'eshell)
+
+   ;; Open buffer F5
+   (global-set-key (kbd "<f5>") 'helm-buffers-list)
 #+END_SRC
 
 * Personal
@@ -1267,10 +1275,3 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
    - ~d~ Mark files for deletion
    - ~x~ Delete files marked for deletion
    - For more info ~C-h m~ or See this [[https://www.gnu.org/software/emacs/refcards/pdf/dired-ref.pdf][dired-ref]] document 
-
-
-
-
-
-
-  
