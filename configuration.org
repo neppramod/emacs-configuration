@@ -1062,6 +1062,9 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
 
    ;; Open dired F12
    (global-set-key (kbd "<f12>") 'dired-jump)
+
+   ;; Open treemacs on F8
+   (global-set-key (kbd "<f8>") 'treemacs)
 #+END_SRC
 
 * Personal
