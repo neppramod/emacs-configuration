@@ -321,7 +321,15 @@ Helm swoop allows to quickly search for text under cursor or new text within cur
 :chords
 ("jc" . avy-goto-char)
 ("jw" . avy-goto-word-1)
-("jl" . avy-goto-line))
+("jl" . avy-goto-line)
+("jf" . forward-sexp)
+("jb" . backward-sexp)
+("gg" . keyboard-quit)
+("bb" . helm-buffers-list)
+("rr" . helm-recentf)
+("ff" . helm-find-files)
+;("oo" . other-window)
+)
 #+end_src
 
 ** Which Key
@@ -1054,6 +1062,9 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
    ;; Close current window
    (global-set-key (kbd "M-0") 'delete-window)
 
+   ;; Close other windows
+   (global-set-key (kbd "M-1") 'delete-other-windows)
+
    ;; Open eshell F9
    (global-set-key (kbd "<f9>") (lambda() (interactive) (ansi-term "bash")))
 
@@ -1065,6 +1076,10 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
 
    ;; Open treemacs on F8
    (global-set-key (kbd "<f8>") 'treemacs)
+
+   ;; Set mouse 8 and 9
+   (global-set-key (kbd "<mouse-8>") 'scroll-up-command)
+   (global-set-key (kbd "<mouse-9>") 'scroll-down-command)
 #+END_SRC
 
 * Personal
