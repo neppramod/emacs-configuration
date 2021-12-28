@@ -632,6 +632,13 @@ Htmlize is used to export org file to html file
 (use-package htmlize :ensure t)
 #+END_SRC
 
+** Export
+   Export Org-mode files to various format using Pandoc (C-c C-e)
+   
+   *Note*:  Make sure to install ~pandoc~ package in your distribution. In windows you can use Msys2.
+#+begin_src emacs-lisp
+(use-package ox-pandoc :ensure t)
+#+end_src
 ** Notes
    - Org File. Save file with .org extension
    - ~C-c a~ View agenda mode (has various options to manage agenda)
@@ -664,7 +671,7 @@ Htmlize is used to export org file to html file
    - ~C-c C-c~ Code block
    - ~C-c C-o~ Open result of code block
    - For more see [[https://orgmode.org/orgcard.pdf][Org-Mode Reference Card]]
-
+	 
 * Window and Movement Management
 In this section I will cover packages needed to manage and windows and movement in emacs.
 ** Eyebrowse
