@@ -205,14 +205,6 @@ Install nice icons
 #+end_src
 * Custom Packages
   In this section we will install some of the packages that we will use for various project and file management.
-** Evil Mode
-   Evil Mode is used to enable VI like functionality in emacs. It is good for easy navigation
-#+begin_src text
-(use-package evil
-:ensure t
-:init (evil-mode t)
-)
-#+end_src
 ** Key-Chord
    Key-Chord allows us to bind regular keyboard keys for various commands without having to use prefix keys such as Ctrl, Alt or Super etc.
 
@@ -324,11 +316,6 @@ Helm swoop allows to quickly search for text under cursor or new text within cur
 ("jl" . avy-goto-line)
 ("jf" . forward-sexp)
 ("jb" . backward-sexp)
-;("gg" . keyboard-quit)
-;("bb" . helm-buffers-list)
-;("rr" . helm-recentf)
-;("ff" . helm-find-files)
-;("oo" . other-window)
 )
 #+end_src
 
