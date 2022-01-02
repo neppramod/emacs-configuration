@@ -20,4 +20,6 @@ tramp
 network-security.data
 recentf
 bookmarks
-
+.local/
+eln-cache/
+eww-bookmarks

@@ -76,6 +76,9 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 (recentf-mode 1)            
 (setq recentf-max-saved-items 50)
 
+;; Enable clipboard support
+(setq x-select-enable-clipboard t)
+
 ;; Move all the backup files to specific cache directory
 ;; This way you won't have annoying temporary files starting with ~(tilde) in each directory
 ;; Following setting will move temporary files to specific folders inside cache directory in EMACS_DIR
@@ -121,6 +124,9 @@ Here, I add some basic emacs setup like loading the language, disabling the tool
 
 ;; Raise frame
 (add-hook 'server-switch-hook (lambda () (select-frame-set-input-focus (selected-frame))))
+
+;; Jump past last line with C-n
+(setq next-line-add-newlines t)
 
 #+END_SRC
 
@@ -218,7 +224,16 @@ Install nice icons
 )
 #+end_src
 Here, we changed the delay for the consecutive key to be little higher than default. Adjust this to what you feel comfortable.
-
+** General Key
+#+begin_src emacs-lisp
+(use-package general
+       :ensure
+       :config
+	   (general-create-definer my/general-keys
+	       :prefix "C-c k"
+	   )
+)
+#+end_src
 ** Projectile
    Projectile helps us with easy navigation within a project. Projectile recognizes several source control managed folders e.g *git, mercurial, maven, sbt*, and a folder with empty *.projectile* file. You can use ~C-c p~ to invoke any projectile command. This is a very useful key to remember.
 
@@ -304,21 +319,6 @@ Helm swoop allows to quickly search for text under cursor or new text within cur
 )
 #+end_src
 
-** Avy Goto
-   Avy allows you to quickly jump to certain character, word or line within the file. Use ~jc~, ~jw~ or ~jl~ to quickly jump within current file. Change it to other keys, if you feel you are using this set of keys for other purposes. 
-
-#+begin_src emacs-lisp
-(use-package avy 
-:ensure t
-:chords
-("jc" . avy-goto-char)
-("jw" . avy-goto-word-1)
-("jl" . avy-goto-line)
-("jf" . forward-sexp)
-("jb" . backward-sexp)
-)
-#+end_src
-
 ** Which Key
 For some prefix commands like ~C-c p~ or ~C-c h~ we want Emacs to visually guide you through the available options. Following package allows us to do that.
 #+begin_src emacs-lisp
@@ -328,18 +328,6 @@ For some prefix commands like ~C-c p~ or ~C-c h~ we want Emacs to visually guide
 (which-key-mode)
 )
 #+end_src
-** General Key
-   #+begin_src emacs-lisp
-   (use-package general
-       :ensure
-       :config
-	   (general-create-definer my/general-keys
-	       :prefix "C-c k"
-	   )
-   )
-
-   #+end_src
-
 ** Run Code
 We can use quickrun package to execute code (if it has main). E.g. If you have a java file with main method, it will run with the associated shortcut key ~C-c r~ or quickrun command. Quickrun has support for several languages.
 #+begin_src emacs-lisp
@@ -632,6 +620,16 @@ Htmlize is used to export org file to html file
 (use-package htmlize :ensure t)
 #+END_SRC
 
+** Export
+   Export Org-mode files to various format using Pandoc (C-c C-e)
+   
+   *Note*:  Make sure to install ~pandoc~ package in your distribution. In windows you can use Msys2.
+#+begin_src emacs-lisp
+(use-package ox-pandoc :ensure t)
+
+   GitHub flavored markdown export
+(use-package ox-gfm :ensure t)
+#+end_src
 ** Notes
    - Org File. Save file with .org extension
    - ~C-c a~ View agenda mode (has various options to manage agenda)
@@ -664,7 +662,7 @@ Htmlize is used to export org file to html file
    - ~C-c C-c~ Code block
    - ~C-c C-o~ Open result of code block
    - For more see [[https://orgmode.org/orgcard.pdf][Org-Mode Reference Card]]
-
+	 
 * Window and Movement Management
 In this section I will cover packages needed to manage and windows and movement in emacs.
 ** Eyebrowse
@@ -1042,32 +1040,59 @@ Set location of ~aspell~ executable using ~ispell-program-name~ variable.
 * Custom Keys
 Sometime you use a function so much, you want to give it a key anyway. This section contains keybindings for commands, that did not fit in above sections.
 
-#+BEGIN_SRC emacs-lisp
+** Avy Goto
+	Avy allows you to quickly jump to certain character, word or line within the file. Use ~jc~, ~jw~ or ~jl~ to quickly jump within current file. Change it to other keys, if you feel you are using this set of keys for other purposes. 
+
+ #+begin_src emacs-lisp
+(use-package avy 
+:ensure t
+:chords
+("jc" . avy-goto-char)
+("jw" . avy-goto-word-1)
+("jl" . avy-goto-line)
+("``" . helm-buffers-list))
+ #+end_src
+** Personal Keys
+ #+BEGIN_SRC emacs-lisp
    ;; Replace regexp on selected text
    (global-set-key (kbd "C-;") 'replace-regexp)
    
    ;; Close current window
-   (global-set-key (kbd "M-0") 'delete-window)
+   (global-set-key (kbd "M-1") 'delete-window)
 
    ;; Close other windows
-   (global-set-key (kbd "M-1") 'delete-other-windows)
+   (global-set-key (kbd "M-2") 'delete-other-windows)
 
-   ;; Open eshell F9
-   (global-set-key (kbd "<f9>") (lambda() (interactive) (ansi-term "bash")))
+   ;; Additional keys for next-line previous-line
+   (global-set-key (kbd "M-p") 'previous-line)
+   (global-set-key (kbd "M-n") 'next-line)
+
+   ;; Alternate key for save
+   (global-set-key (kbd "M-s M-s") 'save-buffer)
+   ;; Recent files
+   ;(global-set-key (kbd "M-\\") 'helm-recentf)
+   (global-set-key (kbd "M-\\") (kbd "C-g"))
+
+   ;; Open Terminal
+   (global-set-key (kbd "<f8>") (lambda() (interactive) (ansi-term "bash")))
+
+   ;; Open treemacs
+   (global-set-key (kbd "<f19>") 'treemacs)
+
+      ;; Open dired
+   (global-set-key (kbd "<f10>") 'dired-jump)
 
    ;; Open buffer F5
-   (global-set-key (kbd "<f5>") 'helm-buffers-list)
-
-   ;; Open dired F12
-   (global-set-key (kbd "<f12>") 'dired-jump)
-
-   ;; Open treemacs on F8
-   (global-set-key (kbd "<f8>") 'treemacs)
+   (global-set-key (kbd "<f12>") 'helm-find-files)
 
    ;; Set mouse 8 and 9
    (global-set-key (kbd "<mouse-8>") 'scroll-up-command)
    (global-set-key (kbd "<mouse-9>") 'scroll-down-command)
-#+END_SRC
+   
+   (global-set-key (kbd "M-9") 'backward-sexp)
+   (global-set-key (kbd "M-0") 'forward-sexp)
+
+ #+END_SRC
 
 * Personal
 ** Online
