@@ -1050,8 +1050,6 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
 ("jc" . avy-goto-char)
 ("jw" . avy-goto-word-1)
 ("jl" . avy-goto-line)
-("fc" . forward-char)
-("bc" . backward-char)
 ("``" . helm-buffers-list))
  #+end_src
 ** Personal Keys
@@ -1060,10 +1058,10 @@ Sometime you use a function so much, you want to give it a key anyway. This sect
    (global-set-key (kbd "C-;") 'replace-regexp)
    
    ;; Close current window
-   (global-set-key (kbd "M-0") 'delete-window)
+   (global-set-key (kbd "M-1") 'delete-window)
 
    ;; Close other windows
-   (global-set-key (kbd "M-1") 'delete-other-windows)
+   (global-set-key (kbd "M-2") 'delete-other-windows)
 
    ;; Additional keys for next-line previous-line
    (global-set-key (kbd "M-p") 'previous-line)
