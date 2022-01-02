@@ -413,7 +413,7 @@ Treemacs provides UI elements used for LSP UI. Let's install lsp-treemacs and it
   :ensure t
   :commands lsp-treemacs-errors-list
   :bind (:map lsp-mode-map
-         ("M-9" . lsp-treemacs-errors-list)))
+         ("M-8" . lsp-treemacs-errors-list)))
 
 (use-package treemacs
   :ensure t
