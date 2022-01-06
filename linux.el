@@ -1,6 +1,0 @@
-(setq ORG_DIR "~/Dropbox/org/")
-(setq MUSIC_DIR "~/Music/")
-(setq BIN_DIRECTORY "/usr/bin/")
-(setq MPLAYER_DIRECTORY_LOCATION "/usr/bin")
-(setq ASPELL_BIN (concat BIN_DIRECTORY "aspell"))
-;(setenv "JAVA_HOME" "/usr/lib/jvm/java-11-openjdk-amd64")

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: ats
-# key: ats
-# --
-Arrays.toString($0)
