@@ -83,7 +83,7 @@ Use various utilities for managing project.
   (use-package projectile
     :diminish projectile-mode
     :custom
-      ((projectile-completion-system 'ido))
+      ((projectile-completion-system 'helm))
     :ensure t
     :init
     (projectile-mode +1))
@@ -184,3 +184,15 @@ We can use quickrun package to execute code (if it has main).
 
 ** Org-Mode
 - ~org-insert-structure-template~  Expand various template to insert in org-mode.
+  
+** Programming
+- ~flycheck-list-errors~  Opens a window that shows live errors.
+- ~lsp-treemacs-errors-list~  Same as above, but fancy window
+
+** General
+- ~shrink-window-horizontally~  Shrink the window. ~C-x {~. If you want to shrink other window use ~}~
+- ~repeat~ Repeat last command. ~C-x z~. For subsequent repeat use ~z~.
+- ~universal-argument~ Universal argument can be used with any command. ~C-u~
+#+begin_example
+To shrink a window to right, you can use ~C-u 10 C-x {~, then repeat the command with ~C-x z~ and then keep on repeating it with ~z~.   
+#+end_example
