@@ -65,6 +65,8 @@ In the following code block, we will initialize package repositories and after t
   ;; Set tab width for codign to 4
   (setq c-basic-offset 4)
 
+  ;; Change yes/no to y/n
+  (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
 * Project Management and Coding
