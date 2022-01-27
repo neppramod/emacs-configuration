@@ -40,6 +40,7 @@ In the following code block, we will initialize package repositories and after t
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
+  (fringe-mode -1)
 
   ;; Inhibit startup screen and make scratch buffer clean
   (setq inhibit-startup-screen t)
@@ -68,7 +69,18 @@ In the following code block, we will initialize package repositories and after t
   ;; Change yes/no to y/n
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
+** Disable ansi color in compilation mode
+#+begin_src emacs-lisp
+  (defun my/ansi-colorize-buffer ()
+  (let ((buffer-read-only nil))
+  (ansi-color-apply-on-region (point-min) (point-max))))
 
+  (use-package ansi-color
+  :ensure t
+  :config
+  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
+  )
+#+end_src
 * Project Management and Coding
 ** Helm
 Helm allows for easy completion of commands.
@@ -90,7 +102,7 @@ Use various utilities for managing project.
     :init
     (projectile-mode +1))
 #+end_src
-** Magit
+** Magit ()
 Magit works with git projects
 #+begin_src emacs-lisp
   (use-package magit :ensure t)
@@ -174,6 +186,26 @@ We can use quickrun package to execute code (if it has main).
   (use-package quickrun :ensure t)
 #+end_src
 
+** GDB
+#+begin_src emacs-lisp
+  ;; Show main source buffer when using GDB
+  (setq gdb-show-main t)
+
+  ;; Open gdb-many-window
+  (setq gdb-many-windows t)
+#+end_src
+* Custom Packages
+** Org Mode
+*** Org Bullets
+Org-bullets is used to show asterisk's as bullets in org-mode
+#+begin_src emacs-lisp
+  (use-package org-bullets 
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook 'org-bullets-mode))
+#+end_src
+* Experimental
+
 * Custom Commands
 #+begin_src emacs-lisp
   ;; Helm replace popular commands
@@ -181,6 +213,8 @@ We can use quickrun package to execute code (if it has main).
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-x C-f") 'helm-find-files)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (global-set-key (kbd "M-s o") 'helm-occur)
+  (global-set-key (kbd "M-s i") 'helm-imenu)
 #+end_src
 * Notes
 
