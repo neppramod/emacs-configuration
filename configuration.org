@@ -31,7 +31,7 @@ In the following code block, we will initialize package repositories and after t
 #+BEGIN_SRC emacs-lisp
 
   ;; Theme
-  (load-theme 'tsdh-dark)
+  (load-theme 'funky2333 t)
 
   ;; Font
   (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-14"))
