@@ -63,9 +63,6 @@ In the following code block, we will initialize package repositories and after t
   ;; Coding (Enable ending brackets)
   (electric-pair-mode 1)
 
-  ;; Set tab width for codign to 4
-  (setq c-basic-offset 4)
-
   ;; Change yes/no to y/n
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
@@ -162,7 +159,6 @@ Visually guide keys
     (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
     )
 
-
   (use-package lsp-ui
     :ensure t
     :after (lsp-mode)
@@ -186,14 +182,6 @@ We can use quickrun package to execute code (if it has main).
   (use-package quickrun :ensure t)
 #+end_src
 
-** GDB
-#+begin_src emacs-lisp
-  ;; Show main source buffer when using GDB
-  (setq gdb-show-main t)
-
-  ;; Open gdb-many-window
-  (setq gdb-many-windows t)
-#+end_src
 * Custom Packages
 ** Org Mode
 *** Org Bullets
@@ -213,27 +201,7 @@ Org-bullets is used to show asterisk's as bullets in org-mode
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-x C-f") 'helm-find-files)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-  (global-set-key (kbd "M-s o") 'helm-occur)
-  (global-set-key (kbd "M-s i") 'helm-imenu)
 #+end_src
-* Notes
-
-** Org-Mode
-- ~org-insert-structure-template~  Expand various template to insert in org-mode.
-  
-** Programming
-- ~flycheck-list-errors~  Opens a window that shows live errors.
-- ~lsp-treemacs-errors-list~  Same as above, but fancy window
-
-** General
-- ~shrink-window-horizontally~  Shrink the window. ~C-x {~. If you want to shrink other window use ~}~
-- ~repeat~ Repeat last command. ~C-x z~. For subsequent repeat use ~z~.
-- ~universal-argument~ Universal argument can be used with any command. ~C-u~
-#+begin_example
-To shrink a window to right, you can use ~C-u 10 C-x {~, then repeat the command with ~C-x z~ and then keep on repeating it with ~z~.   
-#+end_example
-
-
 * Custom Script
 #+begin_src emacs-lisp
   (org-babel-load-file "~/.emacs.d/custom.org")
