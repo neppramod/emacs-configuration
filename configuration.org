@@ -63,12 +63,29 @@ In the following code block, we will initialize package repositories and after t
   ;; Coding (Enable ending brackets)
   (electric-pair-mode 1)
 
-  ;; Set tab width for codign to 4
-  (setq c-basic-offset 4)
-
   ;; Change yes/no to y/n
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
+
+
+** Environment Setup
+In some operating systems Emacs does not load environment variables properly. Therefore, below we install a package called ~exec-path-from-shell~ and initialize it.
+ #+begin_src emacs-lisp
+ (use-package exec-path-from-shell :ensure t)
+ (exec-path-from-shell-initialize)
+ #+end_src
+** Operating System specific variable setup
+   Since we want to use same emacs configuration for each of our operating systems, we want to separate values that are different between different operating systems. In my setup, I have different values for ~JAVA_HOME~ in my linux.el and mac.el. Adjust these values accordingly for your setup if you are using different versions of Java. Following code loads mac.el, linux.el or windows.el based on where you run this configuration.
+
+#+BEGIN_SRC emacs-lisp
+ ;; Load platform specific variables using specific files. E.g linux.el. 
+ ;; Make necessary changes as needed
+ (cond ((eq system-type 'windows-nt) (load (concat EMACS_DIR "windows")))
+ ((eq system-type 'gnu/linux) (load (concat EMACS_DIR "linux")))
+ ((eq system-type 'darwin) (load (concat EMACS_DIR "mac")))
+ (t (load-library "default")))
+ #+END_SRC
+
 ** Disable ansi color in compilation mode
 #+begin_src emacs-lisp
   (defun my/ansi-colorize-buffer ()
@@ -90,6 +107,12 @@ Helm allows for easy completion of commands.
     :init
     (helm-mode 1)
     (progn (setq helm-buffers-fuzzy-matching t)))
+
+  (use-package helm-lsp
+    :ensure ;TODO: 
+    :after (lsp-mode)
+    :commands (helm-lsp-workspace-symbol)
+    :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 #+end_src
 ** Projectile
 Use various utilities for managing project.
@@ -100,7 +123,10 @@ Use various utilities for managing project.
       ((projectile-completion-system 'helm))
     :ensure t
     :init
-    (projectile-mode +1))
+    (projectile-mode +1)
+    :config
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    )
 #+end_src
 ** Magit ()
 Magit works with git projects
@@ -162,10 +188,12 @@ Visually guide keys
     (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
     )
 
-
   (use-package lsp-ui
     :ensure t
     :after (lsp-mode)
+    :bind (:map lsp-ui-mode-map
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+         ([remap xref-find-references] . lsp-ui-peek-find-references))
     :init (setq lsp-ui-doc-delay 1.5
 		lsp-ui-doc-position 'bottom
 		lsp-ui-doc-max-width 100)
@@ -183,17 +211,11 @@ Visually guide keys
 ** Quickrun
 We can use quickrun package to execute code (if it has main).
 #+begin_src emacs-lisp
-  (use-package quickrun :ensure t)
+      (use-package quickrun
+	:ensure t
+	:bind ("C-c r" . quickrun))
 #+end_src
 
-** GDB
-#+begin_src emacs-lisp
-  ;; Show main source buffer when using GDB
-  (setq gdb-show-main t)
-
-  ;; Open gdb-many-window
-  (setq gdb-many-windows t)
-#+end_src
 * Custom Packages
 ** Org Mode
 *** Org Bullets
@@ -213,27 +235,7 @@ Org-bullets is used to show asterisk's as bullets in org-mode
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-x C-f") 'helm-find-files)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-  (global-set-key (kbd "M-s o") 'helm-occur)
-  (global-set-key (kbd "M-s i") 'helm-imenu)
 #+end_src
-* Notes
-
-** Org-Mode
-- ~org-insert-structure-template~  Expand various template to insert in org-mode.
-  
-** Programming
-- ~flycheck-list-errors~  Opens a window that shows live errors.
-- ~lsp-treemacs-errors-list~  Same as above, but fancy window
-
-** General
-- ~shrink-window-horizontally~  Shrink the window. ~C-x {~. If you want to shrink other window use ~}~
-- ~repeat~ Repeat last command. ~C-x z~. For subsequent repeat use ~z~.
-- ~universal-argument~ Universal argument can be used with any command. ~C-u~
-#+begin_example
-To shrink a window to right, you can use ~C-u 10 C-x {~, then repeat the command with ~C-x z~ and then keep on repeating it with ~z~.   
-#+end_example
-
-
 * Custom Script
 #+begin_src emacs-lisp
   (org-babel-load-file "~/.emacs.d/custom.org")

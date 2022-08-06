@@ -1,15 +1,4 @@
 #+TITLE: Custom Playground configuration
-* Load Font
-#+begin_example
-  ;; Load font
-  (defun my-font-setup () (interactive)
-		 (set-frame-font "Hack 15" nil t))
-#+end_example
-* Rust
-#+begin_src emacs-lisp
-  (use-package rust-mode :ensure t)
-  (use-package flycheck-rust :ensure t)
-#+end_src
 * Open Lines
 #+begin_src emacs-lisp
   (defun open-line-up() (interactive)
