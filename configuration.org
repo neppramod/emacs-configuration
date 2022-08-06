@@ -31,7 +31,7 @@ In the following code block, we will initialize package repositories and after t
 #+BEGIN_SRC emacs-lisp
 
   ;; Theme
-  (load-theme 'funky2333 t)
+  (load-theme 'tsdh-dark t)
 
   ;; Font
   (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-14"))
@@ -232,3 +232,9 @@ Org-bullets is used to show asterisk's as bullets in org-mode
 #+begin_example
 To shrink a window to right, you can use ~C-u 10 C-x {~, then repeat the command with ~C-x z~ and then keep on repeating it with ~z~.   
 #+end_example
+
+
+* Custom Script
+#+begin_src emacs-lisp
+  (org-babel-load-file "~/.emacs.d/custom.org")
+#+end_src
