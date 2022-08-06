@@ -1,0 +1,38 @@
+#+TITLE: Custom Playground configuration
+* Load Font
+#+begin_example
+  ;; Load font
+  (defun my-font-setup () (interactive)
+		 (set-frame-font "Hack 15" nil t))
+#+end_example
+* Rust
+#+begin_src emacs-lisp
+  (use-package rust-mode :ensure t)
+  (use-package flycheck-rust :ensure t)
+#+end_src
+* Open Lines
+#+begin_src emacs-lisp
+  (defun open-line-up() (interactive)
+		 (beginning-of-visual-line)
+		 (open-line 1)
+		 (indent-for-tab-command)
+		 )
+
+  (defun open-line-down() (interactive)
+		 (end-of-visual-line)
+		 (open-line 1)
+  
+		 (next-line)
+		 (indent-for-tab-command)
+		 )
+  
+  (global-set-key (kbd "M-o") 'open-line-down)
+  (global-set-key (kbd "C-o") 'open-line-up)
+#+end_src
+* Custom Global keys
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-0") 'delete-window)
+  (global-set-key (kbd "M-1") 'delete-other-windows)
+#+end_src
+
+
