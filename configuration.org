@@ -30,41 +30,44 @@ In the following code block, we will initialize package repositories and after t
 ** Looks
 #+BEGIN_SRC emacs-lisp
 
-  ;; Theme
-  (load-theme 'tsdh-dark t)
+    (use-package doom-themes
+      :ensure t 
+      :init 
+      (load-theme 'doom-palenight t))
+    ;; Theme
 
-  ;; Font
-  (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-14"))
+    ;; Font
+    (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-14"))
 
-  ;; Hide Menubar, toolbar and scrollbar
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (fringe-mode -1)
+    ;; Hide Menubar, toolbar and scrollbar
+    (menu-bar-mode -1)
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    (fringe-mode -1)
 
-  ;; Inhibit startup screen and make scratch buffer clean
-  (setq inhibit-startup-screen t)
-  (setq initial-scratch-message "")
+    ;; Inhibit startup screen and make scratch buffer clean
+    (setq inhibit-startup-screen t)
+    (setq initial-scratch-message "")
 
-  ;; Enable soft-wrap. Also set syntax highlighting for longer lines
-  (global-visual-line-mode 1)
-  (setq whitespace-line-column 1000) 
+    ;; Enable soft-wrap. Also set syntax highlighting for longer lines
+    (global-visual-line-mode 1)
+    (setq whitespace-line-column 1000) 
 
-  ;; Set language and coding system to UTF-8
-  (set-language-environment "UTF-8")
+    ;; Set language and coding system to UTF-8
+    (set-language-environment "UTF-8")
 
-  ;; Disable annoying ring-bell when backspace key is pressed
-  (setq ring-bell-function 'ignore)
+    ;; Disable annoying ring-bell when backspace key is pressed
+    (setq ring-bell-function 'ignore)
 
-  ;; Maintain a list of recent files opened
-  (recentf-mode 1)
-  (setq recentf-max-saved-items 50)
+    ;; Maintain a list of recent files opened
+    (recentf-mode 1)
+    (setq recentf-max-saved-items 50)
 
-  ;; Coding (Enable ending brackets)
-  (electric-pair-mode 1)
+    ;; Coding (Enable ending brackets)
+    (electric-pair-mode 1)
 
-  ;; Change yes/no to y/n
-  (fset 'yes-or-no-p 'y-or-n-p)
+    ;; Change yes/no to y/n
+    (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
 
