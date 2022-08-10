@@ -68,6 +68,11 @@ In the following code block, we will initialize package repositories and after t
 
     ;; Change yes/no to y/n
     (fset 'yes-or-no-p 'y-or-n-p)
+
+    ;; Tab space
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+  (setq indent-line-function 'insert-tab)
 #+END_SRC
 
 
@@ -128,7 +133,7 @@ Use various utilities for managing project.
     :init
     (projectile-mode +1)
     :config
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (define-key projectile-mode-map (kbd "C-'") 'projectile-command-map)
     )
 #+end_src
 ** Magit ()
@@ -167,20 +172,23 @@ Visually guide keys
   (use-package lsp-mode
     :ensure t
     :hook (
-	   (lsp-mode . lsp-enable-which-key-integration)
-	   (java-mode . #'lsp-deferred)
-	   (c++-mode . #'lsp-deferred)
-	   )
+       (lsp-mode . lsp-enable-which-key-integration)
+       (java-mode . #'lsp-deferred)
+       (c++-mode . #'lsp-deferred)
+       )
     :init (setq 
-	   lsp-keymap-prefix "C-c l"              ; this is for which-key integration documentation, need to use lsp-mode-map
-	   lsp-enable-file-watchers nil
-	   read-process-output-max (* 1024 1024)  ; 1 mb
-	   lsp-completion-provider :capf
-	   company-idle-delay 0.0
-	   lsp-headerline-breadcrumb-enable t
-	   lsp-idle-delay 0.1
-	   lsp-lens-mode 1
-	   )
+       lsp-keymap-prefix "C-c l"              ; this is for which-key integration documentation, need to use lsp-mode-map
+       lsp-enable-file-watchers nil
+       read-process-output-max (* 1024 1024)  ; 1 mb
+       lsp-completion-provider :capf
+       company-idle-delay 0.5
+       lsp-headerline-breadcrumb-enable nil
+       lsp-idle-delay 0.5
+       lsp-lens-mode nil
+       lsp-log-io nil
+       lsp-inhibit-message t
+       lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms1024m")
+       )
     :config 
     (setq lsp-intelephense-multi-root nil) ; don't scan unnecessary projects
     (with-eval-after-load 'lsp-intelephense
@@ -198,8 +206,8 @@ Visually guide keys
          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
          ([remap xref-find-references] . lsp-ui-peek-find-references))
     :init (setq lsp-ui-doc-delay 1.5
-		lsp-ui-doc-position 'bottom
-		lsp-ui-doc-max-width 100)
+        lsp-ui-doc-position 'bottom
+        lsp-ui-doc-max-width 100)
     )
 
   (use-package lsp-treemacs

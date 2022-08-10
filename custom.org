@@ -18,10 +18,26 @@
   (global-set-key (kbd "M-o") 'open-line-down)
   (global-set-key (kbd "C-o") 'open-line-up)
 #+end_src
+
 * Custom Global keys
 #+begin_src emacs-lisp
   (global-set-key (kbd "M-0") 'delete-window)
   (global-set-key (kbd "M-1") 'delete-other-windows)
+  (global-set-key (kbd "C-;") 'treemacs)
+#+End_src
+* Set Lsp worspace folder
+#+begin_src emacs-lisp
+  (setq lsp-java--workspace-folders (list "/home/pramod.emacs.d/workspace"
+					"/home/pramod/Documents/Programming/problems_practice/"
+					  ))
+#+end_src
+* Backward Kill Line
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-<backspace>") (lambda ()
+                                          (interactive)
+                                          (kill-line 0)
+                                          (indent-according-to-mode)
+                                          ))
 #+end_src
 
 
