@@ -24,6 +24,8 @@
   (global-set-key (kbd "M-0") 'delete-window)
   (global-set-key (kbd "M-1") 'delete-other-windows)
   (global-set-key (kbd "C-;") 'treemacs)
+  (global-set-key (kbd "M-n") 'forward-sexp)
+  (global-set-key (kbd "M-p") 'backward-sexp)
 #+End_src
 * Set Lsp worspace folder
 #+begin_src emacs-lisp
@@ -39,5 +41,3 @@
                                           (indent-according-to-mode)
                                           ))
 #+end_src
-
-

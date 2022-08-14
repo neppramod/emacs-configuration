@@ -116,12 +116,18 @@ Helm allows for easy completion of commands.
     (helm-mode 1)
     (progn (setq helm-buffers-fuzzy-matching t)))
 
+  
+#+end_src
+
+#+begin_src example
   (use-package helm-lsp
     :ensure ;TODO: 
     :after (lsp-mode)
     :commands (helm-lsp-workspace-symbol)
     :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 #+end_src
+
+
 ** Projectile
 Use various utilities for managing project.
 #+begin_src emacs-lisp
@@ -155,7 +161,7 @@ Provides autocomplete. Required for LSP completion
 *** Yasnippet
 Yasnippet is a template system for Emacs.
 #+begin_src emacs-lisp
-  (use-package yasnippet :ensure t)
+  (use-package yasnippet :ensure t :config (yas-global-mode 1))
   (use-package yasnippet-snippets :ensure t)
 #+end_src
 *** Which Key
@@ -167,7 +173,7 @@ Visually guide keys
     (which-key-mode))
 #+end_src
 *** LSP
-#+begin_src emacs-lisp
+#+begin_src example
 
   (use-package lsp-mode
     :ensure t
