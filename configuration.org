@@ -2,74 +2,74 @@
 This file contains every thing from [[https://github.com/neppramod/java_emacs/blob/master/emacs-configuration.org][Java Programming in Emacs]] and more
 
 * Setup
-  Since this is an org file, I am using ~org-babel-load-file~ command to load this file from [[init.el]] file. Emacs loads [[init.el]] when it starts. I have setup a variable called ~EMACS_DIR~ to point to *.emacs.d* as the setup directory. Adjust it to match your system. To speed up loading time of emacs, I have ~used gc-cons-threshold~ and ~gc-cons-percentage~ variables, before and after loading this configuration file. I have set ~gc-cons-threshold~ value to 300 mb after startup. Adjust it to comfortable value according to memory in your system. ~lsp-java~ package however has ~1GB~ setup as default.
+Since this is an org file, I am using ~org-babel-load-file~ command to load this file from [[init.el]] file. Emacs loads [[init.el]] when it starts. I have setup a variable called ~EMACS_DIR~ to point to *.emacs.d* as the setup directory. Adjust it to match your system. To speed up loading time of emacs, I have ~used gc-cons-threshold~ and ~gc-cons-percentage~ variables, before and after loading this configuration file. I have set ~gc-cons-threshold~ value to 300 mb after startup. Adjust it to comfortable value according to memory in your system. ~lsp-java~ package however has ~1GB~ setup as default.
 
 ** Setup repository in org file
 In the following code block, we will initialize package repositories and after that install ~use-package~. This package is used to install other packages.
 
- #+BEGIN_SRC emacs-lisp
- (require 'package)
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
 
- (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                          ("elpa" . "https://elpa.gnu.org/packages/")
-			  ("org" . "https://orgmode.org/elpa/")
- ))
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ))
 
 
- (package-initialize)
+  (package-initialize)
 
- ; Fetch the list of packages available 
- (unless package-archive-contents (package-refresh-contents))
+                                          ; Fetch the list of packages available 
+  (unless package-archive-contents (package-refresh-contents))
 
- ; Install use-package
- (setq package-list '(use-package))
- (dolist (package package-list)
- (unless (package-installed-p package) (package-install package)))
- #+END_SRC
+                                          ; Install use-package
+  (setq package-list '(use-package))
+  (dolist (package package-list)
+    (unless (package-installed-p package) (package-install package)))
+#+END_SRC
 
 ** Looks
 #+BEGIN_SRC emacs-lisp
 
-    (use-package doom-themes
-      :ensure t 
-      :init 
-      (load-theme 'doom-palenight t))
-    ;; Theme
+  (use-package doom-themes
+    :ensure t 
+    :init 
+    (load-theme 'doom-palenight t))
+  ;; Theme
 
-    ;; Font
-    (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-14"))
+  ;; Font
+  (add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-14"))
 
-    ;; Hide Menubar, toolbar and scrollbar
-    (menu-bar-mode -1)
-    (tool-bar-mode -1)
-    (scroll-bar-mode -1)
-    (fringe-mode -1)
+  ;; Hide Menubar, toolbar and scrollbar
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (fringe-mode -1)
 
-    ;; Inhibit startup screen and make scratch buffer clean
-    (setq inhibit-startup-screen t)
-    (setq initial-scratch-message "")
+  ;; Inhibit startup screen and make scratch buffer clean
+  (setq inhibit-startup-screen t)
+  (setq initial-scratch-message "")
 
-    ;; Enable soft-wrap. Also set syntax highlighting for longer lines
-    (global-visual-line-mode 1)
-    (setq whitespace-line-column 1000) 
+  ;; Enable soft-wrap. Also set syntax highlighting for longer lines
+  (global-visual-line-mode 1)
+  (setq whitespace-line-column 1000) 
 
-    ;; Set language and coding system to UTF-8
-    (set-language-environment "UTF-8")
+  ;; Set language and coding system to UTF-8
+  (set-language-environment "UTF-8")
 
-    ;; Disable annoying ring-bell when backspace key is pressed
-    (setq ring-bell-function 'ignore)
+  ;; Disable annoying ring-bell when backspace key is pressed
+  (setq ring-bell-function 'ignore)
 
-    ;; Maintain a list of recent files opened
-    (recentf-mode 1)
-    (setq recentf-max-saved-items 50)
+  ;; Maintain a list of recent files opened
+  (recentf-mode 1)
+  (setq recentf-max-saved-items 50)
 
-    ;; Coding (Enable ending brackets)
-    (electric-pair-mode 1)
+  ;; Coding (Enable ending brackets)
+  (electric-pair-mode 1)
 
-    ;; Change yes/no to y/n
-    (fset 'yes-or-no-p 'y-or-n-p)
+  ;; Change yes/no to y/n
+  (fset 'yes-or-no-p 'y-or-n-p)
 
-    ;; Tab space
+  ;; Tab space
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 4)
   (setq indent-line-function 'insert-tab)
@@ -78,34 +78,36 @@ In the following code block, we will initialize package repositories and after t
 
 ** Environment Setup
 In some operating systems Emacs does not load environment variables properly. Therefore, below we install a package called ~exec-path-from-shell~ and initialize it.
- #+begin_src emacs-lisp
- (use-package exec-path-from-shell :ensure t)
- (exec-path-from-shell-initialize)
- #+end_src
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell :ensure t)
+  (exec-path-from-shell-initialize)
+#+end_src
+
 ** Operating System specific variable setup
-   Since we want to use same emacs configuration for each of our operating systems, we want to separate values that are different between different operating systems. In my setup, I have different values for ~JAVA_HOME~ in my linux.el and mac.el. Adjust these values accordingly for your setup if you are using different versions of Java. Following code loads mac.el, linux.el or windows.el based on where you run this configuration.
+Since we want to use same emacs configuration for each of our operating systems, we want to separate values that are different between different operating systems. In my setup, I have different values for ~JAVA_HOME~ in my linux.el and mac.el. Adjust these values accordingly for your setup if you are using different versions of Java. Following code loads mac.el, linux.el or windows.el based on where you run this configuration.
 
 #+BEGIN_SRC emacs-lisp
- ;; Load platform specific variables using specific files. E.g linux.el. 
- ;; Make necessary changes as needed
- (cond ((eq system-type 'windows-nt) (load (concat EMACS_DIR "windows")))
- ((eq system-type 'gnu/linux) (load (concat EMACS_DIR "linux")))
- ((eq system-type 'darwin) (load (concat EMACS_DIR "mac")))
- (t (load-library "default")))
- #+END_SRC
+  ;; Load platform specific variables using specific files. E.g linux.el. 
+  ;; Make necessary changes as needed
+  (cond ((eq system-type 'windows-nt) (load (concat EMACS_DIR "windows")))
+        ((eq system-type 'gnu/linux) (load (concat EMACS_DIR "linux")))
+        ((eq system-type 'darwin) (load (concat EMACS_DIR "mac")))
+        (t (load-library "default")))
+#+END_SRC
 
 ** Disable ansi color in compilation mode
 #+begin_src emacs-lisp
   (defun my/ansi-colorize-buffer ()
-  (let ((buffer-read-only nil))
-  (ansi-color-apply-on-region (point-min) (point-max))))
+    (let ((buffer-read-only nil))
+      (ansi-color-apply-on-region (point-min) (point-max))))
 
   (use-package ansi-color
-  :ensure t
-  :config
-  (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
-  )
+    :ensure t
+    :config
+    (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
+    )
 #+end_src
+
 * Project Management and Coding
 ** Helm
 Helm allows for easy completion of commands.
@@ -116,17 +118,8 @@ Helm allows for easy completion of commands.
     (helm-mode 1)
     (progn (setq helm-buffers-fuzzy-matching t)))
 
-  
-#+end_src
 
-#+begin_src example
-  (use-package helm-lsp
-    :ensure ;TODO: 
-    :after (lsp-mode)
-    :commands (helm-lsp-workspace-symbol)
-    :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 #+end_src
-
 
 ** Projectile
 Use various utilities for managing project.
@@ -134,7 +127,7 @@ Use various utilities for managing project.
   (use-package projectile
     :diminish projectile-mode
     :custom
-      ((projectile-completion-system 'helm))
+    ((projectile-completion-system 'helm))
     :ensure t
     :init
     (projectile-mode +1)
@@ -142,108 +135,31 @@ Use various utilities for managing project.
     (define-key projectile-mode-map (kbd "C-'") 'projectile-command-map)
     )
 #+end_src
-** Magit ()
+
+** Magit 
 Magit works with git projects
 #+begin_src emacs-lisp
   (use-package magit :ensure t)
 #+end_src
-** Language Server Protocol
-*** FlyCheck
-FlyCheck checks for errors in code at run-time
-#+begin_src emacs-lisp
-  (use-package flycheck :ensure t :init (global-flycheck-mode))
-#+end_src
-*** Company Mode
-Provides autocomplete. Required for LSP completion
-#+begin_src emacs-lisp
-  (use-package company :ensure t)
-#+end_src
-*** Yasnippet
+
+** Yasnippet
 Yasnippet is a template system for Emacs.
 #+begin_src emacs-lisp
   (use-package yasnippet :ensure t :config (yas-global-mode 1))
   (use-package yasnippet-snippets :ensure t)
 #+end_src
-*** Which Key
-Visually guide keys
+** TreeMacs
 #+begin_src emacs-lisp
-  (use-package which-key
-    :ensure t
-    :init
-    (which-key-mode))
-#+end_src
-*** LSP
-#+begin_src example
-
-  (use-package lsp-mode
-    :ensure t
-    :hook (
-       (lsp-mode . lsp-enable-which-key-integration)
-       (java-mode . #'lsp-deferred)
-       (c++-mode . #'lsp-deferred)
-       )
-    :init (setq 
-       lsp-keymap-prefix "C-c l"              ; this is for which-key integration documentation, need to use lsp-mode-map
-       lsp-enable-file-watchers nil
-       read-process-output-max (* 1024 1024)  ; 1 mb
-       lsp-completion-provider :capf
-       company-idle-delay 0.5
-       lsp-headerline-breadcrumb-enable nil
-       lsp-idle-delay 0.5
-       lsp-lens-mode nil
-       lsp-log-io nil
-       lsp-inhibit-message t
-       lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms1024m")
-       )
-    :config 
-    (setq lsp-intelephense-multi-root nil) ; don't scan unnecessary projects
-    (with-eval-after-load 'lsp-intelephense
-      (setf (lsp--client-multi-root (gethash 'iph lsp-clients)) nil))
-    ;; `-background-index' requires clangd v8+!
-    (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))
-    (yas-global-mode)
-    (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-    )
-
-  (use-package lsp-ui
-    :ensure t
-    :after (lsp-mode)
-    :bind (:map lsp-ui-mode-map
-         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-         ([remap xref-find-references] . lsp-ui-peek-find-references))
-    :init (setq lsp-ui-doc-delay 1.5
-        lsp-ui-doc-position 'bottom
-        lsp-ui-doc-max-width 100)
-    )
-
-  (use-package lsp-treemacs
-    :after (lsp-mode treemacs)
+    (use-package treemacs
     :ensure t)
-
-  (use-package lsp-java
-    :ensure t
-    :config (add-hook 'java-mode-hook 'lsp))
 #+end_src
-
 ** Quickrun
 We can use quickrun package to execute code (if it has main).
 #+begin_src emacs-lisp
-      (use-package quickrun
-	:ensure t
-	:bind ("C-c r" . quickrun))
+  (use-package quickrun
+    :ensure t
+    :bind ("C-c r" . quickrun))
 #+end_src
-
-* Custom Packages
-** Org Mode
-*** Org Bullets
-Org-bullets is used to show asterisk's as bullets in org-mode
-#+begin_src emacs-lisp
-  (use-package org-bullets 
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook 'org-bullets-mode))
-#+end_src
-* Experimental
 
 * Custom Commands
 #+begin_src emacs-lisp
@@ -253,7 +169,9 @@ Org-bullets is used to show asterisk's as bullets in org-mode
   (global-set-key (kbd "C-x C-f") 'helm-find-files)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 #+end_src
+
 * Custom Script
+My custom script
 #+begin_src emacs-lisp
   (org-babel-load-file "~/.emacs.d/custom.org")
 #+end_src

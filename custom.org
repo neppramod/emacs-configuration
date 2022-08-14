@@ -2,19 +2,19 @@
 * Open Lines
 #+begin_src emacs-lisp
   (defun open-line-up() (interactive)
-		 (beginning-of-visual-line)
-		 (open-line 1)
-		 (indent-for-tab-command)
-		 )
+         (beginning-of-visual-line)
+         (open-line 1)
+         (indent-for-tab-command)
+         )
 
   (defun open-line-down() (interactive)
-		 (end-of-visual-line)
-		 (open-line 1)
-  
-		 (next-line)
-		 (indent-for-tab-command)
-		 )
-  
+         (end-of-visual-line)
+         (open-line 1)
+
+         (next-line)
+         (indent-for-tab-command)
+         )
+
   (global-set-key (kbd "M-o") 'open-line-down)
   (global-set-key (kbd "C-o") 'open-line-up)
 #+end_src
@@ -29,9 +29,9 @@
 #+End_src
 * Set Lsp worspace folder
 #+begin_src emacs-lisp
-  (setq lsp-java--workspace-folders (list "/home/pramod.emacs.d/workspace"
-					"/home/pramod/Documents/Programming/problems_practice/"
-					  ))
+  (setq lsp-java--workspace-folders (list "~/emacs.d/workspace"
+                                          "~/Documents/Programming/problems_practice/"
+                                          ))
 #+end_src
 * Backward Kill Line
 #+begin_src emacs-lisp
