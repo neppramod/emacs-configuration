@@ -2,7 +2,7 @@
 ** Installation
  - Install *emacs*
  - Download this repository to ~.emacs.d~ folder (in your home directory) \\ 
-   ~git clone https://github.com/neppramod/emacs-configuration.git .emacs.d~
+   ~git clone git@github.com:neppramod/emacs-configuration.git .emacs.d~
  - *Note*: /In windows, home directory is at C:\Users\<username>\AppData\Roaming. AppData folder is hidden by default/ \\
  - I am using *DejaVu Sans Mono-14* fonts (size 14). Change it in configuration.org if you like something else. 
 ** Details
