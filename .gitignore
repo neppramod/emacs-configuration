@@ -23,3 +23,6 @@ bookmarks
 .local/
 eln-cache/
 eww-bookmarks
+!linux.el
+!windows.el
+!mac.el
