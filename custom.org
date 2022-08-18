@@ -1,4 +1,14 @@
 #+TITLE: Custom Playground configuration
+
+* Custom Packages
+
+** Multiple Cursors
+#+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+  :bind ("C-S-c" . mc/edit-lines)
+  :ensure t)
+#+END_SRC
+
 * Open Lines
 #+begin_src emacs-lisp
   (defun open-line-up() (interactive)
@@ -41,3 +51,28 @@
                                           (indent-according-to-mode)
                                           ))
 #+end_src
+* Delete In Brace
+#+BEGIN_SRC emacs-lisp
+  (defun delete-in-brace()
+    (interactive)
+    (search-forward-regexp "{")
+    (push-mark)
+    (search-forward-regexp "}")
+    (backward-char)
+    (delete-region (point) (mark))
+    (newline 1)
+    (c-indent-line-or-region)
+    (open-line-up)
+    )
+    (global-set-key (kbd "C-c d") 'delete-in-brace)
+#+END_SRC
+* GUD Commands (For Debugging)
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<f6>") 'gud-next)
+  (global-set-key (kbd "<f7>") 'gud-step)
+  (global-set-key (kbd "<f8>") 'gud-finish)
+  (global-set-key (kbd "<f9>") 'gud-cont)
+  (global-set-key (kbd "<f12>") 'gud-run)
+  (global-set-key (kbd "C-c b") 'gud-break)
+  (global-set-key (kbd "C-c x") 'gud-remove)
+#+END_SRC

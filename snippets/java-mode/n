@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name:n
+# key:n
+# --
+class Node {
+    Node next;
+    int val;
+
+    public Node(int v) {
+        val = v;
+    }
+}$0

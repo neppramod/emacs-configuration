@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: sopf
+# key: sofp
+# --
+System.out.printf($1);$0
