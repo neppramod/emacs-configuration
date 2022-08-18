@@ -1,0 +1,74 @@
+#+TITLE: Looks and Behavior
+* Theme
+#+BEGIN_SRC emacs-lisp
+  (use-package emacs
+    :init
+    ;; Add all your customizations prior to loading the themes
+    (setq modus-themes-italic-constructs t
+	  modus-themes-bold-constructs nil
+	  modus-themes-region '(bg-only no-extend))
+    :config
+    ;; Load the theme of your choice:
+    (load-theme 'modus-operandi))
+#+END_SRC
+* Font
+#+BEGIN_SRC emacs-lisp
+ (add-to-list 'default-frame-alist '(font . "Hack-14"))
+#+END_SRC
+
+* Behavior
+#+BEGIN_SRC emacs-lisp
+  ;; Hide Menubar, toolbar and scrollbar
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (fringe-mode -1)
+
+  ;; Inhibit startup screen and make scratch buffer clean
+  (setq inhibit-startup-screen t)
+  (setq initial-scratch-message "")
+
+  ;; Enable soft-wrap. Also set syntax highlighting for longer lines
+  (global-visual-line-mode 1)
+  (setq whitespace-line-column 1000) 
+
+  ;; Set language and coding system to UTF-8
+  (set-language-environment "UTF-8")
+
+  ;; Disable annoying ring-bell when backspace key is pressed
+  (setq ring-bell-function 'ignore)
+
+  ;; Change yes/no to y/n
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+* Recent Files
+#+BEGIN_SRC emacs-lisp
+;; Maintain a list of recent files opened
+  (recentf-mode 1)
+  (setq recentf-max-saved-items 50)
+#+END_SRC
+
+* Coding
+** Default Coding Behavior
+#+BEGIN_SRC emacs-lisp
+  ;; Coding (Enable ending brackets)
+  (electric-pair-mode 1)
+
+  ;; Tab space
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+  (setq indent-line-function 'insert-tab)
+#+END_SRC
+
+** Disable ansi color in compilation mode
+#+BEGIN_SRC emacs-lisp
+  (defun my/ansi-colorize-buffer ()
+    (let ((buffer-read-only nil))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+
+  (use-package ansi-color
+    :ensure t
+    :config
+    (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
+#+END_SRC

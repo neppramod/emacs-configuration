@@ -1,0 +1,10 @@
+#+TITLE: Packages to Handle Projects
+* Helm
+Helm allows for easy completion of commands.
+#+BEGIN_SRC emacs-lisp
+  (use-package helm
+    :ensure t
+    :init
+    (helm-mode 1)
+    (progn (setq helm-buffers-fuzzy-matching t)))
+#+END_SRC
