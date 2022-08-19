@@ -1,5 +1,9 @@
 #+TITLE: Network related Utilities
 * Download a file
+https://stackoverflow.com/questions/4448055/download-a-file-with-emacs-lisp
+
+Also see asynchronous url-retrieve
+(defun print-url (url) (url-retrieve url (lambda (a) (print a))))
 #+BEGIN_SRC emacs-lisp
   (require 'url)
 
