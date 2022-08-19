@@ -16,6 +16,7 @@ transient/
 emms/
 workspace/
 cache/
+url/
 tramp
 network-security.data
 recentf
