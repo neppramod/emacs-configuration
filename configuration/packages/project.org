@@ -1,0 +1,31 @@
+#+TITLE: Packages to Handle Projects
+* Helm
+Helm allows for easy completion of commands.
+#+BEGIN_SRC emacs-lisp
+  (use-package helm
+    :ensure t
+    :init
+    (helm-mode 1)
+    (progn (setq helm-buffers-fuzzy-matching t)))
+#+END_SRC
+
+* Projectile
+Use various utilities for managing project.
+#+begin_src emacs-lisp
+  (use-package projectile
+    :diminish projectile-mode
+    :custom
+    ((projectile-completion-system 'helm))
+    :ensure t
+    :init
+    (projectile-mode +1))
+#+end_src
+
+* Which Key
+Visually guide keys
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :init
+    (which-key-mode))
+#+END_SRC

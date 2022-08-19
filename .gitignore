@@ -16,6 +16,7 @@ transient/
 emms/
 workspace/
 cache/
+url/
 tramp
 network-security.data
 recentf
@@ -26,3 +27,5 @@ eww-bookmarks
 !linux.el
 !windows.el
 !mac.el
+*~
+*.eld

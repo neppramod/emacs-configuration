@@ -1,1 +1,0 @@
-("~/Documents/Programming/problems_practice/gfg/recursion_problems_practice_gfg/" "~/Documents/Programming/problems_practice/" "~/.emacs.d/")
