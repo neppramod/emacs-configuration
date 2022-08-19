@@ -1,0 +1,26 @@
+#+TITLE: Coding related packages
+
+* Magit
+Magit works with git projects
+#+begin_src emacs-lisp
+  (use-package magit :ensure t)
+#+end_src
+
+* YaSnippet
+Yasnippet is a template system for Emacs.
+#+begin_src emacs-lisp
+  (use-package yasnippet :ensure t :config (yas-global-mode 1))
+  (use-package yasnippet-snippets :ensure t)
+#+end_src
+
+* Quickrun
+We can use quickrun package to execute code (if it has main).
+#+begin_src emacs-lisp
+  (defun myquickrun()
+    (interactive)
+    (save-buffer)
+    (quickrun))
+
+  (use-package quickrun
+      :ensure t)
+#+end_src
