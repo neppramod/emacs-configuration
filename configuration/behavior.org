@@ -1,15 +1,16 @@
 #+TITLE: Looks and Behavior
 * Theme
 #+BEGIN_SRC emacs-lisp
+  (use-package modus-themes :ensure t)
   (use-package emacs
     :init
     ;; Add all your customizations prior to loading the themes
     (setq modus-themes-italic-constructs t
-	  modus-themes-bold-constructs nil
-	  modus-themes-region '(bg-only no-extend))
+      modus-themes-bold-constructs nil
+      modus-themes-region '(bg-only no-extend))
     :config
     ;; Load the theme of your choice:
-    (load-theme 'modus-operandi))
+    (load-theme 'modus-operandi t))
 #+END_SRC
 * Font
 #+BEGIN_SRC emacs-lisp
@@ -22,10 +23,8 @@
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
-  (fringe-mode -1)
+  ;(fringe-mode -1)
 
-  ;; Show line number
-  (global-linum-mode 1)
 
   ;; Inhibit startup screen and make scratch buffer clean
   (setq inhibit-startup-screen t)

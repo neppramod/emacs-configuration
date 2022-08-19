@@ -35,3 +35,9 @@ Move some keys around for easier typing
   (global-set-key (kbd "C-d") 'kill-word)
 #+END_SRC
 
+* Coding
+Shortcut for coding related keys
+#+BEGIN_SRC emacs-lisp
+  ;; Quick run
+  (global-set-key (kbd "C-c r") 'myquickrun)
+#+END_SRC
