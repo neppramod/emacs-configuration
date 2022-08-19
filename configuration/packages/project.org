@@ -20,3 +20,12 @@ Use various utilities for managing project.
     :init
     (projectile-mode +1))
 #+end_src
+
+* Which Key
+Visually guide keys
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :init
+    (which-key-mode))
+#+END_SRC

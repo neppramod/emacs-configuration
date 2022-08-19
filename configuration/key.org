@@ -41,3 +41,9 @@ Shortcut for coding related keys
   ;; Quick run
   (global-set-key (kbd "C-c r") 'myquickrun)
 #+END_SRC
+
+* Project Management
+#+BEGIN_SRC emacs-lisp
+  ;; Projectile
+  (global-set-key (kbd "C-c p") 'projectile-command-map)
+#+END_SRC
