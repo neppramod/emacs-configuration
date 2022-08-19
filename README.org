@@ -4,7 +4,7 @@
  - Download this repository to ~.emacs.d~ folder (in your home directory) \\ 
    ~git clone git@github.com:neppramod/emacs-configuration.git ~/.emacs.d~
  - *Note*: /In windows, home directory is at C:\Users\<username>\AppData\Roaming. AppData folder is hidden by default/ \\
- - I am using *DejaVu Sans Mono-14* fonts (size 14). Change it in configuration.org if you like something else. 
+ - Only adjustment you may need to do is setup proper font
 ** Details
   - Read [[configuration/configuration.org][configuration/configuration.org]], and go through each section on how things are set. I believe it is well documented. Github also loads org file in proper displayable format, so it should be easy to follow.
 
