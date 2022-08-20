@@ -44,6 +44,11 @@
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
+* Desktop Save
+#+BEGIN_SRC emacs-lisp
+(desktop-save-mode 1)
+#+END_SRC
+
 * Recent Files
 #+BEGIN_SRC emacs-lisp
 ;; Maintain a list of recent files opened
