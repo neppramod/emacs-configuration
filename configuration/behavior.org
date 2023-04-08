@@ -14,7 +14,7 @@
 #+END_SRC
 * Font
 #+BEGIN_SRC emacs-lisp
- (add-to-list 'default-frame-alist '(font . "Hack-14"))
+  (add-to-list 'default-frame-alist '(font . "Hack-14"))
 #+END_SRC
 
 * Behavior
