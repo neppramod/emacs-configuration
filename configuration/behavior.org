@@ -1,16 +1,45 @@
 #+TITLE: Looks and Behavior
 * Theme
 #+BEGIN_SRC emacs-lisp
-  (use-package modus-themes :ensure t)
-  (use-package emacs
-    :init
-    ;; Add all your customizations prior to loading the themes
-    (setq modus-themes-italic-constructs t
-      modus-themes-bold-constructs nil
-      modus-themes-region '(bg-only no-extend))
-    :config
-    ;; Load the theme of your choice:
-    (load-theme 'modus-operandi t))
+
+  (use-package all-the-icons
+  :ensure t)
+
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
+
+
+  (use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+  ;; Various doom themes
+  
+  (load-theme 'doom-peacock t)
+  ; (load-theme 'doom-opera)
+  ; (load-theme 'doom-oceanic-next)
+  ; (load-theme 'doom-moonlight)
+  ; (load-theme 'doom-molokai)
+  ; (load-theme 'doom-laserwave)
+  ; (load-theme 'doom-dracula)
+  ; (load-theme 'doom-one)
+
+
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
 #+END_SRC
 * Font
 #+BEGIN_SRC emacs-lisp
