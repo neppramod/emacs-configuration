@@ -45,3 +45,15 @@ Contains utilities for handling network related things
 #+BEGIN_SRC emacs-lisp
   (org-babel-load-file (concat EMACS_CUSTOM_DIR "network.org"))
 #+END_SRC
+
+** Project related scripts
+Contains project related scripts and modifications
+#+BEGIN_SRC emacs-lisp
+  (org-babel-load-file (concat EMACS_CUSTOM_DIR "project.org"))
+#+END_SRC
+
+** Org-MOde related scripts
+** Coding
+#+BEGIN_SRC emacs-lisp
+(org-babel-load-file (concat EMACS_PACKAGES_DIR "orgmode.org"))
+#+END_SRC

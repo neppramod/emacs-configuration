@@ -14,7 +14,7 @@
 #+END_SRC
 * Font
 #+BEGIN_SRC emacs-lisp
- (add-to-list 'default-frame-alist '(font . "Hack-14"))
+  (add-to-list 'default-frame-alist '(font . "Hack-14"))
 #+END_SRC
 
 * Behavior
@@ -42,6 +42,11 @@
 
   ;; Change yes/no to y/n
   (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+* Desktop Save
+#+BEGIN_SRC emacs-lisp
+(desktop-save-mode 1)
 #+END_SRC
 
 * Recent Files

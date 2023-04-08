@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name:tree 
+# key: tree
+# --
+static Tree c(int v) {
+    return new Tree(v);
+}
+
+static class Tree {
+    Tree left, right;
+    int val;
+
+    public Tree(int v) {
+        val = v;
+    }
+}$0

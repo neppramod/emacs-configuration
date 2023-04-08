@@ -1,0 +1,10 @@
+#+TITLE: Various Project related Scripts
+
+* Handle Project Multi Occur Differently
+#+BEGIN_SRC emacs-lisp
+  (defun cust/projectile-multi-occur()
+    (interactive)
+    "Call projectile multi-occur and switch to it"
+    (projectile-multi-occur)
+    (switch-to-buffer "*Occur*"))
+#+END_SRC

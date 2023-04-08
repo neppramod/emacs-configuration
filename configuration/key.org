@@ -2,9 +2,13 @@
 * Helm
 Remap some of the default functions to helm versions
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c f") 'helm-recentf)
+  (global-set-key (kbd "C-c f") 'helm-multi-files)
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+  (global-set-key (kbd "C-x b") 'helm-buffers-list)
+  (global-set-key (kbd "C-c o") 'cust/projectile-multi-occur)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 #+END_SRC
 
@@ -20,19 +24,19 @@ Move some keys around for easier typing
 #+BEGIN_SRC emacs-lisp
 
   ;; Switch C-<backspace> and C-w
-  (global-set-key (kbd "C-<backspace>") 'kill-region)
-  (global-set-key (kbd "C-w") 'backward-kill-word)
+  ;(global-set-key (kbd "C-<backspace>") 'kill-region)
+  ;(global-set-key (kbd "C-w") 'backward-kill-word)
 
   ;; M-p/n does same thing as C-p/n
   (global-set-key (kbd "M-n") 'next-line)
   (global-set-key (kbd "M-p") 'previous-line)
 
   ;; C-f/b does same thing as M-f/b
-  (global-set-key (kbd "C-f") 'forward-word)
-  (global-set-key (kbd "C-b") 'backward-word)
+  ;(global-set-key (kbd "C-f") 'forward-word)
+  ;(global-set-key (kbd "C-b") 'backward-word)
 
   ;; C-d does same thing as M-d
-  (global-set-key (kbd "C-d") 'kill-word)
+  ;(global-set-key (kbd "C-d") 'kill-word)
 #+END_SRC
 
 * Coding
