@@ -3,9 +3,10 @@ This file sets up other files using ~org-babel-load-file~
 
 * Set Variables
 #+BEGIN_SRC emacs-lisp
-(setq EMACS_CONFIG_DIR (concat EMACS_DIR "configuration/"))
-(setq EMACS_PACKAGES_DIR (concat EMACS_CONFIG_DIR "packages/"))
-(setq EMACS_CUSTOM_DIR (concat EMACS_CONFIG_DIR "custom/"))
+  (setq EMACS_CONFIG_DIR (concat EMACS_DIR "configuration/"))
+  (setq EMACS_PACKAGES_DIR (concat EMACS_CONFIG_DIR "packages/"))
+  (setq EMACS_CUSTOM_DIR (concat EMACS_CONFIG_DIR "custom/"))
+  (setq EMACS_CACHE_DIR "cache/")
 #+END_SRC
 
 * Setup Repository

@@ -29,3 +29,10 @@ Visually guide keys
     :init
     (which-key-mode))
 #+END_SRC
+
+* Dired Sidebar
+#+BEGIN_SRC emacs-lisp
+(use-package dired-sidebar
+  :ensure t
+  :commands (dired-sidebar-toggle-sidebar))
+#+END_SRC

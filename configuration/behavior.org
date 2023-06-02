@@ -78,7 +78,13 @@
 (desktop-save-mode 1)
 #+END_SRC
 
+* Cache directory
+#+BEGIN_SRC emacs-lisp
+(setq user-cache-directory EMACS_CACHE_DIR)
+#+END_SRC
+
 * Recent Files
+
 #+BEGIN_SRC emacs-lisp
 ;; Maintain a list of recent files opened
   (recentf-mode 1)
