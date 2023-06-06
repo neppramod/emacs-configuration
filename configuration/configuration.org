@@ -53,8 +53,11 @@ Contains project related scripts and modifications
   (org-babel-load-file (concat EMACS_CUSTOM_DIR "project.org"))
 #+END_SRC
 
-** Org-MOde related scripts
-** Coding
+** Org-Mode related scripts
 #+BEGIN_SRC emacs-lisp
-(org-babel-load-file (concat EMACS_PACKAGES_DIR "orgmode.org"))
+  (org-babel-load-file (concat EMACS_PACKAGES_DIR "orgmode.org"))
+#+END_SRC
+** LSP
+#+BEGIN_SRC emacs-lisp
+  (org-babel-load-file (concat EMACS_PACKAGES_DIR "lsp.org"))
 #+END_SRC

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: java
+# key: java
+# --
+#+BEGIN_SRC java
+$0
+#+END_SRC

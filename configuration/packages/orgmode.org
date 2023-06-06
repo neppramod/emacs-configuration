@@ -8,3 +8,14 @@
 #+BEGIN_SRC emacs-lisp
   (use-package org-sidebar :ensure t)
 #+END_SRC
+* Org Modern
+#+BEGIN_SRC emacs-lisp
+  (use-package org-modern :ensure t)
+
+  (add-hook 'org-mode-hook #'org-modern-mode)
+  (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+#+END_SRC
+* Org Preview Html
+#+BEGIN_SRC emacs-lisp
+  (use-package org-preview-html :ensure t)
+#+END_SRC

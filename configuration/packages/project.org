@@ -30,9 +30,9 @@ Visually guide keys
     (which-key-mode))
 #+END_SRC
 
-* Dired Sidebar
+* VTerm
+A more capable terminal emulator
 #+BEGIN_SRC emacs-lisp
-(use-package dired-sidebar
-  :ensure t
-  :commands (dired-sidebar-toggle-sidebar))
+  (use-package vterm :ensure t)
+  (use-package vterm-toggle :ensure t)
 #+END_SRC
