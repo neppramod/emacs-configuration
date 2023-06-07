@@ -17,7 +17,6 @@ Use some basic shortcuts to handle windows
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-0") 'delete-window)
   (global-set-key (kbd "M-1") 'delete-other-windows)
-  (global-set-key (kbd "C-c t") 'treemacs)
 #+END_SRC
 
 * Navigation
