@@ -19,6 +19,13 @@ Use some basic shortcuts to handle windows
   (global-set-key (kbd "M-1") 'delete-other-windows)
 #+END_SRC
 
+* Tabs
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "s-{") 'tab-bar-switch-to-prev-tab)
+  (global-set-key (kbd "s-}") 'tab-bar-switch-to-next-tab)
+  (global-set-key (kbd "s-t") 'tab-bar-new-tab)
+  (global-set-key (kbd "s-w") 'tab-bar-close-tab)
+#+END_SRC
 * Navigation
 Move some keys around for easier typing
 #+BEGIN_SRC emacs-lisp
