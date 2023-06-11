@@ -44,6 +44,11 @@ Move some keys around for easier typing
 
   ;; C-d does same thing as M-d
   ;(global-set-key (kbd "C-d") 'kill-word)
+
+  ;; (key-chord-define-global ";;" 'end-of-visual-line)
+  ;; (key-chord-define-global "aa" 'beginning-of-visual-line)
+  (key-chord-define-global "ww" 'forward-word)
+  (key-chord-define-global "bb" 'backward-word)
 #+END_SRC
 
 * Coding

@@ -128,3 +128,7 @@ In some operating systems Emacs does not load environment variables properly. Th
     (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
 #+END_SRC
 
+** Dired open in
+#+BEGIN_SRC emacs-lisp
+  (setq dired-guess-shell-alist-user '(("\\.pdf\\'" "flatpak run org.kde.okular")))
+#+END_SRC

@@ -3,6 +3,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package org-superstar :ensure t)
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+  (add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
 #+END_SRC
 * Org-Sidebar (Outline)
 #+BEGIN_SRC emacs-lisp
@@ -18,4 +19,15 @@
 * Org Preview Html
 #+BEGIN_SRC emacs-lisp
   (use-package org-preview-html :ensure t)
+#+END_SRC
+* Some configuration
+** Disable angle bracket completion from electric-pair
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook (lambda() 
+
+  (setq electric-pair-inhibit-predicate
+    (lambda (c)
+      (if (char-equal c ?<) t (electric-pair-default-inhibit c)))
+
+  )))
 #+END_SRC

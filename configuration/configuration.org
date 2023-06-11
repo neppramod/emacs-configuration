@@ -7,6 +7,7 @@ This file sets up other files using ~org-babel-load-file~
   (setq EMACS_PACKAGES_DIR (concat EMACS_CONFIG_DIR "packages/"))
   (setq EMACS_CUSTOM_DIR (concat EMACS_CONFIG_DIR "custom/"))
   (setq EMACS_CACHE_DIR "cache/")
+  (setq EMACS_EXPERIMENTAL_DIR (concat EMACS_DIR "configuration/experimental/"))
 #+END_SRC
 
 * Setup Repository
@@ -21,14 +22,14 @@ Handle all the stuff that changes look and feel including font, theme etc.
   (org-babel-load-file (concat EMACS_CONFIG_DIR "behavior.org"));
 #+end_src
 
-* Keys
-Handle all custom key bindings
-#+begin_src emacs-lisp
-  (org-babel-load-file (concat EMACS_CONFIG_DIR "key.org"));
-#+end_src
 
 * Various Packages
 Handle various popular packages under different topics
+
+** General
+#+BEGIN_SRC emacs-lisp
+(org-babel-load-file (concat EMACS_PACKAGES_DIR "general.org"));
+#+END_SRC
 
 ** Project Management
 #+begin_src emacs-lisp
@@ -61,3 +62,13 @@ Contains project related scripts and modifications
 #+BEGIN_SRC emacs-lisp
   (org-babel-load-file (concat EMACS_PACKAGES_DIR "lsp.org"))
 #+END_SRC
+* Experimental Settings
+#+BEGIN_SRC emacs-lisp
+(org-babel-load-file (concat EMACS_EXPERIMENTAL_DIR "experimental.org"))
+#+END_SRC
+
+* Keys
+Handle all custom key bindings
+#+begin_src emacs-lisp
+  (org-babel-load-file (concat EMACS_CONFIG_DIR "key.org"));
+#+end_src

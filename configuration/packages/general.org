@@ -1,0 +1,10 @@
+#+TITLE: General Packages
+#+BEGIN_SRC emacs-lisp
+(use-package use-package-chords
+:ensure t
+:init 
+:config (key-chord-mode 1)
+ (setq key-chord-two-keys-delay 0.2)
+ (setq key-chord-one-key-delay 0.3) ; default 0.2
+)
+#+END_SRC
