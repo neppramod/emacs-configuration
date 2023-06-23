@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: prv
-# key: prv
-# --
-private void $0

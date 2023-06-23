@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: slash
-# key: /
-# --
-/$1/$0
