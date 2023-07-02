@@ -21,11 +21,8 @@
 ;; Enable Recent files, at startup
 (recentf-mode 1)
 (setq recentf-max-saved-items 50)
-
-;; Open recentf at beginning
-(add-hook 'after-init-hook 'recentf-open-files)
 (setq inhibit-startup-screen t)
-
+(add-hook 'after-init-hook 'recentf-open-files)
 
 ;; Coding
 (electric-pair-mode 1)
