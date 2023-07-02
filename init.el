@@ -18,9 +18,14 @@
 (scroll-bar-mode -1)
 (global-visual-line-mode 1)  ;; Soft wrap
 
-;; Enable Recent files
+;; Enable Recent files, at startup
 (recentf-mode 1)
 (setq recentf-max-saved-items 50)
+
+;; Open recentf at beginning
+(add-hook 'after-init-hook 'recentf-open-files)
+(setq inhibit-startup-screen t)
+
 
 ;; Coding
 (electric-pair-mode 1)
@@ -85,7 +90,7 @@
 (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
 ;; Keys
-(global-set-key (kbd "C-c f") 'helm-multi-files)
+(global-set-key (kbd "C-c f") 'recentf-open-files)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
@@ -98,3 +103,16 @@
 
 
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(yasnippet-snippets which-key vterm use-package quickrun org-preview-html org-modern helm gruvbox-theme exec-path-from-shell eglot company)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
