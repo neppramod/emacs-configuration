@@ -1,0 +1,20 @@
+# -*- mode: snippet -*-
+# name:l
+# key:l
+# --
+static void add(Node n, int v) {
+        if (n.next == null) {
+            n.next = new Node(v);
+        } else {
+            add(n.next, v);
+        }
+    }
+
+    static void printList(Node n) {
+        if (n == null) {
+            System.out.println();
+        } else {
+            System.out.printf(n.val + " ");
+            printList(n.next);
+        }
+    }$0

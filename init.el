@@ -10,9 +10,12 @@
   (unless (package-installed-p package) (package-install package)))
 
 ;; Looks
-(load-theme 'leuven 1)
-(add-to-list 'default-frame-alist '(font . "Hack-16"))
+(use-package gruvbox-theme :ensure t
+  :init (load-theme 'gruvbox-dark-hard t))
+
+(add-to-list 'default-frame-alist '(font . "Hack-14"))
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 (global-visual-line-mode 1)  ;; Soft wrap
 
 ;; Enable Recent files
@@ -24,6 +27,8 @@
 (show-paren-mode 1)
 (setq show-paren-style 'mixed)
 
+;; Delete to trash folder
+(setq delete-by-moving-to-trash t)
 
 ;; Few Packages
 ;;
@@ -33,6 +38,9 @@
   :ensure t
   :init
   (exec-path-from-shell-initialize))
+
+;; VTerm
+(use-package vterm :ensure t)
 
 ;; Company Mode (Complete Anything)
 (use-package company
@@ -46,6 +54,10 @@
 
 ;; Quickrun
 (use-package quickrun :ensure t)
+
+;; YaSnippet
+(use-package yasnippet :ensure t :config (yas-global-mode 1))
+(use-package yasnippet-snippets :ensure t)
 
 ;; Helm
 (use-package helm
@@ -65,6 +77,12 @@
   (interactive)
   (save-buffer)
   (quickrun))
+
+(use-package org-modern :ensure t)
+(use-package org-preview-html :ensure t)
+
+(add-hook 'org-mode-hook #'org-modern-mode)
+(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
 ;; Keys
 (global-set-key (kbd "C-c f") 'helm-multi-files)

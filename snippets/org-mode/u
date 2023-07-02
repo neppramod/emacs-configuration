@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: u
+# key: u
+# --
+(use-package $1
+:ensure t)
