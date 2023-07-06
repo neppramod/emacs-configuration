@@ -16,7 +16,10 @@
 (add-to-list 'default-frame-alist '(font . "Hack-14"))
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
 (global-visual-line-mode 1)  ;; Soft wrap
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Enable Recent files, at startup
 (recentf-mode 1)
@@ -87,7 +90,7 @@
 (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
 ;; Keys
-(global-set-key (kbd "C-c f") 'recentf-open-files)
+(global-set-key (kbd "C-c f") 'helm-recentf)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
