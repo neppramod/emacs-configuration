@@ -47,7 +47,6 @@
 ;; VTerm
 (use-package vterm :ensure t)
 
-;; Company Mode (Complete Anything)
 (use-package company
   :ensure t
   :init
@@ -63,6 +62,17 @@
 ;; YaSnippet
 (use-package yasnippet :ensure t :config (yas-global-mode 1))
 (use-package yasnippet-snippets :ensure t)
+
+(defvar company-mode/enable-yas t
+  "Enable yasnippet for all backends.")
+
+(defun company-mode/backend-with-yas (backend)
+  (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+      backend
+    (append (if (consp backend) backend (list backend))
+            '(:with company-yasnippet))))
+
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
 ;; Helm
 (use-package helm
@@ -110,7 +120,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yasnippet-snippets which-key vterm use-package quickrun org-preview-html org-modern helm gruvbox-theme exec-path-from-shell eglot company)))
+   '(company-postframe yasnippet-snippets which-key vterm use-package quickrun org-preview-html org-modern helm gruvbox-theme exec-path-from-shell eglot company)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
