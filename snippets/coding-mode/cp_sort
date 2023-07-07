@@ -1,0 +1,27 @@
+# -*- mode: snippet -*-
+# name: cp_sort
+# key: cp_sort
+# --
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<int> A;
+
+bool cmp(const int a, const int b)
+{
+   return a < b;
+}
+
+int main(int argc, char *argv[])
+{
+  A = {4, 3, 4, 2, 3};
+  sort(A.begin(), A.end(), cmp);
+
+  for (int a1 : A) {
+    printf("%d ", a1);
+  }
+  printf("\n");
+  $0
+  return 0;
+}

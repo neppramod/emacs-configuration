@@ -1,0 +1,37 @@
+# -*- mode: snippet -*-
+# name: cp_bitmask
+# key: cp_bitmask
+# --
+// To multiply left shift, to divide right shift (rounds)
+// S = S << 1
+
+// To set j-th item (0-based indexing)
+// S |= (1 << j)
+
+// To check if the j-th item of the set is on (T is 0 or not 0)
+// T = S & (1<<j)
+
+// To clean/turn off the j-th item of the set
+// S &= ~(1<<j)
+
+// To toggle (flip the status of) the j-th item of the set
+// S ^= (1<<j)
+
+// To get the value of the least significant bit of S that is on
+// T = ((S) & -(S))
+
+// To turn on all bits in a set of size n
+// S = (1<<n) - 1)
+
+// Enumerate all proper subsets of a given set
+/*
+int mask = 18;
+for (int subset = mask; subset; subset = (mask & (subset-1))) {
+    cout << subset << "\n";
+}
+*/
+
+// Count bits
+// __builtin_popcount(32)  // 100000, only 1 bit is on
+// __builtin_ctz(32)       // count trailing zeros 5
+$0

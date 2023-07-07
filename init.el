@@ -25,7 +25,7 @@
 (recentf-mode 1)
 (setq recentf-max-saved-items 50)
 (setq inhibit-startup-screen t)
-(add-hook 'after-init-hook 'recentf-open-files)
+(setq initial-scratch-message "")
 
 ;; Coding
 (electric-pair-mode 1)
@@ -101,7 +101,7 @@
 (global-set-key (kbd "C-c e") 'eglot)
 (global-set-key (kbd "C-c r") 'myquickrun)
 (global-set-key (kbd "C-c f") 'helm-recentf)
-(global-set-key (kbd "C-c y") 'company-yasnippet)
+(global-set-key (kbd "C-c s") 'yas-insert-snippet)
 
 
 (custom-set-variables
