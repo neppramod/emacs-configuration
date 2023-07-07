@@ -30,7 +30,7 @@
 ;; Coding
 (electric-pair-mode 1)
 (show-paren-mode 1)
-(setq show-paren-style 'mixed)
+(setq show-paren-style 'parenthesis)
 
 ;; Delete to trash folder
 (setq delete-by-moving-to-trash t)
@@ -90,17 +90,18 @@
 (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
 ;; Keys
-(global-set-key (kbd "C-c f") 'helm-recentf)
+
 (global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
-(global-set-key (kbd "C-x b") 'helm-buffers-list)
-(global-set-key (kbd "C-c r") 'myquickrun)
 (global-set-key (kbd "M-0") 'delete-window)
 (global-set-key (kbd "M-1") 'delete-other-windows)
+(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-c e") 'eglot)
-
+(global-set-key (kbd "C-c r") 'myquickrun)
+(global-set-key (kbd "C-c f") 'helm-recentf)
+(global-set-key (kbd "C-c y") 'company-yasnippet)
 
 
 (custom-set-variables

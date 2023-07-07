@@ -1,0 +1,67 @@
+# -*- mode: snippet -*-
+# name: cd_bitmask-quiz
+# key: cd_bitmask-quiz
+# --
+#include <bits/stdc++.h>
+#define MAX 20
+#define LSOne(L) ((L) & -(L))
+
+using namespace std;
+
+int x[MAX];
+int y[MAX];
+double memo[1<<20];
+double dist[MAX][MAX];
+
+double dp(int mask);
+
+int main(int argc, char *argv[]) {
+  for (int i = 0; i < (1 << 20); i++) {
+    memo[i] = -1;
+  }
+
+  int n;
+  scanf("%d", &n);
+
+  for (int i = 0; i < 2 * n; i++) {
+    scanf("%d %d", &x[i], &y[i]);
+  }
+
+  for (int i = 0; i < 2 * n; i++) {
+    for (int j = i + 1; j < 2 * n; j++) {
+      dist[i][j] = dist[j][i] = hypot(x[i] - x[j], y[i] - y[j]);
+    }
+  }
+
+  int mask = (1 << (2 * n)) - 1;
+  printf("%.2lf\n", dp(mask));
+
+  return 0;
+}
+
+double dp(int mask) {
+  if (memo[mask] != -1) {
+    return memo[mask];
+  } else if (mask == 0) {
+    return 0.0;
+  }
+
+  double ans = 1e9;
+
+  int tp1 = LSOne(mask);
+  int p1 = __builtin_ctz(tp1);
+
+  int m = mask - tp1;
+
+  while (m) {
+    int tp2 = LSOne(m);
+    int p2 = __builtin_ctz(tp2);
+
+    // mask will have 1 xor 1 at tp1 and tp2, so both bits will be zero
+    ans = min(ans, dist[p1][p2] + dp(mask ^ tp1 ^ tp2));
+    m = m - tp2;
+  }
+
+  return memo[mask] = ans;
+
+}
