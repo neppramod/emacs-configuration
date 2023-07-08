@@ -1,0 +1,166 @@
+# -*- mode: snippet -*-
+# name: cp_fenwick_tree_complex
+# key: cp_fenwick_tree_complex
+# --
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define LSOne(S) ((S) & -(S))
+
+typedef long long ll;
+typedef vector<ll> vll;
+typedef vector<int> vi;
+
+class FenwickTree {
+private:
+  vll ft;
+public:
+  explicit FenwickTree(int m)
+  {
+    ft.assign(m+1, 0);   // Create an empty FT
+  }
+
+  void build(const vll &f) {
+    int m = (int) f.size() - 1;      // not f[0] is always 0
+    ft.assign(m+1, 0);
+
+    for (int i = 1; i <= m; ++i) {    // O(m)
+      ft[i] += f[i];                  // add this value, and i has
+                                      // parent, add to that parent
+      if (i + LSOne(i) <= m) {       
+        ft[i + LSOne(i)] += ft[i];
+      }
+    }
+  }
+
+  explicit FenwickTree(const vll &f)
+  {
+    build(f);
+  }
+
+  explicit FenwickTree(int m, const vi &s)
+  {
+    vll f(m+1, 0);
+
+    for (int i = 0; i < (int)s.size(); ++i) {  // do the conversion first
+                                               // in O(m)
+      ++f[s[i]];
+    }
+
+    build(f);                                  // in O(m)
+  }
+
+  ll rsq(int j)
+  {                                // returns RSQ(1, j)
+    ll sum = 0;
+
+    while (j > 0) {
+      sum += ft[j];
+      j -= LSOne(j);
+    }
+
+    return sum;
+  }
+
+  ll rsq(int i, int j)
+  {
+    return rsq(j) - rsq(i-1);      // inc/exclusion
+  }
+
+  // updates value of the i-th element by v (v can be +ve or -ve)
+  void update(int i, int v)
+  {
+    while (i < (int)ft.size()) {
+      ft[i] += v;
+      i += LSOne(i);
+    }
+  }
+
+  int select(ll k)                   // O(log^2 m)
+  {
+    int lo = 1, hi = ft.size() - 1;
+
+    for (int i = 0; i < 30; ++i) {  // 2^30 > 10^9, usually ok
+      int mid = (lo + hi) / 2;      // BSTA
+      (rsq(1, mid) < k) ? lo = mid : hi = mid;
+    }
+
+    return hi;
+  }
+};
+
+class RUPQ {
+private:
+  FenwickTree ft;                           // internally use PURQ FT
+public:
+  RUPQ(int m) : ft(FenwickTree(m)) {}
+
+  void range_update(int ui, int uj, int v)
+  {
+    ft.update(ui, v);                     // [ui, ui+1, ..., m] +v
+    ft.update(uj+1, -v);                  // [uj+1, uj+2, ..., m] -v
+  }                                       // [ui, ui+1, ..., uj] +v
+
+  ll point_query(int i)
+  {
+    return ft.rsq(i);                     // rsq(i) is sufficient
+  }
+};
+
+class RURQ {
+private:
+  RUPQ rupq;
+  FenwickTree purq;                  // needs two helper RUPQ and PURQ
+public:
+  RURQ(int m) : rupq(RUPQ(m)), purq(FenwickTree(m)) {} // initialization
+
+  void range_update(int ui, int uj, int v)
+  {
+    rupq.range_update(ui, uj, v);       // [ui, ui+1, .., uj] + v
+    purq.update(ui, v * (ui - 1));      // -(ui-1)*v before ui
+    purq.update(uj+1, -v * uj);         // +(uj-ui+1)*v after uj
+  }
+
+  ll rsq(int j)
+  {
+    return rupq.point_query(j) * j - purq.rsq(j);  // initial calculation
+                                                   // cancelation factor
+  }
+
+  ll rsq(int i, int j) {   
+    return rsq(j) - rsq(i-1);                // standard
+  }  
+};
+
+void solve()
+{
+  vll f = {0,0,1,0,1,2,3,2,1,1,0};
+  // index 0 is always 0
+  FenwickTree ft(f);
+  printf("%lld\n", ft.rsq(1, 6)); // 7 => ft[6]+ft[4] = 5+2 = 7
+  printf("%d\n", ft.select(7)); // index 6, rsq(1, 6) == 7, which is >= 7
+  ft.update(5, 1); // update demo
+  printf("%lld\n", ft.rsq(1, 10)); // now 12
+  printf("=====\n");
+  RUPQ rupq(10);
+  RURQ rurq(10);
+  rupq.range_update(2, 9, 7); // indices in [2, 3, .., 9] updated by +7
+  rurq.range_update(2, 9, 7); // same as rupq above
+  rupq.range_update(6, 7, 3); // indices 6&7 are further updated by +3 (10)
+  rurq.range_update(6, 7, 3); // same as rupq above
+  // idx = 0 (unused) | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |10
+  // val = -          | 0 | 7 | 7 | 7 | 7 |10 |10 | 7 | 7 | 0
+  for (int i = 1; i <= 10; i++)
+    printf("%d -> %lld\n", i, rupq.point_query(i));
+  printf("RSQ(1, 10) = %lld\n", rurq.rsq(1, 10)); // 62
+  printf("RSQ(6, 7) = %lld\n", rurq.rsq(6, 7)); // 20
+}
+
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  solve();
+  $0
+  return 0;
+}

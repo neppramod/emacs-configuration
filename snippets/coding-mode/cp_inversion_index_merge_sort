@@ -1,0 +1,97 @@
+# -*- mode: snippet -*-
+# name: cp_inversion_index_merge_sort
+# key: cp_inversion_index_merge_sort
+# --
+#include <bits/stdc++.h>
+
+using namespace std;
+
+void mergesort(int arr[], int l, int r);
+void merge(int arr[], int l, int m, int r);
+
+int count_inversion = 0;
+void solve()
+{
+  int arr[] = {3, 2, 1, 4, 4, 2, 3, 2, 3};
+  int n = 9;
+  mergesort(arr, 0, n-1);
+
+  printf("Number of Inversions: %d\n", count_inversion);
+  for (int i = 0; i < n; i++) {
+    printf("%d ", arr[i]);
+  }
+  printf("\n");
+}
+
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+
+  solve();$0
+  return 0;
+}
+
+void mergesort(int arr[], int l, int r)
+{
+  if (l >= r) {
+    return;
+  }
+
+  int m = l + (r - l) / 2;
+  mergesort(arr, l, m);
+  mergesort(arr, m+1, r);
+  merge(arr, l, m, r);
+}
+
+void merge(int arr[], int l, int m, int r)
+{
+  int n1 = m-l+1;
+  int n2 = r - m;
+
+  int L[n1];
+  int R[n2];
+
+  for (int i = 0; i < n1; i++) {
+    L[i] = arr[l+i];
+  }
+
+  for (int j = 0; j < n2; j++) {
+    R[j] = arr[m + 1 + j];
+  }
+
+  int i = 0, j = 0, k = l;
+
+  while (i < n1 && j < n2) {
+    if (L[i] <= R[j]) {
+      arr[k] = L[i];
+      i++;
+    } else {
+      arr[k] = R[j];
+      j++;
+
+      // If we pick from right, we need to add the numbers on left
+      // to inversion count
+      // Since our left is l, m-l gives us total left size, but
+      // since we have only added i elements till now
+      // we need to subtract it
+      // We add +1 because we need to consider ith element as well
+      // E.g. {2, 3, 4, 5}, there are 3 elemnts between 4 and 2
+      // however 4-2 = 2, that's why we need to add 1
+      count_inversion = count_inversion + (m - l - i + 1);
+    }
+    k++;
+  }
+
+
+  while (i < n1) {
+    arr[k] = L[i];
+    i++;
+    k++;
+  }
+
+  while (j < n2) {
+    arr[k] = R[j];
+    j++;
+    k++;
+  }
+}

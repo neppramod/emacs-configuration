@@ -1,0 +1,72 @@
+# -*- mode: snippet -*-
+# name: cp_read_string_from_file
+# key: cp_read_string_from_file
+# --
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+void printline(char *line);
+bool startsWith7Dots(char *line);
+char bigline[1024];
+int biglineindex = 0;
+
+// read file
+int main()
+{
+  FILE *fp;
+  char *line = NULL;
+  ssize_t len = 0;
+  ssize_t read;
+
+  fp = fopen("input.txt", "r");
+  if (fp == NULL) {
+    exit(EXIT_FAILURE);
+  }
+
+  while ((read = getline(&line, &len, fp)) != -1) {
+    if (line != NULL && strlen(line) >= 7 && startsWith7Dots(line)) {
+      break;
+    } else {
+      printline(line);
+    }
+  }
+
+  bigline[biglineindex] = '\0';
+  printf("%s\n", bigline);
+
+  fclose(fp);
+  if (line) {
+    free(line);
+  }
+  $0
+  exit(EXIT_SUCCESS);
+}
+
+
+void printline(char *line)
+{
+  if (line == NULL) {
+    return;
+  }    
+  for (int i = 0; i < strlen(line)-1; i++) {
+    bigline[biglineindex] = line[i];
+    biglineindex = biglineindex + 1;
+  }
+
+  bigline[biglineindex] = ' ';
+  biglineindex = biglineindex + 1;
+
+}
+
+bool startsWith7Dots(char *line)
+{
+  for (int i = 0; i < 7; i++) {
+    if (line[i] != '.') {
+      return false;
+    }
+  }
+
+  return true;
+}

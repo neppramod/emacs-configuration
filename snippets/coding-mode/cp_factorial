@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: cp_factorial
+# key: cp_factorial
+# --
+import java.math.BigInteger;
+
+class Main {
+    public static void main(String[] args) {
+        BigInteger fact = BigInteger.ONE;
+
+        for (int i = 2; i <= 40; i++) {
+            fact = fact.multiply(BigInteger.valueOf(i));
+        }
+        System.out.println(fact);$0
+    }
+}

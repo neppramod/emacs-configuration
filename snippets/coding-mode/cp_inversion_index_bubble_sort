@@ -1,0 +1,59 @@
+# -*- mode: snippet -*-
+# name: cp_inversion_index_bubble_sort
+# key: cp_inversion_index_bubble_sort
+# --
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int bubblesort_count(int arr[], int n);
+void swap(int arr[], int i, int j);
+
+void solve()
+{
+  int a[] = {3, 2, 1, 4};
+  int c = bubblesort_count(a, 4);
+  for (int i = 0; i < 4; i++) {
+    printf("%d ", a[i]);
+  }
+  printf("\n");
+  printf("%d\n", c);
+}
+
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  solve();$0
+  return 0;
+}
+
+
+int bubblesort_count(int arr[], int n)
+{
+  // bubble sort count
+  int count = 0;
+  bool swapped = false;
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n-1; j++) {
+      if (arr[j] > arr[j+1]) {
+        swap(arr, j, j+1);
+        count++;
+        swapped = true;
+      }
+    }
+
+    // if no longer swapped, break
+    if (swapped = false) {
+      break;
+    }
+  }
+
+  return count;
+}
+
+void swap(int arr[], int i, int j)
+{
+  int tmp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = tmp;
+}
