@@ -2,7 +2,7 @@
 ** Installation
  - Install *emacs*
  - Download this repository to ~.emacs.d~ folder (in your home directory) \\ 
-   ~git clone git@github.com:neppramod/emacs-configuration.git ~/.emacs.d~
+   ~git clone git@github.com:neppramod/emacs-configuration.git ~/.config/doom -b doom-emacs~
  - *Note*: /In windows, home directory is at C:\Users\<username>\AppData\Roaming. AppData folder is hidden by default/ \\
  - Only adjustment you may need to do is setup proper font
 ** Details
