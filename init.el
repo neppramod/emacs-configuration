@@ -46,6 +46,7 @@
 
 ;; VTerm
 (use-package vterm :ensure t)
+(use-package vterm-toggle :ensure t)
 
 (use-package company
   :ensure t
@@ -88,13 +89,38 @@
   (which-key-mode))
 
 ;; Custom Functions
-(defun myquickrun()
+(defun my/quickrun()
   (interactive)
   (save-buffer)
   (quickrun))
 
+;; Copy current line
+(defun my/copy-line()
+  (interactive)
+  (save-excursion
+    (back-to-indentation)
+    (kill-ring-save
+     (point)
+     (line-end-position)
+     )
+    )
+  )
+
+
 (use-package org-modern :ensure t)
 (use-package org-preview-html :ensure t)
+
+
+
+(use-package avy :ensure t)
+
+(use-package key-chord
+  :ensure t
+  :config
+  (key-chord-mode 1)
+  (setq key-chord-one-key-delay 0.50 ; same key (e.g. xx)
+      key-chord-two-keys-delay 0.325)
+  )
 
 (add-hook 'org-mode-hook #'org-modern-mode)
 (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
@@ -109,9 +135,30 @@
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-c e") 'eglot)
-(global-set-key (kbd "C-c r") 'myquickrun)
+(global-set-key (kbd "C-c r") 'my/quickrun)
 (global-set-key (kbd "C-c f") 'helm-recentf)
 (global-set-key (kbd "C-c s") 'yas-insert-snippet)
+
+(key-chord-define-global "gc" 'avy-goto-char-2)
+(key-chord-define-global "gw" 'avy-goto-word-1)
+(key-chord-define-global "gl" 'avy-goto-line)
+(key-chord-define-global "gk" 'kill-visual-line)
+(key-chord-define-global "gs" 'isearch-forward)
+(key-chord-define-global "gg" 'keyboard-escape-quit)
+(key-chord-define-global "gu" 'undo)
+(key-chord-define-global "yy" 'my/copy-line)
+(key-chord-define-global "pp" 'yank)
+(key-chord-define-global "[[" 'keyboard-escape-quit)
+
+(key-chord-define-global " b" 'helm-buffers-list)
+(key-chord-define-global " f" 'helm-find-files)
+(key-chord-define-global " r" 'helm-multi-files)
+(key-chord-define-global " s" 'save-buffer)
+(key-chord-define-global " t" 'vterm-toggle)
+(key-chord-define-global " x" 'helm-M-x)
+(key-chord-define-global " k" 'kill-current-buffer)
+(key-chord-define-global " 0" 'delete-window)
+(key-chord-define-global " 1" 'delete-other-windows)
 
 
 (custom-set-variables
@@ -120,7 +167,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(company-postframe yasnippet-snippets which-key vterm use-package quickrun org-preview-html org-modern helm gruvbox-theme exec-path-from-shell eglot company)))
+   '(vterm-toggle company-postframe yasnippet-snippets which-key vterm use-package quickrun org-preview-html org-modern helm gruvbox-theme exec-path-from-shell eglot company)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
