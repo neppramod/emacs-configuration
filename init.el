@@ -154,11 +154,16 @@
 (key-chord-define-global " f" 'helm-find-files)
 (key-chord-define-global " r" 'helm-multi-files)
 (key-chord-define-global " s" 'save-buffer)
-(key-chord-define-global " t" 'vterm-toggle)
+(key-chord-define-global " v" 'vterm-toggle)
 (key-chord-define-global " x" 'helm-M-x)
 (key-chord-define-global " k" 'kill-current-buffer)
 (key-chord-define-global " 0" 'delete-window)
+(key-chord-define-global " d" 'kill-buffer-and-window)
 (key-chord-define-global " 1" 'delete-other-windows)
+(key-chord-define-global " 2" 'split-window-below)
+(key-chord-define-global " 3" 'split-window-right)
+(key-chord-define-global " o" 'other-window)
+(key-chord-define-global " q" 'save-buffers-kill-emacs)
 
 
 (custom-set-variables
